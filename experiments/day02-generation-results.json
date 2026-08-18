@@ -1,0 +1,34 @@
+[
+    {
+        "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "prompt": "Write a short, creative explanation about the future of artificial intelligence.",
+        "seed": 42,
+        "config": {
+            "do_sample": false,
+            "max_new_tokens": 100
+        },
+        "output": "system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face\nuser\nWrite a short, creative explanation about the future of artificial intelligence.\nassistant\nImagine a world where AI is not just a tool, but a partner that can help us solve complex problems, make decisions, and even create new possibilities. In this future, AI is not just a machine, but a living, breathing entity that can learn, adapt, and evolve.\n\nAI is no longer just a collection of algorithms and data, but a dynamic, self-aware entity that can understand and interpret human emotions, intuition, and creativity. It can learn from our experiences, recognize"
+    },
+    {
+        "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "prompt": "Write a short, creative explanation about the future of artificial intelligence.",
+        "seed": 42,
+        "config": {
+            "do_sample": true,
+            "temperature": 0.7,
+            "max_new_tokens": 100
+        },
+        "output": "system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face\nuser\nWrite a short, creative explanation about the future of artificial intelligence.\nassistant\nIn the near future of artificial intelligence, humans will have to adapt to an AI-driven world where AI is not only intelligent but also omnipresent. The AI that surrounds us has become an extension of our daily lives, making our lives easier and more efficient. It can analyze our thoughts, emotions, and behaviors to provide personalized solutions and support.\n\nAI has become a part of our daily routines, such as in our cars, homes, and workplaces. It can help us drive safely and"
+    },
+    {
+        "model": "HuggingFaceTB/SmolLM2-360M-Instruct",
+        "prompt": "Write a short, creative explanation about the future of artificial intelligence.",
+        "seed": 42,
+        "config": {
+            "do_sample": true,
+            "temperature": 1.2,
+            "max_new_tokens": 100
+        },
+        "output": "system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face\nuser\nWrite a short, creative explanation about the future of artificial intelligence.\nassistant\nLively future of A-nimal - how about an AI that could be called, \"Auguristic\" perhaps - super intelligent and super powerful like a giant blue monster or simply an unstoppable machine made up of tiny computers that can think fast like a lightning speed machine. Or maybe a machine that could think faster than us humans and has just the perfect balance between smartness, and not so smartness that it's still a machine. And wouldn't that be cool even though it can"
+    }
+]
