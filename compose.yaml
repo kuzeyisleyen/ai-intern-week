@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      APP_MODE: compose
+
+    volumes:
+      - ./output:/app/output
+
+    command:
+      - python
+      - day03/text_cli.py
+      - Docker Compose uzerinden calisan Python

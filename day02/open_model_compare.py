@@ -44,5 +44,8 @@ if __name__ == "__main__":
     prompt_B = "Explain the difference between a Python list and dictionary in exactly three bullet points."
     prompt_C = "Python'da list ve dict arasındaki farkı tam olarak 3 maddede açıkla."
 
-    base_model(prompt_C)
-    instruct_model(prompt_C)
+    for prompt in [prompt_A, prompt_B, prompt_C]:
+        print("Base Model Results:")
+        base_model(prompt)
+        print("Instruct Model Results:")
+        instruct_model(prompt)

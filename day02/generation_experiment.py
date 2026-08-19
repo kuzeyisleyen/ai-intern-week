@@ -44,15 +44,15 @@ for cfg in config :
     outputs = model.generate(**inputs, **generation_parameters)# ** işareti sözlükten parametreleri alıp fonksiyona gönderir
     result_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-#Sonucun kaydedileceği format
-    experiment_results.append({
-        "model": model_name,
-        "prompt": prompt,
-        "seed": 42,
-        "config": cfg["name"],
-        "config": generation_parameters,
-        "output": result_text
-    })
+#Sonucun kaydedileceği format/Config anahtarının birden fazla kullanımı çözüldü
+experiment_results.append({
+    "model": model_name,
+    "prompt": prompt,
+    "seed": 42,
+    "config_name": cfg["name"],
+    "generation_parameters": generation_parameters,
+    "output": result_text,
+})
 
 
 

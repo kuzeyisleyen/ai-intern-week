@@ -1,8 +1,9 @@
+.git/
 .venv/
 __pycache__/
 *.pyc
 .pytest_cache/
+.vscode/
 .env
-.DS_Store
-output/*
-!output/.gitkeep
+reports/
+output/

@@ -8,18 +8,21 @@
 
 import re
 
-def clean_text(text : str) -> str:
-   if not isinstance(text, str):
-       raise ValueError("Input must be a string")
-   else:
-       text = text.lower()
-       text = re.sub(r'[^\w\s]', '', text)
+def clean_text(text: str) -> str:
+    if not isinstance(text, str):
+        raise ValueError("Input must be a string")
 
-       return text
+    text = text.lower()
+  
+    kelimeler = re.findall(r"\b\w+\b", text)
+
+    temiz_metin = " ".join(kelimeler)
+    
+    return temiz_metin
 
 
-def tokenize(cleaned_text) -> list:
-        return cleaned_text.split()
+def tokenize(cleaned_text: str) -> list:
+    return cleaned_text.split()
 
 
 def get_word_frequencies(words):
@@ -78,5 +81,12 @@ def analyze_text(text : str) -> dict:
     }
     
     return output
+# Yukarıda analyze_text fonksiyonunun kodları var...
 
-print(analyze_text("Hello world! This is a test. This test is only a test."))
+# Dosyanın en altındaki test kısmını bu kilidin içine alıyoruz:
+if __name__ == "__main__":
+    test_metni = "Bu bir test metnidir."
+    sonuc = analyze_text(test_metni)
+    print(sonuc)
+
+    print(analyze_text("Hello world! This is a test. This test is only a test."))
