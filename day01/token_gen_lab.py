@@ -8,11 +8,15 @@ tokenizer.pad_token = tokenizer.eos_token
 
 
 def get_input() -> str:
-    input_text = input("Enter a prompt for text generation: ")
-    if not input_text.strip():
-        print("Input cannot be empty. Please enter a valid prompt.")
-        return get_input()
-    return input_text
+    while True:
+        input_text = input(
+            "Enter a prompt for text generation: "
+        ).strip()
+
+        if input_text:
+            return input_text
+
+        print("Prompt cannot be empty.")
 
 def count_words(text: str) -> int:
     return len(text.split())

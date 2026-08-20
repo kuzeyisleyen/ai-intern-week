@@ -87,7 +87,7 @@ print(degerler)
 #"longest_word": "",
 #"top_words": []
 
-def analyze_text(text : str) -> dict:
+def analyze_text_basic(text : str) -> dict:
 
     output = {
        "character count": 0,
@@ -112,7 +112,7 @@ def analyze_text(text : str) -> dict:
    
     return output
 
-print(analyze_text("Yapay zeka yazılım geliştirme sürecini hızlandırabilir."))
-print(analyze_text("Yapay yapay zeka , yazılım geliştirme sürecini hızlandırabilir."))
+print(analyze_text_basic("Yapay zeka yazılım geliştirme sürecini hızlandırabilir."))
+print(analyze_text_basic("Yapay yapay zeka , yazılım geliştirme sürecini hızlandırabilir."))
 
     
