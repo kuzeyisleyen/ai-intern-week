@@ -1,16 +1,24 @@
 services:
+  ollama:
+    image: ollama/ollama:latest #Ollama runtime’ını ayrı container olarak çalıştırır.
+    volumes:
+      - ollama_data:/root/.ollama #indirilecek modeller container’ın geçici dosya sisteminde değil, Docker tarafından yönetilen kalıcı volume’da tutulur.
+    healthcheck:
+      test: ["CMD", "ollama", "list"] #Ollama komutunun container içinde cevap verip vermediğini kontrol eder.
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
-
     environment:
-      APP_MODE: compose
-
+      OLLAMA_BASE_URL: http://ollama:11434 #Buradaki ollama, Compose servis adıdır. App container içinden localhost kullanılmaz.
+      OLLAMA_MODEL: qwen3:1.7b
     volumes:
       - ./output:/app/output
 
-    command:
-      - python
-      - day03/text_cli.py
-      - Docker Compose uzerinden calisan Python
+volumes:
+  ollama_data:
