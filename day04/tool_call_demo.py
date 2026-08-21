@@ -1,6 +1,6 @@
 import sys
 import json
-from ollama_client import OllamaClient
+from day04.ollama_client import OllamaClient
 from tools import SHIPPING_TOOL
 from tool_dispatcher import execute_tool
 
@@ -34,7 +34,7 @@ def main():
         
         messages.append({
             "role": "tool",
-            "content": json.dumps(tool_result, ensure_ascii=False)
+            "content": json.dumps(tool_result)  #
         })
         
         print("3. AŞAMA: Model, araçtan gelen sonuca göre final cevabını hazırlıyor...\n")

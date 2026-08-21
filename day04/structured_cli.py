@@ -1,6 +1,6 @@
 import sys
 import json
-from ollama_client import OllamaClient
+from day04.ollama_client import OllamaClient
 
 def main():
     client = OllamaClient()

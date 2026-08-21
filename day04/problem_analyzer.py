@@ -1,7 +1,7 @@
 import sys
 import json
 import os
-from ollama_client import OllamaClient
+from day04.ollama_client import OllamaClient
 from schema_cli import PROBLEM_ANALYSIS_SCHEMA, validate_problem_analysis
 
 def main():

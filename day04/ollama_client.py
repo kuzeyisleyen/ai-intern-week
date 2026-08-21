@@ -1,39 +1,51 @@
-import urllib.request
-import json
+import os
+import requests
 
 class OllamaClient:
-    # Kendi kullandığın model adını (örneğin "qwen2.5:3b" veya dökümandaki "qwen3:1.7b") buraya yazabilirsin.
-    def __init__(self, base_url="http://ollama:11434", model="qwen3:1.7b"): 
-        self.base_url = base_url
-        self.model = model
-
-    # Artık 'messages' ve 'tools' parametrelerini de kabul ediyor!
-    def chat(self, prompt=None, response_format=None, messages=None, tools=None):
-        url = f"{self.base_url}/api/chat"
+    def __init__(self):
+        self.base_url = os.getenv("OLLAMA_BASE_URL","http://ollama:11434")
         
-        # Eğer dışarıdan hazır bir mesaj listesi verilmediyse, prompt'u mesaja çevir
-        if messages is None:
-            messages = [{"role": "user", "content": prompt}]
+        self.model = os.getenv("OLLAMA_MODEL" , "qwen3:1.7b")    
+
+    def health(self):
+        """Ollama API'sinin ayakta olup olmadığını kontrol eder."""
+        try:
+            response = requests.get(f"{self.base_url}/api/version", timeout=5.0)
+            response.raise_for_status()
+      
+            return response.json()
             
+        except requests.exceptions.RequestException as e:
+            print(f"Health check başarısız: {e}")
+            return {"status": "error", "details": str(e)}
+        
+
+    def chat(self, messages: list, tools: list = None) -> dict:
+        """
+        Model ile etkileşimi kuran asıl fonksiyon.
+        """
+        endpoint = f"{self.base_url}/api/chat"
         payload = {
             "model": self.model,
             "messages": messages,
             "stream": False
         }
         
-        if response_format:
-            payload["format"] = response_format
-            
-        # Eğer modelden araç kullanmasını istiyorsak bunu da pakete ekliyoruz!
         if tools:
             payload["tools"] = tools
-            
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
-        
+
         try:
-            with urllib.request.urlopen(req) as response:
-                return json.loads(response.read().decode("utf-8"))
-        except Exception as e:
-            print(f"Ollama API Hatası: {e}")
-            return {}
+            response = requests.post(endpoint, json=payload,timeout=30.0) 
+    
+            response.raise_for_status() 
+            
+            return response.json()
+        
+        except requests.exceptions.Timeout as e:
+            return {"error": f"Zaman Aşımı: {str(e)}"}
+            
+        except requests.exceptions.RequestException as e:
+            return {"error": f"Bağlantı hatası: {str(e)}"}
+            
+        except ValueError as e:
+            return {"error": f"Geçersiz yanıt formatı: {str(e)}"}

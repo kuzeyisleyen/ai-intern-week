@@ -1,5 +1,3 @@
-# day04/tools.py
-
 def calculate_shipping_cost(city: str, weight_kg: float) -> dict:
     """
     Gönderilen şehre ve kiloya göre kargo maliyetini hesaplar.
@@ -12,7 +10,7 @@ def calculate_shipping_cost(city: str, weight_kg: float) -> dict:
   
     if city == "İstanbul":
         taban_fiyat = 50
-    if city == "Ankara" : 
+    elif city == "Ankara" : 
         taban_fiyat = 60
     else:
         taban_fiyat= 75
@@ -42,6 +40,23 @@ SHIPPING_TOOL = {
                 "weight_kg": {
                     "type": "number",
                     "description": "Package weight in kilograms"
+                }
+            }
+        }
+    }
+}
+ANALYZE_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "analyze_text",
+        "description": "Analyze text to find character count, word count, unique words, longest word, and top words.",
+        "parameters": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "description": "The text to be analyzed"
                 }
             }
         }

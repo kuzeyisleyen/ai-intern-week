@@ -1,6 +1,6 @@
 import sys
 import json
-from ollama_client import OllamaClient
+from day04.ollama_client import OllamaClient
 print("Python scripti çalışmaya başladı!", flush=True)
 PROBLEM_ANALYSIS_SCHEMA = {
     "type": "object",

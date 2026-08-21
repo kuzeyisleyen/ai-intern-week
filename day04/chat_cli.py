@@ -1,7 +1,7 @@
 import sys
 import json
 import os
-from ollama_client import OllamaClient
+from day04.ollama_client import OllamaClient
 
 def main():
 
