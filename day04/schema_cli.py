@@ -64,8 +64,17 @@ def main():
     """
     
     print("Ollama'dan Schema formatında veri bekleniyor...\n")
+    
+    # YENİ SÖZLEŞME: 'prompt' yerine 'messages' listesi gönderiyoruz.
+    # Yapısal veri döndürmesi için sisteme güçlü bir yönerge veriyoruz.
+    messages = [
+        {"role": "system", "content": f"Sen bir analiz asistanısın. Sadece aşağıdaki JSON şemasına uygun bir çıktı üretmelisin, başka hiçbir metin eklememelisin. Şema: {json.dumps(PROBLEM_ANALYSIS_SCHEMA)}"},
+        {"role": "user", "content": prompt}
+    ]
 
-    response = client.chat(prompt=prompt, response_format=PROBLEM_ANALYSIS_SCHEMA)
+    # 'response_format' artık yok, sadece messages gönderiyoruz.
+    messages = [{"role": "user", "content": prompt}]
+    response = client.chat(messages=messages, response_format="json")
     
     metin_cevap = response.get("message", {}).get("content")
     

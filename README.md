@@ -1,4 +1,3 @@
-Markdown
 # AI Intern Week
 
 ## Amaç
@@ -50,7 +49,7 @@ Dördüncü gün, Ollama konteyneri kullanılarak yerel yapay zeka çıkarımın
 Ana Scriptler: day04/tool_call_demo.py, day04/problem_analyzer.py, day04/ollama_client.py
 
 Day 5 (Otonom Ajan Mimarisi ve Orkestrasyon)
-Beşinci gün, LangChain gibi dış framework'lere bağımlı kalmadan sıfırdan (native) otonom bir ajan motorunun yazıldığı modüldür. Sisteme; sonsuz döngüleri engelleyen fren mekanizmaları (Termination Guards), hata durumlarında modelin kendini düzeltmesini sağlayan geri besleme döngüsü (Self-Correction) ve ajanın kararlarını şeffaflaştıran bir gözlemlenebilirlik (Trace/Observability) altyapısı kazandırılmıştır.
+Beşinci gün, LangChain gibi dış framework'lere bağımlı kalmadan sıfırdan (native) otonom bir ajan motorunun yazıldığı modüldür. Sisteme; sonsuz döngüleri engelleyen fren mekanizmaları (Termination Guards), hata durumlarında modelin kendini düzeltmesini sağlayan geri besleme döngüsü (Self-Correction) ve ajanın kararlarını şeffaflaştıran, şifre maskelemeli benzersiz ID'lere sahip bir gözlemlenebilirlik (Trace/Observability) altyapısı kazandırılmıştır.
 Ana Scriptler: day05/agent_loop.py, day05/agent_cli.py, day05/trace_writer.py
 
 Çalıştırma (Docker Compose ile)
@@ -64,9 +63,10 @@ docker compose up -d ollama
 docker compose build app
 
 # 3. Uygulamayı çalıştırın (Örnek: Day 4 Tool Calling)
-docker compose run --rm app python day04/tool_call_demo.py "Ankara'ya 3 kg paket göndereceğim. Maliyeti hesapla."
+docker compose run --rm app python -m day04.tool_call_demo "Ankara'ya 3 desi kargo göndereceğim. Maliyeti hesapla."
 
 # 4. Ajanı interaktif modda çalıştırın (Örnek: Day 5 Otonom Ajan CLI)
+# Not: Bu komut çalıştığında, ajan kararları 'output/' dizinine şifreler gizlenerek eşsiz bir trace.json olarak kaydedilir.
 docker compose run --rm app python -m day05.agent_cli
 Test
 Testler, uygulamanın çalıştığı environment ile aynı koşulları sağlaması amacıyla yalnızca Docker Compose üzerinden çalıştırılmalıdır.

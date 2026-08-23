@@ -5,12 +5,13 @@ from day04.ollama_client import OllamaClient
 def main():
     client = OllamaClient()
     
-    
     prompt = "Bana en popüler 3 programlama dilini sadece şu JSON formatında ver: {'diller': ['dil1', 'dil2', 'dil3']}"
     
     print("Ollama'dan JSON verisi bekleniyor...\n")
 
-    response = client.chat(prompt=prompt,response_format="json")
+    # BURASI DEĞİŞTİ: prompt yerine messages kullanıyoruz!
+    messages = [{"role": "user", "content": prompt}]
+    response = client.chat(messages=messages, response_format="json")
     
     metin_cevap = response.get("message", {}).get("content")
     

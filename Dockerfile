@@ -5,11 +5,13 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # 3. Önce bağımlılık listesini kopyala ve kur (Cache optimizasyonu için)
-COPY day03/requirements-docker.txt ./requirements-docker.txt
-RUN python -m pip install --no-cache-dir -r requirements-docker.txt
+# DÜZELTME 1: Artık ana dizindeki doğru requirements.txt dosyasını okuyoruz
+COPY requirements.txt .
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
 # 4. Projedeki tüm kodları kopyala (.dockerignore sayesinde output/ kopyalanmayacak)
 COPY . .
 
 # 5. Konteyner hiçbir komut verilmeden çalıştırılırsa varsayılan olarak ne yapsın?
-CMD ["python", "day03/text_cli.py", "Docker icindeki varsayilan CMD calisti!"]
+# DÜZELTME 2: Eski day03 yerine, varsayılan olarak yeni ajanımızı test etsin
+CMD ["python", "-m", "day04.tool_call_demo", "İstanbul'dan Ankara'ya 2 desi kargo ne kadar tutar?"]

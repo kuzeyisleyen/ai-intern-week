@@ -13,9 +13,12 @@ def main():
   
     client = OllamaClient()
     try:
-        response = client.chat(prompt)
+        # user_input yerine prompt kullanıyoruz
+        messages = [{"role": "user", "content": prompt}]
+        response = client.chat(messages=messages)
     except Exception as e :
-        print("Hata oluştu : {e}")
+        # f string yaptık ki gerçek hatayı görebilelim
+        print(f"Hata oluştu : {e}")
         sys.exit(1) 
 
     output_data ={ 

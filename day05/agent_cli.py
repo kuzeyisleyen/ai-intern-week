@@ -11,54 +11,28 @@ def main():
     print("Çıkmak için 'q' veya 'quit' yazabilirsiniz.\n")
 
     while True:
-        # TODO: Kullanıcıdan input al
-        user_input = input("Sen : ") 
-        # TODO: Kullanıcı 'q', 'quit' veya 'exit' yazarsa döngüyü kır (break)
+        user_input = input("Sen : ")
+
         if user_input.lower() in ["q","quit","exit"]:
-            print("görüşmek üzere")
+            print("sistem kapatılıyor...")
             break
 
-        # Boş girdileri atla
         if not user_input.strip():
             continue
+        print("ajan çalıştırılıyor...")
 
-        print("\n[Ajan Çalışıyor...]")
-        
-        # TODO: run_agent fonksiyonunu user_input ile çağır ve dönen sonucu final_state değişkenine ata
-        final_state = run_agent(user_input, system_prompt=SYSTEM_INSTRUCTION)
+        final_state = run_agent(user_input,system_prompt=SYSTEM_INSTRUCTION)
 
-        
-        print("\n" + "="*30)
-        print("=== AJAN ÇIKTISI ===")
-        
-        # TODO: final_state içinden "status" değerini ekrana yazdır
-        print(f"Durum(states) : {final_state['status']}")
-
-        # TODO: final_state içinden "iteration" (kaç adım sürdüğü) değerini ekrana yazdır
+        print("Ajan Çıktısı")
+        print(f"Durum : {final_state['status']}")
         print(f"iteration : {final_state['iteration']}")
-        
-        # TODO: Eğer final_state içinde "errors" listesi boş değilse hataları ekrana yazdır
-        if final_state["errors"]:
+
+        if final_state["errors"]: 
             print(f"Hatalar : {final_state['errors']}")
-            
-        # TODO: final_state içinden "final_response" değerini ekrana yazdır
-        print(f"Final response : {final_state['final_response']}")
-        
-        print("="*30 + "\n")
+            print(f"Final response : {final_state['final_response']}")
 
-        # 1. Ajanı çalıştır (Burası while döngüsünün İÇİNDE olmalı)
-        final_state = run_agent(user_input)
-        
-        # 2. Ekrana yazdırma işlemleri
-        print("\n==============================")
-        print("=== AJAN ÇIKTISI ===")
-        print(f"Durum(states) : {final_state['status']}")
-        print(f"iteration : {final_state['iteration']}")
-        print(f"Final response : {final_state['final_response']}")
-        print("==============================\n")
-        
-        # 3. YENİ EKLENEN: İşlem bitince trace'i kaydet (Burası da while'ın İÇİNDE)
-        write_trace(final_state)
+            write_trace(final_state)
+
 
 if __name__ == "__main__":
     main()

@@ -20,7 +20,7 @@ class OllamaClient:
             return {"status": "error", "details": str(e)}
         
 
-    def chat(self, messages: list, tools: list = None) -> dict:
+    def chat(self, messages: list, tools: list = None, response_format: str = None) -> dict:
         """
         Model ile etkileşimi kuran asıl fonksiyon.
         """
@@ -33,6 +33,10 @@ class OllamaClient:
         
         if tools:
             payload["tools"] = tools
+            
+        # 2. Eğer JSON formatı isteniyorsa, payload'a ekliyoruz (Ollama'nın resmi format desteği)
+        if response_format == "json":
+            payload["format"] = "json"
 
         try:
             response = requests.post(endpoint, json=payload,timeout=30.0) 

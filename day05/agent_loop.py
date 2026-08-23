@@ -87,18 +87,25 @@ def run_agent(user_prompt: str, client=None, system_prompt: str = None) -> dict:
             try:
                 tool_result = execute_tool(tool_name, arguments)
                 state["messages"].append({
-                                "role":"tool",
-                                "content" :json.dumps(tool_result)
-                            })
-            # TODO: Başarılı işlem detayını state["tool_history"] listesine dictionary olarak ekle
-            # Format: {"iteration": state["iteration"], "tool_name": tool_name, "arguments": arguments, "result": tool_result, "status": "success"}
+                    "role": "tool",
+                    "name": tool_name,
+                    "content": json.dumps(tool_result),
+                })
+
+                call_status = "success"
+                if isinstance(tool_result, dict) and "error" in tool_result:
+                    call_status = "error"
+                    state["errors"].append(
+                        f"Tool {tool_name} returned error: {tool_result['error']}"
+                    )
+
                 state["tool_history"].append({
                     "iteration": state["iteration"],
                     "tool_name": tool_name,
                     "arguments": arguments,
                     "result": tool_result,
-                    "status": "success"
-                })    
+                    "status": call_status,
+                })
 
             except Exception as e:
                 # TODO: Hatayı bir string olarak değişkene al (Örn: error_msg = f"Tool Error: {str(e)}")
@@ -111,6 +118,7 @@ def run_agent(user_prompt: str, client=None, system_prompt: str = None) -> dict:
                 # (Böylece model "Ha, bu tool'da hata yaptım" diyip diğer iterasyonda düzeltebilecek)
                 state["messages"].append({
                     "role": "tool",
+                    "name": tool_name,
                     "content": error_msg,
                 })
 

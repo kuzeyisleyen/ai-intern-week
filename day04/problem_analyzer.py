@@ -2,7 +2,7 @@ import sys
 import json
 import os
 from day04.ollama_client import OllamaClient
-from schema_cli import PROBLEM_ANALYSIS_SCHEMA, validate_problem_analysis
+from day04.schema_cli import PROBLEM_ANALYSIS_SCHEMA, validate_problem_analysis
 
 def main():
     if len(sys.argv) < 2:
@@ -22,7 +22,12 @@ def main():
     
     print("Ollama'dan analiz bekleniyor, lütfen bekleyin...\n")
     
-    response = client.chat(prompt=prompt, response_format=PROBLEM_ANALYSIS_SCHEMA)
+    messages = [
+        {"role": "system", "content": f"Sen bir analiz asistanısın. Sadece aşağıdaki JSON şemasına uygun bir çıktı üretmelisin, başka hiçbir metin eklememelisin. Şema: {json.dumps(PROBLEM_ANALYSIS_SCHEMA)}"},
+        {"role": "user", "content": problem_text}
+    ]
+        
+    response = client.chat(messages=messages)
     metin_cevap = response.get("message", {}).get("content")
      
     try:
