@@ -9,7 +9,7 @@ model: qwen3:1.7b
 native_agent_working: true
 max_iterations: 5
 unit_tests_passed: 21
-integration_tests_passed: 2
+integration_tests_passed: 4
 agent_scenarios_run: 4
 literature_note_completed: true
 framework_mapping_completed: true

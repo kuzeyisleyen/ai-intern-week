@@ -1,4 +1,4 @@
-# AI Intern Week
+readme_content = """# AI Intern Week
 
 ## Amaç
 Bu depo (repository), Python programlama disiplinini geliştirmek, temiz kod ve otomatik test alışkanlığı kazanmak, aynı zamanda açık kaynaklı yapay zeka modellerinin (LLM) temel çalışma prensiplerini (Token, Embedding, Base vs. Instruct, Generation Parametreleri, Tool Calling ve Otonom Ajanlar) kontrollü deneylerle uygulamalı olarak öğrenmek amacıyla hazırlanmıştır. 
@@ -13,6 +13,7 @@ Bu depo (repository), Python programlama disiplinini geliştirmek, temiz kod ve 
 Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşük donanım tüketimi amacıyla aşağıdaki açık kaynaklı küçük/orta ölçekli modeller tercih edilmiştir:
 * **SmolLM2-360M:** Hugging Face ekosisteminde (Day 2); Tokenizer yapısını anlama, Embedding vektörlerini inceleme ve metin üretim parametreleri (temperature, top_p) deneylerinde kullanılmıştır.
 * **qwen3:1.7b:** Ollama altyapısında (Day 4 ve Day 5); JSON formatında yapılandırılmış çıktı (Structured Output) üretme, dış Python fonksiyonlarını tetikleme (Tool Calling) ve çoklu adım gerektiren Otonom Ajan (Agent) senaryolarında orkestrasyon motoru olarak kullanılmıştır.
+* **embeddinggemma:** Ollama altyapısında (Day 6); metinleri 768 boyutlu uzayda koordinatlara (vektörlere) dönüştürmek ve "Kosinüs Benzerliği" (Cosine Similarity) aracılığıyla Anlamsal Arama (Semantic Search) motoru mantığını kurmak için temsil modeli olarak kullanılmıştır.
 
 ## Kurulum (Lokal Python Ortamı)
 Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebilirsiniz. Ancak 3. Gün itibarıyla projenin ana çalıştırma ortamı **Docker Compose** olarak belirlenmiştir.
@@ -22,7 +23,7 @@ Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebil
 python -m venv .venv
 
 # 2. Sanal ortamı aktif edin (Windows)
-.venv\Scripts\activate.bat
+.venv\\Scripts\\activate.bat
 # (macOS/Linux)
 source .venv/bin/activate
 
@@ -52,6 +53,10 @@ Day 5 (Otonom Ajan Mimarisi ve Orkestrasyon)
 Beşinci gün, LangChain gibi dış framework'lere bağımlı kalmadan sıfırdan (native) otonom bir ajan motorunun yazıldığı modüldür. Sisteme; sonsuz döngüleri engelleyen fren mekanizmaları (Termination Guards), hata durumlarında modelin kendini düzeltmesini sağlayan geri besleme döngüsü (Self-Correction) ve ajanın kararlarını şeffaflaştıran, şifre maskelemeli benzersiz ID'lere sahip bir gözlemlenebilirlik (Trace/Observability) altyapısı kazandırılmıştır.
 Ana Scriptler: day05/agent_loop.py, day05/agent_cli.py, day05/trace_writer.py
 
+Day 6 (Embedding ve Anlamsal Arama - Semantic Search)
+Altıncı gün, framework kullanmadan saf matematik (Kosinüs Benzerliği) ile sıfırdan bir Anlamsal Arama (Semantic Search) motorunun inşa edildiği modüldür. Metinlerin uzaydaki yönlerini ölçerek çalışan sistem; Top-K sıralaması, Keyword (Kelime) araması ile Semantic (Anlamsal) aramanın kıyaslanması ve Retrieval Observability (Görünürlük) kavramlarının uygulamalı olarak deneyimlenmesini sağlamıştır.
+Ana Scriptler: day06/similarity.py, day06/semantic_search.py, day06/semantic_search_cli.py, day06/final_experiment.py
+
 Çalıştırma (Docker Compose ile)
 Projenin bağımlılıkları ve çalışma ortamı Docker imajı içerisine paketlenmiştir. Projeyi ayağa kaldırmak ve çalıştırmak için:
 
@@ -66,8 +71,13 @@ docker compose build app
 docker compose run --rm app python -m day04.tool_call_demo "Ankara'ya 3 desi kargo göndereceğim. Maliyeti hesapla."
 
 # 4. Ajanı interaktif modda çalıştırın (Örnek: Day 5 Otonom Ajan CLI)
-# Not: Bu komut çalıştığında, ajan kararları 'output/' dizinine şifreler gizlenerek eşsiz bir trace.json olarak kaydedilir.
 docker compose run --rm app python -m day05.agent_cli
+
+# 5. Day 6 Semantic Search için 'embeddinggemma' modelini Ollama içerisine indirin
+docker compose exec ollama ollama pull embeddinggemma
+
+# 6. Day 6 Anlamsal Arama test uygulamasını çalıştırın
+docker compose run --rm app python -m day06.semantic_search_cli
 Test
 Testler, uygulamanın çalıştığı environment ile aynı koşulları sağlaması amacıyla yalnızca Docker Compose üzerinden çalıştırılmalıdır.
 
@@ -85,7 +95,8 @@ ai-intern-week/
 ├── day03/                  # 3. Gün Docker CLI ve Python uyarlamaları
 ├── day04/                  # 4. Gün yerel LLM, yapılandırılmış çıktı ve Tool Calling kodları
 ├── day05/                  # 5. Gün native ajan döngüsü, state yönetimi ve CLI kodları
-├── output/                 # Docker üzerinden host'a yazılan kalıcı trace ve log çıktıları
+├── day06/                  # 6. Gün Embedding vektörleri, kosinüs benzerliği ve arama motoru kodları
+├── output/                 # Docker üzerinden host'a yazılan kalıcı trace, arama ve log çıktıları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale (Toolformer, MRKL vb.) okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları, araştırmalar ve framework mimari eşleştirmeleri

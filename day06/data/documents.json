@@ -1,0 +1,12 @@
+[
+  { "id": "doc-01", "text": "Docker named volume, container silinse bile kalıcı veri saklamak için kullanılabilir." },
+  { "id": "doc-02", "text": "Bind mount, host üzerindeki bir klasörü container içine doğrudan bağlar." },
+  { "id": "doc-03", "text": "Pytest unit testleri deterministic Python davranışlarını hızlı doğrulamak için kullanılabilir." },
+  { "id": "doc-04", "text": "Birim testlerinde dış servislere (API) bağımlılığı kesmek için mock objeleri kullanılır." },
+  { "id": "doc-05", "text": "LLM'lerin function calling (araç kullanımı) yeteneği, onlara dış dünyadan veri çekme imkanı sunar." },
+  { "id": "doc-06", "text": "Büyük dil modellerine (LLM) system prompt ile belirli bir persona veya katı kurallar atanabilir." },
+  { "id": "doc-07", "text": "Git branch'leri, ana kodu bozmadan yeni özellikler geliştirmek için izole alanlar sağlar." },
+  { "id": "doc-08", "text": "Docker Compose, birden fazla container'ı aynı ağ üzerinde ayağa kaldırmak için YAML dosyası kullanır." },
+  { "id": "doc-09", "text": "Agent döngüsü (loop), modelin bir karar vermesini, araç çağırmasını ve sonucu değerlendirmesini sağlar." },
+  { "id": "doc-10", "text": "Trace ve log kayıtları, otonom bir ajanın hangi adımda neden hata yaptığını bulmak için kritik öneme sahiptir." }
+]

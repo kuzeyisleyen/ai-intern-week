@@ -86,12 +86,15 @@ def run_agent(user_prompt: str, client=None, system_prompt: str = None) -> dict:
             # TODO: execute_tool çağrısını bir try-except bloğu içine al
             try:
                 tool_result = execute_tool(tool_name, arguments)
-                state["messages"].append({
+                tool_message = {
                     "role": "tool",
-                    "name": tool_name,
+                    "tool_name": tool_name,
                     "content": json.dumps(tool_result),
-                })
+                }
+                assert tool_message["role"] == "tool", "Tool mesajı 'role': 'tool' içermeli!"
+                assert tool_message["tool_name"] == tool_name, f"Tool mesajı 'tool_name': '{tool_name}' içermeli!"
 
+                state["messages"].append(tool_message)
                 call_status = "success"
                 if isinstance(tool_result, dict) and "error" in tool_result:
                     call_status = "error"
@@ -114,13 +117,16 @@ def run_agent(user_prompt: str, client=None, system_prompt: str = None) -> dict:
                 # TODO: Bu hatayı state["errors"] listesine append ile ekle (Loglamak için)
                 state["errors"].append(error_msg)
                 
-                # TODO: MODELİN HATAYI GÖRMESİ İÇİN: Hata mesajını "tool" rolüyle state["messages"] listesine ekle. 
-                # (Böylece model "Ha, bu tool'da hata yaptım" diyip diğer iterasyonda düzeltebilecek)
-                state["messages"].append({
+                tool_error_message = {
                     "role": "tool",
-                    "name": tool_name,
+                    "tool_name": tool_name,
                     "content": error_msg,
-                })
+                }
+                
+                assert tool_error_message["role"] == "tool", "Hata tool mesajı 'role': 'tool' içermeli!"
+                assert tool_error_message["tool_name"] == tool_name, f"Hata tool mesajı 'tool_name': '{tool_name}' içermeli!"
+
+                state["messages"].append(tool_error_message)
 
                 # TODO: Hatalı işlem detayını state["tool_history"] listesine dictionary olarak ekle
                 # Format: {"iteration": state["iteration"], "tool_name": tool_name, "arguments": arguments, "result": error_msg, "status": "error"}
