@@ -47,7 +47,7 @@ def test_agent_smoke_flow():
     messages.append({
         "role": "tool",
         "content": str(tool_result),
-        "name": tool_call["function"]["name"]
+        "tool_name": tool_call["function"]["name"]
     })
     
     response_2 = client.chat(messages=messages, tools=tools)

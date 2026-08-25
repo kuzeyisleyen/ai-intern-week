@@ -1,11 +1,15 @@
-```markdown
 # Day 6 — Embedding Mental Model
 
 ## Token ID nedir?
 Token ID,tokenların modelin hafızasındaki sıra numarasıdır.Sayının büyüklüğü küçüklüğüyle tokenlar arasında bir ilşki yoktur.
 
 ## Embedding nedir?
-Embedding, tokeni modelin matematiksel olarak işleyebilceği çok boyutlu sayı vektöre dönüştüren temsil.
+Embedding, insan dilindeki değişken uzunluktaki herhangi bir bilginin, yapay zeka süzgecinden geçirilerek, veritabanının matematiksel olarak kıyaslayabileceği sabit uzunlukta bir koordinata (vektöre) dönüştürülmesi sürecidir.
+
+## Token embedding:
+ token ID'nin model içindeki learned representation'ı.
+## Retrieval text embedding
+ bir query/sentence/chunk'ın retrieval amacıyla üretilmiş bütün-text vector'ü.
 
 ## Token ID ile embedding neden aynı şey değildir?
 Token ID sadece embedding tablosunda hangi satırın alınıcağını belirleyen indeks numarasıdır.

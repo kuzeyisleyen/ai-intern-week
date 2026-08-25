@@ -1,29 +1,34 @@
-readme_content = """# AI Intern Week
+AI Intern Week
+Amaç
+Bu depo (repository), Python programlama disiplinini geliştirmek, temiz kod ve otomatik test alışkanlığı kazanmak, aynı zamanda açık kaynaklı yapay zeka modellerinin (LLM) temel çalışma prensiplerini (Token, Embedding, Base vs. Instruct, Generation Parametreleri, Tool Calling ve Otonom Ajanlar) kontrollü deneylerle uygulamalı olarak öğrenmek amacıyla hazırlanmıştır.
 
-## Amaç
-Bu depo (repository), Python programlama disiplinini geliştirmek, temiz kod ve otomatik test alışkanlığı kazanmak, aynı zamanda açık kaynaklı yapay zeka modellerinin (LLM) temel çalışma prensiplerini (Token, Embedding, Base vs. Instruct, Generation Parametreleri, Tool Calling ve Otonom Ajanlar) kontrollü deneylerle uygulamalı olarak öğrenmek amacıyla hazırlanmıştır. 
+Gereksinimler
+Python 3.10 veya üzeri
 
-## Gereksinimler
-* Python 3.9 veya üzeri
-* Git
-* Docker ve Docker Compose 
-* Aktif bir internet bağlantısı
+Git
 
-## Kullanılan Modeller
+Docker ve Docker Compose
+
+Aktif bir internet bağlantısı
+
+Kullanılan Modeller
 Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşük donanım tüketimi amacıyla aşağıdaki açık kaynaklı küçük/orta ölçekli modeller tercih edilmiştir:
-* **SmolLM2-360M:** Hugging Face ekosisteminde (Day 2); Tokenizer yapısını anlama, Embedding vektörlerini inceleme ve metin üretim parametreleri (temperature, top_p) deneylerinde kullanılmıştır.
-* **qwen3:1.7b:** Ollama altyapısında (Day 4 ve Day 5); JSON formatında yapılandırılmış çıktı (Structured Output) üretme, dış Python fonksiyonlarını tetikleme (Tool Calling) ve çoklu adım gerektiren Otonom Ajan (Agent) senaryolarında orkestrasyon motoru olarak kullanılmıştır.
-* **embeddinggemma:** Ollama altyapısında (Day 6); metinleri 768 boyutlu uzayda koordinatlara (vektörlere) dönüştürmek ve "Kosinüs Benzerliği" (Cosine Similarity) aracılığıyla Anlamsal Arama (Semantic Search) motoru mantığını kurmak için temsil modeli olarak kullanılmıştır.
 
-## Kurulum (Lokal Python Ortamı)
-Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebilirsiniz. Ancak 3. Gün itibarıyla projenin ana çalıştırma ortamı **Docker Compose** olarak belirlenmiştir.
+SmolLM2-360M: Hugging Face ekosisteminde (Day 2); Tokenizer yapısını anlama, Embedding vektörlerini inceleme ve metin üretim parametreleri (temperature, top_p) deneylerinde kullanılmıştır.
 
-```bash
+qwen3:1.7b: Ollama altyapısında (Day 4 ve Day 5); JSON formatında yapılandırılmış çıktı (Structured Output) üretme, dış Python fonksiyonlarını tetikleme (Tool Calling) ve çoklu adım gerektiren Otonom Ajan (Agent) senaryolarında orkestrasyon motoru olarak kullanılmıştır.
+
+embeddinggemma: Ollama altyapısında (Day 6 ve Day 7); metinleri 768 boyutlu uzayda koordinatlara (vektörlere) dönüştürmek ve "Kosinüs Benzerliği" (Cosine Similarity) aracılığıyla Anlamsal Arama (Semantic Search) motoru mantığını kurmak için temsil modeli olarak kullanılmıştır.
+
+Kurulum (Lokal Python Ortamı)
+Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebilirsiniz. Ancak 3. Gün itibarıyla projenin ana çalıştırma ortamı Docker Compose olarak belirlenmiştir.
+
+Bash
 # 1. Sanal ortam (virtual environment) oluşturun
 python -m venv .venv
 
 # 2. Sanal ortamı aktif edin (Windows)
-.venv\\Scripts\\activate.bat
+.venv\Scripts\activate.bat
 # (macOS/Linux)
 source .venv/bin/activate
 
@@ -57,12 +62,16 @@ Day 6 (Embedding ve Anlamsal Arama - Semantic Search)
 Altıncı gün, framework kullanmadan saf matematik (Kosinüs Benzerliği) ile sıfırdan bir Anlamsal Arama (Semantic Search) motorunun inşa edildiği modüldür. Metinlerin uzaydaki yönlerini ölçerek çalışan sistem; Top-K sıralaması, Keyword (Kelime) araması ile Semantic (Anlamsal) aramanın kıyaslanması ve Retrieval Observability (Görünürlük) kavramlarının uygulamalı olarak deneyimlenmesini sağlamıştır.
 Ana Scriptler: day06/similarity.py, day06/semantic_search.py, day06/semantic_search_cli.py, day06/final_experiment.py
 
+Day 7 (Vektör Veritabanı ve Kalıcılık - Vector DB & Persistence)
+Yedinci gün, Qdrant kullanılarak yerel bir vektör veritabanının ayağa kaldırıldığı, anlamsal arama (semantic search) ve meta veri filtreleme (metadata filtering) yeteneklerinin entegre edildiği modüldür. Veri kalıcılığı (persistence), bellek içi (in-memory) arama ile Qdrant'ın performans/mimari farkları ve geleneksel ilişkisel veritabanları (SQLite) ile vektör veritabanlarının (Exact vs. Semantic) farkları deneysel olarak incelenmiştir.
+Ana Scriptler: day07/ingest.py, day07/search.py, day07/compare.py, day07/sqlite_vs_qdrant.py
+
 Çalıştırma (Docker Compose ile)
 Projenin bağımlılıkları ve çalışma ortamı Docker imajı içerisine paketlenmiştir. Projeyi ayağa kaldırmak ve çalıştırmak için:
 
 Bash
-# 1. Ollama servisini (AI motorunu) arka planda başlatın (Day 4 ve sonrası için)
-docker compose up -d ollama
+# 1. Ollama (AI motoru) ve Qdrant (Vektör DB) servislerini arka planda başlatın (Day 4 ve sonrası için)
+docker compose up -d ollama qdrant
 
 # 2. App imajını inşa edin
 docker compose build app
@@ -78,6 +87,12 @@ docker compose exec ollama ollama pull embeddinggemma
 
 # 6. Day 6 Anlamsal Arama test uygulamasını çalıştırın
 docker compose run --rm app python -m day06.semantic_search_cli
+
+# 7. Day 7 Qdrant veritabanına dokümanları vektörleştirip yükleyin (Ingestion)
+docker compose run --rm app python -m day07.ingest
+
+# 8. Day 7 Qdrant üzerinde anlamsal arama (Semantic Search) yapın
+docker compose run --rm app python -m day07.search "Container silinince verilerim kaybolmasın."
 Test
 Testler, uygulamanın çalıştığı environment ile aynı koşulları sağlaması amacıyla yalnızca Docker Compose üzerinden çalıştırılmalıdır.
 
@@ -85,7 +100,7 @@ Bash
 # Sadece birim (Unit) testlerini çalıştırmak için:
 docker compose run --rm app python -m pytest -v -m "not integration"
 
-# Ollama servisine bağlanan entegrasyon (Integration) testlerini çalıştırmak için:
+# Dış servislere (Ollama, Qdrant) bağlanan entegrasyon (Integration) testlerini çalıştırmak için:
 docker compose run --rm app python -m pytest -v -m integration
 Proje Yapısı
 Plaintext
@@ -96,19 +111,20 @@ ai-intern-week/
 ├── day04/                  # 4. Gün yerel LLM, yapılandırılmış çıktı ve Tool Calling kodları
 ├── day05/                  # 5. Gün native ajan döngüsü, state yönetimi ve CLI kodları
 ├── day06/                  # 6. Gün Embedding vektörleri, kosinüs benzerliği ve arama motoru kodları
+├── day07/                  # 7. Gün Qdrant vektör veritabanı, Ingestion, Search, SQL vs Vector DB deney kodları
 ├── output/                 # Docker üzerinden host'a yazılan kalıcı trace, arama ve log çıktıları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale (Toolformer, MRKL vb.) okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları, araştırmalar ve framework mimari eşleştirmeleri
 ├── reports/                # Günlük gelişim raporları (Blocker'lar ve öğrenimler)
-├── tests/                  # Pytest ile yazılmış otomatik test senaryoları (Unit & Integration)
+├── tests/                  # Pytest ile yazılmış otomatik test senaryoları (Unit & Integration klasörleriyle)
 ├── .gitignore              # Git tarafından takip edilmeyen geçici/sistem dosyaları
 ├── .dockerignore           # Docker build context'e girmeyecek dosyalar
 ├── pytest.ini              # Pytest konfigürasyonu (Test discovery ve marker ayarları)
 ├── Dockerfile              # Proje imajının kurulum adımları
-├── compose.yaml            # Servis, volume (ollama_data) ve environment tanımları
+├── compose.yaml            # Servis, volume (ollama_data, qdrant_data) ve environment tanımları
 ├── requirements-lab.txt    # Lokal laboratuvar/deney kodları için ağır bağımlılıklar (torch, transformers)
-├── requirements.txt        # Docker ve lokal için temel bağımlılıklar (pytest, requests vb.)
+├── requirements.txt        # Docker ve lokal için temel bağımlılıklar (pytest, requests, qdrant-client vb.)
 └── README.md               # Proje dokümantasyonu
 Bilinen Limitasyonlar
 Donanım: Scriptler lokal cihazda CPU üzerinde çalışacak şekilde kurgulanmıştır.

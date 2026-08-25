@@ -23,6 +23,8 @@ def semantic_search(query: str, embedded_documents: list[dict], client: Embeddin
     """
     Sorguyu alır, vektöre çevirir, tüm dokümanlarla karşılaştırır ve en yüksek skorlu top_k sonucu döner.
     """
+    if top_k <= 0:
+        raise ValueError("top_k değeri 0'dan büyük olmalıdır.")
     # TODO: 1. Kullanıcının aradığı metni (query) client.embed() ile vektöre çevir (query_vector)
     query_vector = client.embed(query)
 

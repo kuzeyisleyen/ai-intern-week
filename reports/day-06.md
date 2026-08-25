@@ -2,11 +2,13 @@
 ---
 day: 6
 date: 2026-08-24
-status: completed | partial | blocked
+status: completed 
 embedding_model: embeddinggemma
 embedding_dimension: 768
-unit_tests_passed: 27
-integration_tests_passed: 7
+total_unit_tests_passed: 27
+total_integration_tests_passed: 7
+specific_unit_test_passed : 6
+specific_integration_test_passed:3
 blocker_count: 0
 ---
 
@@ -93,7 +95,7 @@ Spesifik komutlar veya bir hata kodunun (Error 404 vb.) aranması.
 top_k=1:
 Çok dar. Sistem, o konuyu farklı kelimelerle daha iyi açıklayan alternatif bir dokümanı gözden kaçırabilir.
 top_k=3:
-En dengeli nokta.Genelde ideal sonuçları sunuyor.
+Benim veri setimdeki veri sayısına kıyasla ideal tutarlı yanıtları getirdi.
 top_k=5:
 Veri setimiz küçük olduğu için gereksiz gürültü üretmeye ve asıl konuyla alakası olmayan dokümanları da getirmeye başladı.
 

@@ -8,8 +8,8 @@ status: completed
 model: qwen3:1.7b
 native_agent_working: true
 max_iterations: 5
-unit_tests_passed: 21
-integration_tests_passed: 4
+total_unit_tests_passed: 21
+totaL_integration_tests_passed: 4
 agent_scenarios_run: 4
 literature_note_completed: true
 framework_mapping_completed: true
@@ -33,12 +33,13 @@ Gerçek test sonucu:
 ## 2. Literatür Taraması
 
 MRKL:
-Ajanların sadece kendi bildikleriyle değil, dış uzman modüllere (hesap makinesi, hava durumu API'si vb.) bağlanarak çalışmasını savunan mimarilerinden biri.
-ReAct:
-Modelin bir aksiyon (tool) almadan önce mutlaka Reasoning yapmasını sağlayan yapı. Düşün -> Hareket Et -> Gözlemle döngüsüne dayanır.
+Büyük dil modellerinin sadece kendi ağırlıklarına güvenmek yerine, dış uzman modüller (hesap makinesi, hava durumu API'si vb.) ve sembolik sistemlerle entegre çalışabildiği modüler ajan mimarilerinden biridir.
+
+ReAct (Reasoning and Acting):
+Modelin bir eylem (tool çağrısı) gerçekleştirmeden önce adım adım akıl yürütmesini teşvik eden bir yönlendirme stratejisidir. "Düşün -> Hareket Et -> Gözlemle" akışını temel alarak modelin karar alma sürecini daha izlenebilir hale getirir.
 
 Toolformer:
-Modellerin dış araçları kullanmayı, zero-shot promptlar yerine doğrudan fine-tuning (kendi kendini eğitme) ile öğrenmesini sağlayan araştırma.
+Modellerin dış araçları kullanmayı dışarıdan zorlamalı promptlar yerine, doğrudan ince ayar (fine-tuning) süreçleriyle kendi başlarına öğrenmesini amaçlayan önemli bir akademik araştırma yaklaşımıdır.
 
 “En iyi agent hangisi?” sorusuna bugünkü cevabım:
 En iyi agent, görevin karmaşıklığına göre değişir. Sabit ve belirli araçların olduğu senaryolarda ReAct tabanlı native while döngüleri fazlasıyla yeterliyken, API sayısının yüzleri bulduğu durumlarda Toolformer gibi aracı doğrudan tanıyan modeller daha avantajlı olabilir.
@@ -224,7 +225,7 @@ Gözlem: Orchestration yeteneği harikaydı. İterasyonlar arasında kaybolmadan
 ## 14. Agent = LLM + While Loop mu?
 
 Cevabım:
-Kesinlikle evet. Olay modeli çağıran API'de değil, onu çerçeveleyen mantıkta.
+İlk başta "Kesinlikle evet" diyerek bunu çok basite indirgemiştim. Ancak bugün anlıyorum ki temelinde bir döngü yatıyor olsa da, gerçek bir ajan sistemi (agent-system) sadece LLM ve while döngüsünden ibaret değildir. Sağlam bir ajan mimarisi; hafıza (memory) yönetimi, dış araçların (tools) güvenli orkestrasyonu, bağlam (context) sınırlarının korunması ve hata anında kendi kendini düzeltebilme (error recovery) gibi çok daha kapsamlı bir durum (state) yönetimine ihtiyaç duyar. Döngü sadece motorun çalışmasını sağlar; ajanı ajan yapan şey ise bu döngüyü çevreleyen sistemin ne kadar dayanıklı olduğudur.
 
 Model: Sadece prompt alan ve metin/JSON döndüren bir tahmin makinesi.
 State: LLM'in kendisinde hafıza olmadığı için bizim dışarıda tuttuğumuz liste.
@@ -232,7 +233,7 @@ Tools: Modele "eller" veren Python fonksiyonlarımız.
 Orchestration: Gelen JSON'u parse edip fonksiyonu çağıran köprü.
 Validation: LLM'in uydurma ihtimaline karşı veri tipi koruyucumuz.
 Termination: Sistemin sonsuza kadar para harcamasını engelleyen if-else frenleri.
-Observability: Ajanın kara kutu olmasını engelleyen trace kayıtları.
+Observability:Ajanın karar alma süreçlerini şeffaflaştıran ve iç işleyişinin (hangi adımlardan geçtiğinin) adım adım izlenebilmesini sağlayan detaylı trace (iz) kayıtlarıdır.
 
 ## 15. Native vs Framework
 
@@ -251,7 +252,7 @@ Framework hangi boilerplate'i azaltıyor?
 Manuel state sözlüğü oluşturma, araç şemalarını API formatına dönüştürme ve hata loglama kodlarını azaltıyor.
 
 Framework hangi mekanizmayı gizleyebilir?
-Ajanın adım adım nasıl düşündüğünü, hatayı modele nasıl geri beslediğimizi ve döngü mekanizmasını bir kara kutu içine hapseder. Hata çıktığında nerede takıldığını anlamak zorlaşır.
+Ajanın adım adım nasıl düşündüğünü, hatayı modele nasıl geri beslediğimizi ve döngü yönetimini yüksek seviyeli API'lerin arkasında soyutlar. Bu durum, standart süreçleri hızlandırıp geliştiriciyi yormasa da, karmaşık bir hata (bug) çıktığında arka plandaki kontrol akışını (control flow) incelemeyi ve müdahale etmeyi zorlaştırabilir.
 
 ## 16. Literatür ile Kod Bağlantısı
 

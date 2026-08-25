@@ -1,0 +1,92 @@
+[
+  {
+    "id": "doc-01",
+    "text": "Docker named volume kalıcı veri saklar. Container silinse bile veriler host makinede güvende kalır.",
+    "category": "docker",
+    "source": "intern-week-notes",
+    "day": 3,
+    "topic": "persistence",
+    "language": "tr"
+  },
+  {
+    "id": "doc-02",
+    "text": "Qdrant bir vektör veritabanıdır. Vektörleri bellek yerine diskte kalıcı olarak saklamamızı sağlar.",
+    "category": "database",
+    "source": "intern-week-notes",
+    "day": 7,
+    "topic": "vector-search",
+    "language": "tr"
+  },
+  {
+    "id": "doc-03",
+    "text": "Ollama yerel makinede büyük dil modellerini (LLM) çalıştırmak için kullanılan bir araçtır. API üzerinden erişim sunar.",
+    "category": "ai-tools",
+    "source": "intern-week-notes",
+    "day": 2,
+    "topic": "llm-hosting",
+    "language": "tr"
+  },
+  {
+    "id": "doc-04",
+    "text": "Cosine similarity, iki vektörün yön ilişkisini ölçer. 1.0 aynı yön, 0.0 ise ortogonal (dik) yön demektir.",
+    "category": "math",
+    "source": "intern-week-notes",
+    "day": 6,
+    "topic": "embeddings",
+    "language": "tr"
+  },
+  {
+    "id": "doc-05",
+    "text": "Qdrant içindeki payload, vektör dışında kalan yapılandırılmış meta verilerdir. Örneğin kategori, dil veya belge kimliği gibi bilgileri tutarak filtreleme işlemlerini kolaylaştırır.",
+    "category": "database",
+    "source": "intern-week-notes",
+    "day": 7,
+    "topic": "metadata",
+    "language": "tr"
+  },
+  {
+    "id": "doc-06",
+    "text": "Token embedding model içindeki her bir token'ın temsilidir. Retrieval text embedding ise bir cümlenin veya bütün bir metnin arama amacıyla üretilmiş tek bir sabit boyutlu vektörüdür.",
+    "category": "ai-concepts",
+    "source": "intern-week-notes",
+    "day": 6,
+    "topic": "embeddings",
+    "language": "tr"
+  },
+  {
+    "id": "doc-07",
+    "text": "İlişkisel veritabanları (SQLite, PostgreSQL) kesin ve yapısal sorgular için idealdir. Vektör veritabanları ise anlamsal benzerlik aradığımız sorgular için tasarlanmıştır.",
+    "category": "architecture",
+    "source": "intern-week-notes",
+    "day": 7,
+    "topic": "search-types",
+    "language": "tr"
+  },
+  {
+    "id": "doc-08",
+    "text": "Docker Compose ağında, aynı network içindeki servisler birbirlerine doğrudan servis isimleriyle ulaşabilir. Host portunun açılması zorunlu değildir.",
+    "category": "docker",
+    "source": "intern-week-notes",
+    "day": 3,
+    "topic": "networking",
+    "language": "tr"
+  },
+  {
+    "id": "doc-09",
+    "text": "Büyük verilerde tüm vektörleri tek tek karşılaştırmak yavaştır. Qdrant dense vektör aramasında HNSW indeks altyapısı kullanarak en yakın adaylara çok daha hızlı ulaşır.",
+    "category": "database",
+    "source": "intern-week-notes",
+    "day": 7,
+    "topic": "indexing",
+    "language": "tr"
+  },
+  {
+    "id": "doc-10",
+    "text": "Top-k (getirilecek sonuç sayısı) evrensel bir sabit değildir. Veri setine, sorguya, hedeflenen kaliteye ve context budget'a göre (bağlam bütçesine) test edilerek belirlenir.",
+    "category": "ai-concepts",
+    "source": "intern-week-notes",
+    "day": 6,
+    "topic": "retrieval",
+    "language": "tr"
+  }
+]
