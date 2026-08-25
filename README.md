@@ -126,30 +126,30 @@ docker compose run --rm app python -m pytest -v -m "not integration"
 docker compose run --rm app python -m pytest -v -m integration
 
 Proje Yapısı
-
+```
 ai-intern-week/
-├── day01/              # 1. Gün metin analizi kodları
-├── day02/              # 2. Gün LLM ve tokenizer laboratuvar kodları
-├── day03/              # 3. Gün Docker CLI ve Python uyarlamaları
-├── day04/              # 4. Gün yerel LLM, yapılandırılmış çıktı ve Tool Calling kodları
-├── day05/              # 5. Gün native ajan döngüsü, state yönetimi ve CLI kodları
-├── day06/              # 6. Gün Embedding vektörleri, kosinüs benzerliği ve arama motoru kodları
-├── day07/              # 7. Gün Qdrant vektör veritabanı, Ingestion, Search, SQL vs Vector DB deney kodları
-├── output/             # Docker üzerinden host'a yazılan kalıcı trace, arama ve log çıktıları
-├── experiments/        # Otomatik kaydedilen deney sonuçları (JSON)
-├── literature/         # Makale (Toolformer, MRKL vb.) okuma notları ve teorik incelemeler
-├── notes/              # Teorik kavram cevapları, araştırmalar ve framework mimari eşleştirmeleri
-├── reports/            # Günlük gelişim raporları (Blocker'lar ve öğrenimler)
-├── tests/              # Pytest ile yazılmış otomatik test senaryoları (Unit & Integration klasörleriyle)
-├── .gitignore          # Git tarafından takip edilmeyen geçici/sistem dosyaları
-├── .dockerignore       # Docker build context'e girmeyecek dosyalar
-├── pytest.ini          # Pytest konfigürasyonu (Test discovery ve marker ayarları)
-├── Dockerfile          # Proje imajının kurulum adımları
-├── compose.yaml        # Servis, volume (ollama_data, qdrant_data) ve environment tanımları
-├── requirements-lab.txt # Lokal laboratuvar/deney kodları için ağır bağımlılıklar (torch, transformers)
-├── requirements.txt    # Docker ve lokal için temel bağımlılıklar (pytest, requests, qdrant-client vb.)
-└── README.md           # Proje dokümantasyonu
-
+├── day01/                  # 1. Gün metin analizi kodları
+├── day02/                  # 2. Gün LLM ve tokenizer laboratuvar kodları
+├── day03/                  # 3. Gün Docker CLI ve Python uyarlamaları
+├── day04/                  # 4. Gün yerel LLM, yapılandırılmış çıktı ve Tool Calling kodları
+├── day05/                  # 5. Gün native ajan döngüsü, state yönetimi ve CLI kodları
+├── day06/                  # 6. Gün Embedding vektörleri, kosinüs benzerliği ve arama motoru kodları
+├── day07/                  # 7. Gün Qdrant vektör veritabanı, Ingestion, Search, SQL vs Vector DB deney kodları
+├── output/                 # Docker üzerinden host'a yazılan kalıcı trace, arama ve log çıktıları
+├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
+├── literature/             # Makale (Toolformer, MRKL vb.) okuma notları ve teorik incelemeler
+├── notes/                  # Teorik kavram cevapları, araştırmalar ve framework mimari eşleştirmeleri
+├── reports/                # Günlük gelişim raporları (Blocker'lar ve öğrenimler)
+├── tests/                  # Pytest ile yazılmış otomatik test senaryoları (Unit & Integration klasörleriyle)
+├── .gitignore              # Git tarafından takip edilmeyen geçici/sistem dosyaları
+├── .dockerignore           # Docker build context'e girmeyecek dosyalar
+├── pytest.ini              # Pytest konfigürasyonu (Test discovery ve marker ayarları)
+├── Dockerfile              # Proje imajının kurulum adımları
+├── compose.yaml            # Servis, volume (ollama_data, qdrant_data) ve environment tanımları
+├── requirements-lab.txt    # Lokal laboratuvar/deney kodları için ağır bağımlılıklar (torch, transformers)
+├── requirements.txt        # Docker ve lokal için temel bağımlılıklar (pytest, requests, qdrant-client vb.)
+└── README.md               # Proje dokümantasyonu
+```
 Bilinen Limitasyonlar
 
 Donanım: Scriptler lokal cihazda CPU üzerinde çalışacak şekilde kurgulanmıştır.
