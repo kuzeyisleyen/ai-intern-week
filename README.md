@@ -1,10 +1,10 @@
-AI Intern Week
+# AI Intern Week
 
-Amaç
+# Amaç
 
 Bu depo (repository), Python programlama disiplinini geliştirmek, temiz kod ve otomatik test alışkanlığı kazanmak, aynı zamanda açık kaynaklı yapay zeka modellerinin (LLM) temel çalışma prensiplerini (Token, Embedding, Base vs. Instruct, Generation Parametreleri, Tool Calling ve Otonom Ajanlar) kontrollü deneylerle uygulamalı olarak öğrenmek amacıyla hazırlanmıştır.
 
-Gereksinimler
+# Gereksinimler
 
 Python 3.10 veya üzeri
 
@@ -14,7 +14,7 @@ Docker ve Docker Compose
 
 Aktif bir internet bağlantısı
 
-Kullanılan Modeller
+# Kullanılan Modeller
 
 Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşük donanım tüketimi amacıyla aşağıdaki açık kaynaklı küçük/orta ölçekli modeller tercih edilmiştir:
 
@@ -24,7 +24,7 @@ qwen3:1.7b: Ollama altyapısında (Day 4 ve Day 5); JSON formatında yapılandı
 
 embeddinggemma: Ollama altyapısında (Day 6 ve Day 7); metinleri 768 boyutlu uzayda koordinatlara (vektörlere) dönüştürmek ve "Kosinüs Benzerliği" (Cosine Similarity) aracılığıyla Anlamsal Arama (Semantic Search) motoru mantığını kurmak için temsil modeli olarak kullanılmıştır.
 
-Kurulum (Lokal Python Ortamı)
+# Kurulum (Lokal Python Ortamı)
 
 Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebilirsiniz. Ancak 3. Gün itibarıyla projenin ana çalıştırma ortamı Docker Compose olarak belirlenmiştir.
 
