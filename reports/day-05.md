@@ -1,6 +1,3 @@
-`reports/day-05.md`
-
-```markdown
 ---
 day: 5
 date: 2026-08-21

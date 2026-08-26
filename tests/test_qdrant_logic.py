@@ -1,6 +1,6 @@
 import pytest
 from qdrant_client import models
-from day07.ingest import validate_documents
+from day07.ingest import validate_documents,build_points
 
 def test_input_validation():
     valid_docs = [{
@@ -70,3 +70,40 @@ def test_result_formatting():
     assert formatted_result["point_id"] == 1
     assert formatted_result["document_id"] == "doc-01"
     assert formatted_result["score"] == 0.8543
+
+def test_build_points():
+    """Production build_points() fonksiyonunu fake client ile test eder."""
+    class FakeEmbeddingClient:
+        def embed(self, text):
+            return [1.0, 0.0, 0.0]
+            
+    client = FakeEmbeddingClient()
+    
+    docs = [
+        {
+            "id": "doc-123", 
+            "text": "Docker test metni", 
+            "category": "docker",
+            "source": "guide", 
+            "day": 7, 
+            "topic": "db", 
+            "language": "tr"
+        }
+    ]
+    
+    points = build_points(client,docs, expected_dimension=3)
+    
+    # 4. Doğrulamalar
+    assert len(points) == 1, "Bir doküman verildi, 1 adet point dönmeli."
+    
+    point = points[0]
+    
+    # point id doğrulaması
+    assert point.id is not None
+    
+    # vector doğrulaması
+    assert point.vector == [1.0, 0.0, 0.0]
+    
+    # payload.document_id ve payload.category doğrulaması
+    assert point.payload["document_id"] == "doc-123"
+    assert point.payload["category"] == "docker"

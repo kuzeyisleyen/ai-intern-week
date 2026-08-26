@@ -40,7 +40,7 @@ def test_semantic_search_ranking():
     assert results[1]["id"]=="C"
     assert results[2]["id"]=="B"
 
-def semantic_search_invalid_top_k() :
+def test_semantic_search_invalid_top_k() :
     """top_k değerinin 0 veya negatif olması durumunda sistemin bunu açıkça reddettiğini doğrular."""
     client = MockClient()
     docs = [{"id":"A","text":"A","embedding":[1.0,0.0]}]
@@ -48,7 +48,7 @@ def semantic_search_invalid_top_k() :
     with pytest.raises(ValueError):
         semantic_search("test",docs,client,top_k=0)
     with pytest.raises(ValueError):
-        semantic_search("test",docs,client,top_k=1)
+        semantic_search("test",docs,client,top_k=-1)
 
 def test_cosine_zero_vector():
     """Sıfır vektörü ile cosine hesabı yapılmaya çalışıldığında ValueError fırlatıldığını doğrular."""

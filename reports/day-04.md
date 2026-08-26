@@ -1,6 +1,3 @@
-# Gün 4 — Çalışma Raporu Şablonu
-
-```markdown
 ---
 day: 4
 date: 2026-08-20

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "q01",
+    "question": "Named volume ile bind mount arasındaki temel fark nedir?",
+    "expected_source": "docker.md",
+    "answerable": true
+  },
+  {
+    "id": "q02",
+    "question": "Docker Compose içindeki named volume tanımı nasıl yapılır?",
+    "expected_source": "compose.md",
+    "answerable": true
+  },
+  {
+    "id": "q03",
+    "question": "Agent loop'ta max_iterations neden var?",
+    "expected_source": "agent-loop.md",
+    "answerable": true
+  },
+  {
+    "id": "q04",
+    "question": "Vector database'ler hangi tür verileri saklamak için tasarlanmıştır?",
+    "expected_source": "vector-database.md",
+    "answerable": true
+  },
+  {
+    "id": "q05",
+    "question": "Embedding modeli metinleri neye dönüştürür?",
+    "expected_source": "embeddings.md",
+    "answerable": true
+  },
+  {
+    "id": "q06",
+    "question": "Türkiye'nin başkenti neresidir?",
+    "expected_source": null,
+    "answerable": false
+  },
+  {
+    "id": "q07",
+    "question": "RAG sisteminde context inşa edilirken modelin kaynakları göstermesi neden istenir?",
+    "expected_source": "llm-basics.md",
+    "answerable": true
+  },
+  {
+    "id": "q08",
+    "question": "Relational database select işlemlerini nasıl hızlandırır?",
+    "expected_source": null,
+    "answerable": false
+  }
+]

@@ -41,8 +41,8 @@ def test_embed_different_texts_same_dimension():
     text_long = "Bu çok daha uzun bir cümle, hatta içinde virgül bile var!"
     
     # TODO: İki metni de embed et
-    vector_short = client.embed(vector_short)
-    vector_long = client.embed(vector_long)
+    vector_short = client.embed(text_short)
+    vector_long = client.embed(text_long)
     
     # TODO: İki vektörün uzunluklarının (len) birbirine eşit olduğunu assert ile doğrula
     assert len(vector_short) ==len(vector_long)

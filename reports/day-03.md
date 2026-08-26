@@ -1,3 +1,4 @@
+---
 day: 3
 date: 2026-08-19
 status: completed
@@ -7,7 +8,7 @@ docker_image_built: true
 compose_working: true 
 output_bind_mount_working: true
 blocker_count: 0
-
+---
 
 # Gün 3 — Çalışma Raporu
 

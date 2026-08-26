@@ -94,7 +94,7 @@ def run_comparison():
         "query": query_text,
         "top_k": top_k,
         "filter": None,
-        "results": [qdrant_experiment_results]
+        "results": qdrant_experiment_results
     }
     experiments.append(qdrant_experiment)
 

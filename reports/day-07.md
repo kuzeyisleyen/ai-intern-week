@@ -55,7 +55,7 @@ Payload alanları:
 
 ## 5. Point Mental Model
 Internal point ID:
-Qdrant'ın indeksleme için zorunlu kıldığı tam sayı
+Qdrant da indeksleme için kullanılan 64-bit unsigned integer veya UUID.
 Original document ID:
 Kendi sistemimdeki referans metin kimliği
 Vector:
@@ -121,7 +121,7 @@ Kesinlikle SQLite (veya klasik DB) kullanılmalı (`WHERE id = 'doc-07'`)
 Category:
 Her ikisi de kullanılabilir (SQL için `WHERE`, Qdrant için `Filter`).
 Semantic query:
-Kesinlikle Qdrant kullanılmalı SQL eşanlamlı kelimelerin matematiğini anlayamaz.
+Bugünkü kullandığımız sql yapısıyla kıyaslandığında kesinlikle qdrant kullanılmalı.
 
 ## 11. Index Mental Model
 Brute-force:

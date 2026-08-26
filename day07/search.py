@@ -1,4 +1,5 @@
 import os
+import sys
 from qdrant_client import QdrantClient, models
 from day06.embedding_client import EmbeddingClient
 
@@ -60,4 +61,10 @@ def test_search():
             print(f"   Metin: {result.payload.get('text')}\n")
 
 if __name__ == "__main__":
-    test_search()
+    if len(sys.argv) > 1:
+        user_query = " ".join(sys.argv[1:])
+    else:
+        user_query = "Container silindiğinde dosyalarımın kaybolmasını nasıl engellerim?"
+        print("Uyarı: Arama metni girilmedi. Varsayılan sorgu çalıştırılıyor...")
+        
+    test_search(user_query)

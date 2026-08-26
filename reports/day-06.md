@@ -1,4 +1,3 @@
-```markdown
 ---
 day: 6
 date: 2026-08-24
