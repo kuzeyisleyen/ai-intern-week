@@ -2,32 +2,28 @@ import pytest
 from day08.rag_pipeline import RAGResult, validate_question
 from day08.retriever import RetrievedChunk
 from day08.context_builder import build_context
+from day08.chunker import chunk_text
+from day08.evaluation import hit_at_k
+from day08.chunker import ChunkConfig
 
-# 1. CHUNK_TEXT() & EDGE CASES
-def chunk_text(text: str, chunk_size: int, overlap: int) -> list[str]:
-    """Test için basitleştirilmiş chunker simülasyonu"""
-    if not text or chunk_size <= 0 or overlap < 0 or overlap >= chunk_size:
-        return []
-    if len(text) <= chunk_size:
-        return [text]
-    
-    chunks = []
-    start = 0
-    while start < len(text):
-        chunks.append(text[start:start + chunk_size])
-        start += (chunk_size - overlap)
-        if start + chunk_size >= len(text) and start < len(text):
-            chunks.append(text[start:])
-            break
-    return chunks
+# 1.EDGE CASES
 
 def test_chunking_edge_cases():
-    assert chunk_text("", 100, 10) == []
-    assert chunk_text("Merhaba", 0, 0) == []
-    assert chunk_text("Merhaba", -5, 0) == []
-    assert chunk_text("Merhaba", 10, -2) == []
-    assert chunk_text("Merhaba", 10, 10) == []
-    assert chunk_text("Kısa", 100, 10) == ["Kısa"]
+    assert chunk_text("", ChunkConfig(chunk_size=100, overlap=10)) == []
+    
+    with pytest.raises(ValueError, match="0 dan büyük olmalıdır"):
+        chunk_text("Merhaba", ChunkConfig(chunk_size=0, overlap=0))
+        
+    with pytest.raises(ValueError):
+        chunk_text("Merhaba", ChunkConfig(chunk_size=-5, overlap=0))
+        
+    with pytest.raises(ValueError):
+        chunk_text("Merhaba", ChunkConfig(chunk_size=10, overlap=-2))
+        
+    with pytest.raises(ValueError):
+        chunk_text("Merhaba", ChunkConfig(chunk_size=10, overlap=10))
+        
+    assert chunk_text("Kısa", ChunkConfig(chunk_size=100, overlap=10)) == ["Kısa"]
 
 # 2. CONTEXT BUILDER & SOURCE-LABEL MAPPING 
 def test_context_builder_and_mapping():
@@ -77,11 +73,9 @@ def test_hit_at_k():
     expected_source = "agent-loop.md"
     retrieved_sources = ["docker.md", "agent-loop.md", "compose.md"]
     
-    hit_1 = len(retrieved_sources) > 0 and retrieved_sources[0] == expected_source
-    hit_3 = expected_source in retrieved_sources[:3]
-    
-    assert hit_1 is False
-    assert hit_3 is True
+    # Artık ana koddaki gerçek fonksiyonumuzu test ediyoruz
+    assert hit_at_k(expected_source, retrieved_sources, k=1) is False
+    assert hit_at_k(expected_source, retrieved_sources, k=3) is True
 
 # 5. INPUT VALIDATION
 def test_input_validation():

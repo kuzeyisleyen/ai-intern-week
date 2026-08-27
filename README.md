@@ -1,11 +1,13 @@
-#  AI Intern Week
+# AI Intern Week
+
+**Proje Durumu:** Tamamlandı (Day 9 - LangGraph Orkestrasyonu)
 
 > **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
 > Bu proje, yazılım mühendisliği disiplinlerini uygulayarak LLM'lerin çalışma prensiplerini (Token, Embedding, Tool Calling, Otonom Ajanlar ve RAG) sıfırdan ve framework kullanmadan inşa etmeyi amaçlayan bir staj simülasyonudur.
 
 ---
 
-##  Gereksinimler
+## Gereksinimler
 
 Projeyi sorunsuz çalıştırmak için bilgisayarınızda aşağıdakilerin kurulu olduğundan emin olun:
 
@@ -16,7 +18,7 @@ Projeyi sorunsuz çalıştırmak için bilgisayarınızda aşağıdakilerin kuru
 
 ---
 
-##  Kullanılan Modeller
+## Kullanılan Modeller
 
 Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşük donanım tüketimi amacıyla aşağıdaki açık kaynaklı modeller tercih edilmiştir:
 
@@ -26,7 +28,7 @@ Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşü
 
 ---
 
-##  Kurulum (Lokal Python Ortamı)
+## Kurulum (Lokal Python Ortamı)
 
 Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebilirsiniz. *(Not: 3. Gün itibarıyla projenin ana çalıştırma ortamı Docker Compose olarak belirlenmiştir.)*
 
@@ -45,38 +47,28 @@ python -m pip install -r requirements.txt
 
 # Opsiyonel: 2. Gün laboratuvar çalışmalarını lokalde çalıştırmak için ağır kütüphaneleri de kurun
 python -m pip install -r requirements-lab.txt
-
 ```
+# Modüller
+Day 1 (Temeller): Python temellerinin atıldığı modüldür. Koda; hata yönetimi, veri tipleri, döngüler ve uç durum (edge-case) güvenlik kontrolleri eklenmiştir. (Ana Script: day01/text_utils.py)
 
-#  Modüller
-# Day 1 (Temeller):
- Python temellerinin atıldığı modüldür. Koda; hata yönetimi, veri tipleri, döngüler ve uç durum (edge-case) güvenlik kontrolleri eklenmiştir. (Ana Script: day01/text_utils.py)
+Day 2 (Hugging Face Laboratuvarı): Açık kaynaklı modellerin incelendiği laboratuvar günüdür. Token/Embedding kavramları ve metin üretim parametreleri üzerine deneyler yapılmıştır. (Ana Scriptler: day02/token_embedding_lab.py, day02/generation_experiment.py)
 
-# Day 2 (Hugging Face Laboratuvarı):
- Açık kaynaklı modellerin incelendiği laboratuvar günüdür. Token/Embedding kavramları ve metin üretim parametreleri üzerine deneyler yapılmıştır. (Ana Scriptler: day02/token_embedding_lab.py, day02/generation_experiment.py)
+Day 3 (Docker Entegrasyonu): Projenin ve testlerin Docker Compose üzerine taşındığı, çıktıların output/ klasöründe kalıcı hale getirildiği geçiş günüdür. (Ana Script: day03/text_cli.py)
 
-# Day 3 (Docker Entegrasyonu):
- Projenin ve testlerin Docker Compose üzerine taşındığı, çıktıların output/ klasöründe kalıcı hale getirildiği geçiş günüdür. (Ana Script: day03/text_cli.py)
+Day 4 (Yerel LLM ve Tool Calling): Ollama kullanılarak modelden yapılandırılmış veri (Structured Output) elde edildiği ve modelin Python fonksiyonlarını (Tool Calling) tetiklediği modüldür. (Ana Scriptler: day04/tool_call_demo.py, day04/ollama_client.py)
 
-# Day 4 (Yerel LLM ve Tool Calling):
- Ollama kullanılarak modelden yapılandırılmış veri (Structured Output) elde edildiği ve modelin Python fonksiyonlarını (Tool Calling) tetiklediği modüldür. (Ana Scriptler: day04/tool_call_demo.py, day04/ollama_client.py)
+Day 5 (Otonom Ajan Mimarisi): LangChain olmadan sıfırdan otonom bir ajan motorunun yazıldığı modüldür. Sisteme; sonsuz döngü frenleri, kendini düzelten (Self-Correction) yapı ve gözlemlenebilirlik (Trace) altyapısı eklenmiştir. (Ana Scriptler: day05/agent_loop.py, day05/agent_cli.py)
 
-# Day 5 (Otonom Ajan Mimarisi):
- LangChain olmadan sıfırdan otonom bir ajan motorunun yazıldığı modüldür. Sisteme; sonsuz döngü frenleri, kendini düzelten (Self-Correction) yapı ve gözlemlenebilirlik (Trace) altyapısı eklenmiştir. (Ana Scriptler: day05/agent_loop.py, day05/agent_cli.py)
+Day 6 (Anlamsal Arama): Framework kullanmadan saf matematik ile Anlamsal Arama (Semantic Search) motorunun inşa edildiği modüldür. Kelime bazlı arama ile anlamsal arama kıyaslanmıştır. (Ana Scriptler: day06/similarity.py, day06/semantic_search_cli.py)
 
-# Day 6 (Anlamsal Arama):
- Framework kullanmadan saf matematik ile Anlamsal Arama (Semantic Search) motorunun inşa edildiği modüldür. Kelime bazlı arama ile anlamsal arama kıyaslanmıştır. (Ana Scriptler: day06/similarity.py, day06/semantic_search_cli.py)
+Day 7 (Vektör Veritabanı): Qdrant kullanılarak yerel bir vektör veritabanının ayağa kaldırıldığı, anlamsal arama ve meta veri filtreleme (metadata filtering) yeteneklerinin entegre edildiği modüldür. (Ana Scriptler: day07/ingest.py, day07/search.py)
 
-# Day 7 (Vektör Veritabanı):
- Qdrant kullanılarak yerel bir vektör veritabanının ayağa kaldırıldığı, anlamsal arama ve meta veri filtreleme (metadata filtering) yeteneklerinin entegre edildiği modüldür. (Ana Scriptler: day07/ingest.py, day07/search.py)
+Day 8 (Native RAG ve Evaluation): Dış bir framework kullanmadan sıfırdan "Retrieval-Augmented Generation" (RAG) mimarisinin kurulduğu modüldür. Dökümanları parçalama, Qdrant'ta arama, bağlam oluşturma (citation) ve Hit@k metrikleriyle arama motoru kalitesi ölçülmüştür. (Ana Scriptler: day08/rag_pipeline.py, day08/rag_cli.py, day08/evaluation.py)
 
-# Day 8 (Native RAG ve Evaluation):
- Dış bir framework kullanmadan sıfırdan "Retrieval-Augmented Generation" (RAG) mimarisinin kurulduğu modüldür. Dökümanları parçalama, Qdrant'ta arama, bağlam oluşturma (citation) ve Hit@k metrikleriyle arama motoru kalitesi ölçülmüştür. (Ana Scriptler: day08/rag_pipeline.py, day08/rag_cli.py, day08/evaluation.py)
+Day 9 (LangGraph Orchestration): Native workflow ile LangGraph framework'ünün karşılaştırıldığı modüldür. Düğümler (nodes), kenarlar (edges) ve framework mimarisinin entegrasyonu tamamlanmıştır. (Ana Scriptler: day09/nodes.py, day09/graph_workflow.py, day09/graph_cli.py)
 
-#  Çalıştırma (Docker Compose ile)
-Projenin tüm bağımlılıkları Docker imajı içerisine paketlenmiştir. Projeyi ayağa kaldırmak için:
-
-
+# Çalıştırma (Docker Compose ile)
+Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
 ```bash
 # 1. Ollama (AI motoru) ve Qdrant (Vektör DB) servislerini arka planda başlatın
 docker compose up -d ollama qdrant
@@ -111,19 +103,9 @@ docker compose run --rm app python -m day08.rag_cli "Named volume ne zaman kulla
 # 11. Day 8 RAG sisteminin arama motoru kalitesini (Hit@k) ölçün
 docker compose run --rm app python -m day08.evaluation
 
+# 12. Day 9 LangGraph Orkestrasyonunu çalıştırın
+docker compose run --rm app python -m day09.graph_cli "Ankara'ya 2 kg kargo ne kadar?"
 ```
-# Test
-Testler, ortam tutarsızlıklarını önlemek için yalnızca Docker Compose üzerinden çalıştırılmalıdır.
-
-```bash
-# Sadece birim (Unit) testlerini çalıştırmak için:
-docker compose run --rm app python -m pytest -v -m "not integration"
-
-# Dış servislere (Ollama, Qdrant) bağlanan entegrasyon testlerini çalıştırmak için:
-docker compose run --rm app python -m pytest -v -m integration
-
-```
-# Proje Yapısı
 ```
 ai-intern-week/
 ├── day01/                  # 1. Gün metin analizi kodları
@@ -134,6 +116,7 @@ ai-intern-week/
 ├── day06/                  # 6. Gün Embedding vektörleri, kosinüs benzerliği ve arama motoru kodları
 ├── day07/                  # 7. Gün Qdrant vektör DB, Ingestion ve Vector DB deney kodları
 ├── day08/                  # 8. Gün Native RAG, chunking, context builder ve evaluation kodları
+├── day09/                  # 9. Gün LangGraph entegrasyonu, graph objesi ve node/edge yönetim kodları
 ├── output/                 # Docker'dan host'a yazılan kalıcı trace, arama ve log çıktıları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
@@ -153,4 +136,5 @@ ai-intern-week/
 # Bilinen Limitasyonlar
 Donanım: Scriptler lokal cihazda CPU üzerinde çalışacak şekilde kurgulanmıştır.
 
-Model Ölçeği: Kullanılan modeller hızlı test için küçük boyutludur. Karmaşık mantık yürütme sorularında halüsinasyon riskleri yüksektir veya tool seçmekte zorlanabilirler. Bu limitasyon, ajan motorunun kendi kendini düzelten (self-correction) yapısını ve RAG sistemindeki kaynak zorunluluğunu (citation policy) test etmek için bir avantaja dönüştürülmüştür.
+# Model Ölçeği:
+ Kullanılan modeller hızlı test için küçük boyutludur. Karmaşık mantık yürütme sorularında halüsinasyon riskleri yüksektir veya tool seçmekte zorlanabilirler. Bu limitasyon, ajan motorunun kendi kendini düzelten (self-correction) yapısını ve RAG sistemindeki kaynak zorunluluğunu (citation policy) test etmek için bir avantaja dönüştürülmüştür.

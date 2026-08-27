@@ -6,30 +6,9 @@ import uuid
 from day08.rag_pipeline import RAGPipeline
 from day08.retriever import create_default_retriever
 
-# Eğer OllamaClient day08.rag_cli içindeyse oradan import ediyoruz. 
-# Değilse diye basit bir client class'ını doğrudan buraya ekliyorum ki import hatası almayalım.
-import requests
-class OllamaClient:
-    def __init__(self, model_name: str = "qwen3:1.7b", base_url: str = "http://ollama:11434"):
-        self.model_name = model_name
-        self.base_url = base_url
-
-    def generate(self, system_prompt: str, user_prompt: str) -> str:
-        url = f"{self.base_url}/api/chat"
-        payload = {
-            "model": self.model_name,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            "stream": False
-        }
-        response = requests.post(url, json=payload)
-        response.raise_for_status()
-        return response.json()["message"]["content"]
-
-
-# --- 1. QDRANT ENTEGRASYON TESTİ ---
+from day08.rag_cli import OllamaClient
+# 1. QDRANT ENTEGRASYON TESTİ
+@pytest.mark.integration
 def test_qdrant_retrieval_fake_vectors():
     """Gerçek Qdrant sunucusunda, sahte (fake) vektörlerle test"""
     client = QdrantClient(url="http://qdrant:6333")
@@ -62,7 +41,8 @@ def test_qdrant_retrieval_fake_vectors():
     client.delete_collection(col_name)
 
 
-# --- 2. UÇTAN UCA (SMOKE) RAG TESTİ ---
+#2. UÇTAN UCA (SMOKE) RAG TESTİ
+@pytest.mark.integration
 def test_full_rag_smoke():
     """Bütün RAG mimarisinin (Qdrant + Ollama) uçtan uca (Smoke) testi"""
     retriever = create_default_retriever()

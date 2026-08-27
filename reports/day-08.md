@@ -116,9 +116,9 @@ Geçerli.
 Question count:
 8
 Answerable:
-7
+6
 Unanswerable:
-1
+2
 
 ## 12. Hit@k
 Hit@1:
