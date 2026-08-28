@@ -67,10 +67,11 @@ Day 8 (Native RAG ve Evaluation): Dış bir framework kullanmadan sıfırdan "Re
 
 Day 9 (LangGraph Orchestration): Native workflow ile LangGraph framework'ünün karşılaştırıldığı modüldür. Düğümler (nodes), kenarlar (edges) ve framework mimarisinin entegrasyonu tamamlanmıştır. (Ana Scriptler: day09/nodes.py, day09/graph_workflow.py, day09/graph_cli.py)
 
+Day 10 (Reliability & Security Boundaries): Sistemin hata yönetiminin (Failure Injection, özel Exception sınıfları) güçlendirildiği ve modelin ürettiği kodu çalıştırmak için Docker düzeyinde (network none, read-only, tmpfs, non-root) güvenlik yalıtım sınırlarının (Sandbox) test edildiği 2. hafta kapanış modüldür. (Ana Script: day10_failure_experiments.py)
+
 # Çalıştırma (Docker Compose ile)
 Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
 ```bash
-# 1. Ollama (AI motoru) ve Qdrant (Vektör DB) servislerini arka planda başlatın
 docker compose up -d ollama qdrant
 
 # 2. App imajını inşa edin
@@ -105,6 +106,15 @@ docker compose run --rm app python -m day08.evaluation
 
 # 12. Day 9 LangGraph Orkestrasyonunu çalıştırın
 docker compose run --rm app python -m day09.graph_cli "Ankara'ya 2 kg kargo ne kadar?"
+
+# 13. Day 10 Hata Enjeksiyonu (Failure Injection) deneylerini çalıştırın
+docker compose run --rm app python day10_failure_experiments.py
+
+# 14. Day 10 Hata yönetimini (Exceptions) doğrulayan tüm birim testlerini (Unit Tests) çalıştırın
+docker compose run --rm app python -m pytest -v -m "not integration"
+
+# 15. Day 10 Kısıtlı Sandbox (Restricted Security Boundary) Testini çalıştırın
+docker run --rm --network none --read-only --tmpfs /tmp --cpus="0.5" --memory="128m" sandbox-demo
 ```
 ```
 ai-intern-week/
@@ -117,20 +127,22 @@ ai-intern-week/
 ├── day07/                  # 7. Gün Qdrant vektör DB, Ingestion ve Vector DB deney kodları
 ├── day08/                  # 8. Gün Native RAG, chunking, context builder ve evaluation kodları
 ├── day09/                  # 9. Gün LangGraph entegrasyonu, graph objesi ve node/edge yönetim kodları
-├── output/                 # Docker'dan host'a yazılan kalıcı trace, arama ve log çıktıları
+├── day10/                  # 10. Gün Hata yönetimi (Exception), Failure Injection ve Security Sandbox incelemeleri
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları ve framework mimari eşleştirmeleri
+├── output/                 # Docker'dan host'a yazılan kalıcı trace, arama ve log çıktıları
 ├── reports/                # Günlük gelişim raporları (Blocker'lar ve öğrenimler)
+├── sandbox_demo/           # 10. Gün Restricted Sandbox (Docker Security) laboratuvar dosyaları
 ├── tests/                  # Pytest ile yazılmış otomatik test senaryoları
-├── .gitignore              # Git tarafından takip edilmeyen dosyalar
 ├── .dockerignore           # Docker build context'e girmeyecek dosyalar
-├── pytest.ini              # Pytest konfigürasyonu
-├── Dockerfile              # Proje imajının kurulum adımları
+├── .gitignore              # Git tarafından takip edilmeyen dosyalar
 ├── compose.yaml            # Servis, volume ve environment tanımları
+├── Dockerfile              # Proje imajının kurulum adımları
+├── pytest.ini              # Pytest konfigürasyonu
+├── README.md               # Proje dokümantasyonu
 ├── requirements-lab.txt    # Lokal deney kodları için ağır bağımlılıklar (torch, transformers)
-├── requirements.txt        # Temel bağımlılıklar (pytest, requests, qdrant-client vb.)
-└── README.md               # Proje dokümantasyonu
+└── requirements.txt        # Temel bağımlılıklar (pytest, requests, qdrant-client vb.)
 ```
 
 # Bilinen Limitasyonlar

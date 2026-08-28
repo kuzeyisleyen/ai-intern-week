@@ -170,11 +170,11 @@ Model answer:
 Fallback yaptı mı?
 Evet.
 Unsupported claim var mı?
-Hayır. System Promptu mükemmel çalıştı.
+Hayır. Sistem istemine uygun davrandı
 
 ## 17. Manual Generation Review
 5 soru için grounding / relevance / citation / unsupported claim özeti:
-Modellerin kendi kendine halüsinasyon görme hevesini sıkı bir system prompt zorunlu kaynak politikası ve Regex validasyonu ile kilit altına almayı başardım. Çıktılar %100 oranında Grounded fakat bunu verilerimdeki keskinlik ve sorularımdaki netliğe bağlıyorum.
+Bu küçük sample'da retrieved set dışı citation gözlemlenmedi ve manuel kontrolde unsupported claim görülmedi. Bu, production'da hallucination'ın ortadan kalktığını garanti etmez.
 
 ## 18. Output
 output/day08-rag-retrieval-eval.json

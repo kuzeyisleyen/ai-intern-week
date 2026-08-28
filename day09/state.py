@@ -20,8 +20,12 @@ class WorkflowState(TypedDict):
     rewrite_count: int
     step_count: int
     status: str
-    errors: list[str]
     node_trace: list[str]
+
+    errors: list[str]
+    error_type: str | None       
+    failed_node: str | None     
+    fallback_reason: str | None
 
 
 def create_initial_state(query: str) -> WorkflowState:
@@ -41,4 +45,8 @@ def create_initial_state(query: str) -> WorkflowState:
         "status": "started",
         "errors": [],
         "node_trace": [],
+        
+        "error_type": None,
+        "failed_node": None,
+        "fallback_reason": None,
     }

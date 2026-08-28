@@ -1,32 +1,51 @@
 import sys
 from day09.state import create_initial_state
-from day09.graph_workflow import graph
+from day09.graph_workflow import run_graph_workflow
 from day09.trace_writer import write_trace
 
-def run_langgraph_workflow(query: str):
+def print_workflow_trace(state: dict):
+    """İş akışı tamamlandıktan sonra terminale basar."""
+    print("\n" + "="*40)
+    print(" WORKFLOW ÖZETİ")
+    print("="*40)
+    print(f"Durum (Status): {state.get('status')}")
+    print(f"Rota (Route): {state.get('route', 'Belirlenmedi')}")
+    
+    trace = state.get("node_trace", [])
+    print(f"İz (Trace): {' ➔ '.join(trace) if trace else 'Boş'}")
+        
+    if state.get("status") in ["error", "stopped"]:
+        print("-" * 40)
+        print(" HATA DETAYLARI")
+        print(f"Hata Türü: {state.get('error_type', 'Bilinmiyor')}")
+        print(f"Kopan Düğüm: {state.get('failed_node', 'Bilinmiyor')}")
+        if state.get("fallback_reason"):
+            print(f"Fallback Nedeni: {state.get('fallback_reason')}")
+        if state.get("errors"):
+            print("Hata Mesajları :")
+            for err in state.get("errors", []):
+                print(f"  - {err}")
+    else:
+        print(f"\nCEVAP: {state.get('answer', 'Cevap üretilemedi.')}")
+        
+    print("="*40 + "\n")
+
+def run_langgraph_workflow_cli(query: str):
     print(f"\n{'='*50}\nSORU: {query}")
-    
-    # 1. Başlangıç durumunu oluştur
-    initial_state = create_initial_state(query)
-    
-    # 2. Graph'ı çalıştır (invoke)
     print("[SİSTEM] LangGraph orkestrasyonu başlatılıyor...")
-    final_state = graph.invoke(initial_state)
     
-    # 3. TRACE'İ KAYDET (İşte burayı ekliyoruz!)
+    final_state = run_graph_workflow(query)
+    
     write_trace(final_state)
     print("[SİSTEM] Trace (iz) başarıyla output/day09-workflow-traces.jsonl dosyasına kaydedildi.")
     
-    # 4. Sonuçları ekrana yazdır
-    print(f"[ROTA]: {final_state.get('route')}")
-    print(f"[TRACE]: {final_state.get('node_trace')}")
-    print(f"[CEVAP]: {final_state.get('answer')}")
-    print(f"[ADIM SAYISI]: {final_state.get('step_count')}")
+    print_workflow_trace(final_state)
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         user_query = " ".join(sys.argv[1:])
-        run_langgraph_workflow(user_query)
+        run_langgraph_workflow_cli(user_query)
     else:
         test_queries = [
             "Merhaba",
@@ -37,4 +56,4 @@ if __name__ == "__main__":
         ]
         
         for q in test_queries:
-            run_langgraph_workflow(q)
+            run_langgraph_workflow_cli(q)

@@ -10,6 +10,11 @@ from day04.tools import SHIPPING_TOOL
 from day08.context_builder import build_context
 from day08.rag_pipeline import SYSTEM_PROMPT, build_user_prompt, validate_citations
 from day08.retriever import RetrievedChunk, create_default_retriever
+from day10.exceptions import (WorkflowError, 
+DependencyUnavailableError, 
+DependencyTimeOutError,
+WorkflowLimitError,
+ResponseContractError)
 
 
 MAX_REWRITES = 1
@@ -37,7 +42,7 @@ def next_step(state: dict, node_name: str) -> dict:
     new_step = state.get("step_count", 0) + 1
 
     if new_step > MAX_STEPS:
-        raise Exception("WorkflowLimitError: MAX_STEPS sınırına ulaşıldı.")
+        raise WorkflowLimitError("Akışın Limiti Aşıldı") #
 
     return {
         "step_count": new_step,
@@ -77,15 +82,17 @@ def direct_generate_node(state: dict) -> dict:
     )
 
     update = next_step(state, "direct_generate")
+    
     if "error" in response:
         update["status"] = "error"
-        update["errors"] = state["errors"] + [response["error"]]
+        update["error_type"] = "DependencyUnavailableError"
+        update["failed_node"] = "direct_generate"
+        update["errors"] = state.get("errors", []) + [response["error"]]
         return update
 
     update["answer"] = response.get("message", {}).get("content", "").strip()
     update["status"] = "completed"
     return update
-
 
 # Sadece izin verdiğim kargo aracını kullanarak modelin hesaplama yapmasını sağlıyorum.
 def tool_node(state: dict) -> dict:
@@ -99,13 +106,18 @@ def tool_node(state: dict) -> dict:
 
     if "error" in response:
         update["status"] = "error"
-        update["errors"] = state["errors"] + [response["error"]]
+        update["error_type"] = "DependencyUnavailableError"#
+        update["failed_node"] = "tool"
+        update["errors"] = state.get("errors", []) + [response["error"]]
         return update
 
     tool_calls = response.get("message", {}).get("tool_calls", [])
+    
     if not tool_calls:
         update["status"] = "error"
-        update["errors"] = state["errors"] + ["Model geçerli bir tool çağrısı üretmedi."]
+        update["error_type"] = "ResponseContractError"
+        update["failed_node"] = "tool"
+        update["errors"] = state.get("errors", []) + ["Model geçerli bir tool çağrısı üretmedi."]
         return update
 
     function_call = tool_calls[0]["function"]
@@ -113,37 +125,46 @@ def tool_node(state: dict) -> dict:
     arguments = function_call["arguments"]
 
     if tool_name not in ALLOWED_TOOL_NAMES:
-        update["tool_name"] = tool_name
         update["status"] = "error"
-        update["errors"] = state["errors"] + [f"İzinsiz tool: {tool_name}"]
+        update["error_type"] = "ResponseContractError"
+        update["failed_node"] = "tool"
+        update["errors"] = state.get("errors", []) + [f"İzinsiz tool: {tool_name}"]
         return update
 
     tool_result = execute_tool(tool_name, arguments)
+    
     if "error" in tool_result:
-        update["tool_name"] = tool_name
-        update["tool_result"] = tool_result
         update["status"] = "error"
-        update["errors"] = state["errors"] + [tool_result["error"]]
+        update["error_type"] = "ToolRuntimeError"  
+        update["failed_node"] = "tool"
+        update["errors"] = state.get("errors", []) + [tool_result["error"]]
         return update
 
     update["tool_name"] = tool_name
     update["tool_result"] = tool_result
-    update["answer"] = (
-        f"{tool_result['city']} için {tool_result['weight_kg']} kg kargo ücreti "
-        f"{tool_result['cost']} {tool_result['currency']}."
-    )
+    update["answer"] = f"{tool_result['city']} için {tool_result['weight_kg']} kg kargo ücreti {tool_result['cost']} {tool_result['currency']}."
     update["status"] = "completed"
     return update
 
 
 # Qdrant'taki vektör veritabanımı tarayıp soruyla en alakalı 3 metin parçasını çekiyorum.
 def retrieve_node(state: dict) -> dict:
-    """Day 8 retriever'ını yeniden kullanarak retrieval yapar."""
-    retriever = create_default_retriever()
-    retrieved_chunks = retriever.retrieve(state["retrieval_query"], top_k=3)
 
+    """Day 8 retriever'ını yeniden kullanarak retrieval yapar."""
     update = next_step(state, "retrieve")
-    update["retrieved_chunks"] = [asdict(chunk) for chunk in retrieved_chunks]
+
+    try:
+        retriever = create_default_retriever()
+        retrieved_chunks = retriever.retrieve(state["retrieval_query"], top_k=3)
+        update["retrieved_chunks"] = [asdict(chunk) for chunk in retrieved_chunks]
+    except Exception as e :
+        update["error_type"] = "DependencyUnavailableError" #
+        update["failed_node"] = "retrieve"
+        update["errors"] = state.get("errors", []) + [f"Qdrant bağlantı hatası: {str(e)}"]
+  
+        update["status"] = "error"
+        update["retrieved_chunks"] = []
+
     return update
 
 
@@ -160,7 +181,7 @@ def quality_node(state: dict) -> dict:
 
 # Bulduğum bağlamı modele gönderip cevap ürettiriyorum ve içinde geçen [Sx] kaynak etiketlerini topluyorum.
 def generate_node(state: dict) -> dict:
-    chunks = [RetrievedChunk(**chunk) for chunk in state["retrieved_chunks"]]
+    chunks = [RetrievedChunk(**chunk) for chunk in state.get("retrieved_chunks", [])]
     context = build_context(chunks)
     user_prompt = build_user_prompt(state["original_query"], context)
 
@@ -175,7 +196,9 @@ def generate_node(state: dict) -> dict:
 
     if "error" in response:
         update["status"] = "error"
-        update["errors"] = state["errors"] + [response["error"]]
+        update["error_type"] = "DependencyUnavailableError" #
+        update["failed_node"] = "generate"
+        update["errors"] = state.get("errors", []) + [response["error"]]
         return update
 
     answer = response.get("message", {}).get("content", "").strip()
@@ -188,7 +211,7 @@ def generate_node(state: dict) -> dict:
 
 # Modelin verdiği [Sx] etiketlerinin gerçekten benim verdiğim metinlerde olup olmadığını kontrol ediyorum.
 def validate_node(state: dict) -> dict:
-    chunks = [RetrievedChunk(**chunk) for chunk in state["retrieved_chunks"]]
+    chunks = [RetrievedChunk(**chunk) for chunk in state.get("retrieved_chunks", [])]
     context = build_context(chunks)
     invalid_citations = validate_citations(state["answer"] or "", context.valid_labels)
 
@@ -196,7 +219,9 @@ def validate_node(state: dict) -> dict:
 
     if invalid_citations:
         update["status"] = "error"
-        update["errors"] = state["errors"] + [f"Geçersiz citation: {citation}" for citation in invalid_citations]
+        update["error_type"] = "ResponseContractError"  
+        update["failed_node"] = "validate"
+        update["errors"] = state.get("errors", []) + [f"Geçersiz citation: {citation}" for citation in invalid_citations]
         return update
 
     update["status"] = "completed"
@@ -207,31 +232,40 @@ def validate_node(state: dict) -> dict:
 def rewrite_query(query: str) -> str:
     """Kılavuzdaki prompt ile yalnız retrieval sorgusunu yeniden yazar."""
     prompt = REWRITE_PROMPT.format(query=query)
-
+    
     try:
         response = requests.post(
             OLLAMA_GENERATE_URL,
             json={"model": GEN_MODEL, "prompt": prompt, "stream": False},
             timeout=30,
         )
-        if response.status_code == 200:
-            rewritten = response.json().get("response", "").strip()
-            if rewritten:
-                return rewritten
-    except requests.RequestException:
-        pass
-
-    # Model erişilemezse control-flow çalışmaya devam eder; niyet değiştirilmez.
+        response.raise_for_status() 
+        
+        rewritten = response.json().get("response", "").strip()
+        if rewritten:
+            return rewritten
+            
+    except requests.RequestException as e:
+        raise DependencyUnavailableError(f"Ollama rewrite servisi çöktü: {str(e)}") #
+        
     return query
 
 
 # Yeni baştan yazılan soruyu kaydedip sonsuz döngüye girmemek için rewrite sayacını bir artırıyorum.
 def rewrite_node(state: dict) -> dict:
-    rewritten_query = rewrite_query(state["retrieval_query"])
-    
     update = next_step(state, "rewrite")
-    update["retrieval_query"] = rewritten_query
-    update["rewrite_count"] = state["rewrite_count"] + 1
+    
+    try:
+        rewritten_query = rewrite_query(state["retrieval_query"])
+        update["retrieval_query"] = rewritten_query
+        update["rewrite_count"] = state.get("rewrite_count", 0) + 1
+        
+    except DependencyUnavailableError as e: #
+        update["status"] = "error"
+        update["error_type"] = "DependencyUnavailableError"
+        update["failed_node"] = "rewrite"
+        update["errors"] = state.get("errors", []) + [str(e)]
+        
     return update
 
 
@@ -240,4 +274,13 @@ def fallback_node(state: dict) -> dict:
     update = next_step(state, "fallback")
     update["answer"] = "Üzgünüm, bu konuda yeterli bilgi bulamadım."
     update["status"] = "completed"
+    return update
+
+def error_node(state: dict) -> dict:
+    update = next_step(state, "error_node")
+    update["status"] = "error"
+    
+    if state.get("route") not in {"smalltalk", "knowledge", "tool"}:
+        update["errors"] = state.get("errors", []) + [f"Bilinmeyen rota: {state.get('route')}"]
+        
     return update

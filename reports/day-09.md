@@ -3,8 +3,10 @@ day: 9
 date: 2026-08-27
 status: completed
 langgraph_version: 1.2.11
-unit_tests_passed: 4
-integration_tests_passed: 3
+total_unit_tests_passed: 50
+total_integration_tests_passed: 15
+specific_unit_tests_passed: 9
+specific_integration_tests_passed: 3
 blocker_count: 0
 ---
 
@@ -215,7 +217,7 @@ Kayıt dosyamızda smalltalk (Merhaba), knowledge (Named volume) ve tool (Kargo 
 
 ## 14. Testler
 
-Unit Passed: 4
+Unit Passed: 9
 Unit Failed: 0
 
 Integration Passed: 3

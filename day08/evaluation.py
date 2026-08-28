@@ -37,7 +37,6 @@ def evaluate_retrieval(
     unanswerable_count = 0 
     
     results_log = []
-    top_k_value = 3
 
     print("RETRIEVAL EVALUATION (Hit@k Metrikleri)")
     
@@ -105,21 +104,18 @@ def evaluate_retrieval(
     print(f" Rapor başarıyla '{output_path}' konumuna kaydedildi.")
 
 if __name__ == "__main__":
-    chunk_sizes = [300, 600, 1000]
     top_ks = [1, 3, 5]
     
     print("Toplu değerlendirme başlatılıyor...")
     
-    for c in chunk_sizes:
-        for k in top_ks:
-            print(f"\n--- Deney: Chunk Size = {c} | Top K = {k} ---")
-            
-            overlap_val = 50 
-            
-            evaluate_retrieval(
-                chunk_size=c, 
-                overlap=overlap_val, 
-                top_k_value=k
-            )
+    # Sadece sabit 600/100 config üzerinde gerçek top_k deneyleri yapıyoruz
+    for k in top_ks:
+        print(f"\n--- Deney: Chunk Size = 600, Overlap = 100 | Top K = {k} ---")
+        
+        evaluate_retrieval(
+            chunk_size=600, 
+            overlap=100, 
+            top_k_value=k
+        )
             
     print("\nTüm deneyler tamamlandı")

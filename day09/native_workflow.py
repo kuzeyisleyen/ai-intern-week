@@ -12,6 +12,11 @@ from day09.nodes import (
     validate_node,
 )
 from day09.state import create_initial_state
+from day10.exceptions import (WorkflowError, 
+DependencyUnavailableError, 
+DependencyTimeOutError,
+WorkflowLimitError,
+ResponseContractError)
 
 
 TERMINAL_STATUSES = {"completed", "error", "stopped"}
@@ -36,67 +41,73 @@ def run_native_workflow(query: str) -> dict:
     print(f"YENİ SORU: {query}")
     state = create_initial_state(query)
 
-    print("[SİSTEM] Sınıflandırma yapılıyor...")
-    state.update(classify_node(state))
+    # DETECT
+    try:
+        print("[SİSTEM] Sınıflandırma yapılıyor...")
+        state.update(classify_node(state))
 
-    target_route = state["route"]
-    print(f"[ROTA BULUNDU] Soru şu rotaya gidiyor: {target_route}")
+        target_route = state["route"]
+        print(f"[ROTA BULUNDU] Soru şu rotaya gidiyor: {target_route}")
 
-    if target_route == "smalltalk":
-        state.update(direct_generate_node(state))
+        if target_route == "smalltalk":
+            state.update(direct_generate_node(state))
 
-    elif target_route == "knowledge":
-        while state["status"] not in TERMINAL_STATUSES:
-            if stop_if_max_steps_reached(state):
-                break
+        elif target_route == "knowledge":
+            while state["status"] not in TERMINAL_STATUSES:
 
-            print("[SİSTEM] Veritabanında arama yapılıyor...")
-            state.update(retrieve_node(state))
+                print("[SİSTEM] Veritabanında arama yapılıyor...")
+                state.update(retrieve_node(state))
 
-            # Önceki akıştaki ana eksik buydu: retrieve quality üretmez.
-            state.update(quality_node(state))
-            quality = state["retrieval_quality"]
+                state.update(quality_node(state))
+                quality = state["retrieval_quality"]
 
-            if quality == "usable":
-                print("[BAŞARILI] Kullanılabilir veri bulundu.")
-                state.update(generate_node(state))
-                state.update(validate_node(state))
+                if quality == "usable":
+                    print("[BAŞARILI] Kullanılabilir veri bulundu.")
+                    state.update(generate_node(state))
+                    state.update(validate_node(state))
 
-            elif quality == "weak":
-                print(
-                    "[UYARI] Veri kalitesi zayıf. "
-                    f"Mevcut Rewrite: {state['rewrite_count']} / {MAX_REWRITES}"
-                )
-
-                if state["rewrite_count"] < MAX_REWRITES:
-                    print("[SİSTEM] Soru bir kez yeniden yazılıyor...")
-                    state.update(rewrite_node(state))
+                elif quality == "weak":
+                    print(f"[UYARI] Veri kalitesi zayıf. Mevcut Rewrite: {state.get('rewrite_count', 0)} / {MAX_REWRITES}")
+                    if state.get("rewrite_count", 0) < MAX_REWRITES:
+                        print("[SİSTEM] Soru bir kez yeniden yazılıyor...")
+                        state.update(rewrite_node(state))
+                    else:
+                        print("[FALLBACK] Rewrite sınırına ulaşıldı.")
+                        state.update(fallback_node(state))
                 else:
-                    print("[FALLBACK] Rewrite sınırına ulaşıldı.")
-                    state.update(fallback_node(state))
+                    state.update({"status": "error", "errors": state["errors"] + [f"Bilinmeyen retrieval quality: {quality}"]})
 
-            else:
-                state.update(
-                    {
-                        "status": "error",
-                        "errors": state["errors"]
-                        + [f"Bilinmeyen retrieval quality: {quality}"],
-                    }
-                )
+        elif target_route == "tool":
+            state.update(tool_node(state))
 
-    elif target_route == "tool":
-        state.update(tool_node(state))
+        else:
+            state.update({
+                "status": "error", 
+                "errors": state["errors"] + [f"Bilinmeyen rota: {target_route}"]
+            })
 
-    else:
-        state.update(
-            {
-                "status": "error",
-                "errors": state["errors"] + ["Bilinmeyen rota"],
-            }
-        )
+    # CONTAIN & RECOVER
+    except WorkflowLimitError as e:
+        print("[DURDURULDU] İş akışı limiti aşıldı.")
+        state.update({
+            "status": "stopped",
+            "error_type": "workflow_limit",
+            "fallback_reason": "max_steps",
+            "errors": state.get("errors", []) + [str(e)]
+        })
+
+    # CONTAIN & RECOVER:
+    except WorkflowError as e:
+        print(f"[HATA] Beklenen bir çalışma zamanı hatası yakalandı: {e.__class__.__name__}")
+        state.update({
+            "status": "error",
+            "error_type": e.__class__.__name__,
+            "errors": state.get("errors", []) + [str(e)]
+        })
+
+    # OBSERVE
 
     return state
-
 
 if __name__ == "__main__":
     result_1 = run_native_workflow("Selam, nasılsın?")

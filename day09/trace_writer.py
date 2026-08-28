@@ -26,7 +26,11 @@ def write_trace(state: dict):
         "retrieved": retrieved_data,
         "tool_name": state.get("tool_name"),
         "status": state.get("status"),
-        "final_answer": state.get("answer")
+        "final_answer": state.get("answer"),
+        "error_type" : state.get("error_type"),
+        "failed_node":state.get("failed_node"),
+        "fallback_reason":state.get("fallback_reason"),
+        "errors":state.get("errors",[])
     }
     
     with open(output_file, "a", encoding="utf-8") as f:

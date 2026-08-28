@@ -205,7 +205,7 @@ def create_default_retriever(
         config = RetrieverConfig()
 
     embedding_client = EmbeddingClient()
-    qdrant_client = QdrantClient(url=config.qdrant_url)
+    qdrant_client = QdrantClient(url=config.qdrant_url,timeout=10.0)
 
     return Retriever(
         config=config,

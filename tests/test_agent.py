@@ -54,7 +54,7 @@ def test_unknown_tool():
     client = FakeClient(fake_responses)
     state = run_agent("Bana şekerli kahve yap", client=client)
     assert state["status"] == "completed"
-    assert "error" in state["tool_history"][0]["result"]
+    assert "Tool Error" in state["tool_history"][0]["result"]
 
 def test_invalid_argument():
     """Ajanın parametreleri yanlış veya eksik gönderdiği senaryo."""
@@ -70,7 +70,7 @@ def test_invalid_argument():
     client = FakeClient(fake_responses)
     state = run_agent("İzmir 2kg kargo", client=client)
     assert state["status"] == "completed"
-    assert "error" in state["tool_history"][0]["result"]
+    assert "Tool Error" in state["tool_history"][0]["result"]
 
 
 def test_tool_exception():
@@ -87,7 +87,7 @@ def test_tool_exception():
     client = FakeClient(fake_responses)
     state = run_agent("Bozuk kargo hesabı yap", client=client)
     assert state["status"] == "completed"
-    assert "error" in state["tool_history"][0]["result"]
+    assert "Tool Error" in state["tool_history"][0]["result"]
 
 def test_max_iteration():
     """Ajanın sürekli tool çağırarak sonsuz döngüye girmeye çalıştığı senaryo."""

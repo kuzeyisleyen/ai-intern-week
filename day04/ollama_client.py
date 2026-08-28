@@ -34,7 +34,7 @@ class OllamaClient:
         if tools:
             payload["tools"] = tools
             
-        # 2. Eğer JSON formatı isteniyorsa, payload'a ekliyoruz (Ollama'nın resmi format desteği)
+        # 2. Eğer JSON formatı isteniyorsa, payload'a ekliyoruz 
         if response_format == "json":
             payload["format"] = "json"
 
