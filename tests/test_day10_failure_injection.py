@@ -17,7 +17,7 @@ class FailingRetriever:
 def mock_create_default_retriever():
     return FailingRetriever()
 
-def run_injection_test():
+def test_retriever_unavailable_failure():
     print("=" * 50)
     print("TEST: QDRANT UNAVAILABLE FAILURE INJECTION")
     print("=" * 50)
@@ -75,4 +75,4 @@ def run_injection_test():
         nodes.create_default_retriever = orijinal_create
 
 if __name__ == "__main__":
-    run_injection_test()
+    test_retriever_unavailable_failure()

@@ -126,7 +126,7 @@ CPU limit observation:
 
 ## 10. Her Isolation Katmanını Neden Kullandım
 network none:
-Dış dünya ile bağlantıyı keserek, model kodunun içeriden dışarıya veri veya şifre sızdırmasını engellemek için.
+workload'un normal network üzerinden dışarı veri gönderebilme yüzeyini ciddi biçimde azaltır; tek başına bütün exfiltration/security risklerini ortadan kaldırdığı iddia edilmemelidir.
 read-only:
 İçerideki dosya sistemine yazma yetkisini kapatarak zararlı kalıcı dosyaların oluşmasını önlemek için.
 tmpfs: 
@@ -142,7 +142,7 @@ cap-drop:
 no-new-privileges:
 Uygulamanın sonradan yetki tırmanışı (privilege escalation) yapmasını önlemek için.
 non-root:
-İşlemlerin süper yönetici (root) yerine sıradan ve kısıtlı bir kullanıcı (1000:1000) ile çalışmasını sağlamak için.
+İşlemlerin süper yönetici (root) yerine sıradan ve kısıtlı bir kullanıcı (65532:65532) ile çalışmasını sağlamak için.
 seccomp:
 Uygulamanın doğrudan kernel üzerinde çalıştırabileceği tehlikeli sistem çağrılarını (syscall) filtrelemek için.
 ## 11. Docker'ın Sınırları
@@ -214,7 +214,7 @@ Testleri yeni mimariye göre baştan düzenledim. Hata döneceğini varsaydığ�
 1. Modelin ürettiği kararları veya kodları deterministik Python sınırları içine almak güvenilirliğin temelidir.
 2. Bir sistemde "bug" ile "failure" farklıdır; dış bağımlılıkların çökmesi olan failure durumları yutulmamalı, aksine detect -> contain -> recover -> observe döngüsüyle yönetilmelidir.
 3. Tool çağırma (side effect) gibi işlemler körlemesine retry edilmemelidir, aksi takdirde felaket sonuçlar doğurabilir.
-4. `pytest.mock` gibi araçlarla, üretim kodunu bozmadan hata senaryolarını simüle edip sistemin direncini kanıtlamak mümkündür.
+4. `unittest.mock` gibi araçlarla, üretim kodunu bozmadan hata senaryolarını simüle edip sistemin direncini kanıtlamak mümkündür.
 5. Docker tek başına bir güvenlik kalesi değildir; yetkileri `--read-only`, `--network none`, `tmpfs` ile sınırlamak ve Firecracker/gVisor gibi yapıların gerekliliğini anlamak sistem güvenliği için şarttır.
 
 ## 19. İkinci Haftanın Sonunda Kendimi Nerede Görüyorum?

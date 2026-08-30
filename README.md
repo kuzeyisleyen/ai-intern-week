@@ -1,6 +1,6 @@
 # AI Intern Week
 
-**Proje Durumu:** Tamamlandı (Day 9 - LangGraph Orkestrasyonu)
+**Proje Durumu:** Tamamlandı ( Day 10 / Week 2 tamamlandı)
 
 > **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
 > Bu proje, yazılım mühendisliği disiplinlerini uygulayarak LLM'lerin çalışma prensiplerini (Token, Embedding, Tool Calling, Otonom Ajanlar ve RAG) sıfırdan ve framework kullanmadan inşa etmeyi amaçlayan bir staj simülasyonudur.
@@ -108,13 +108,27 @@ docker compose run --rm app python -m day08.evaluation
 docker compose run --rm app python -m day09.graph_cli "Ankara'ya 2 kg kargo ne kadar?"
 
 # 13. Day 10 Hata Enjeksiyonu (Failure Injection) deneylerini çalıştırın
-docker compose run --rm app python day10_failure_experiments.py
+docker compose run --rm app python day10.failure_experiments.py
 
 # 14. Day 10 Hata yönetimini (Exceptions) doğrulayan tüm birim testlerini (Unit Tests) çalıştırın
 docker compose run --rm app python -m pytest -v -m "not integration"
 
-# 15. Day 10 Kısıtlı Sandbox (Restricted Security Boundary) Testini çalıştırın
-docker run --rm --network none --read-only --tmpfs /tmp --cpus="0.5" --memory="128m" sandbox-demo
+# 15. Day 10 Kısıtlı Sandbox imajını derleyin (Build)
+docker build \
+  -t sandbox-demo \
+  sandbox_demo
+
+# 16. Day 10 Öğrenilen tüm güvenlik katmanlarını (Isolation Layers) içeren Canonical Sandbox Testini çalıştırın
+docker run --rm \
+  --network none \
+  --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+  --memory=128m \
+  --cpus=0.5 \
+  --pids-limit=64 \
+  --cap-drop=ALL \
+  --security-opt no-new-privileges=true \
+  sandbox-demo
 ```
 ```
 ai-intern-week/

@@ -55,7 +55,7 @@ Zaman aşımı gibi kuralları yöneten ana sistemimiz (trusted) ile, içeride n
 Çalışan kod ile ana bilgisayarın çekirdeği arasına giren, doğrudan teması keserek güvenliği artıran ekstra bir yazılımsal güvenlik katmanıdır.
 
 ## Firecracker mental model
-Container'ların paylaşımlı yapısı yerine, çok hızlı açılıp kapanan ve donanım düzeyinde tamamen izole çalışan hafif sanal makineler (microVM) kullanma mantığıdır.
+microVM/virtualization boundary ile klasik shared-kernel container'a kıyasla daha güçlü bir isolation boundary sağlar.
 
 ## Production multi-tenant sandbox neden daha güçlü isolation isteyebilir?
 Yüzlerce farklı kullanıcının kodunu aynı ortamda çalıştırdığımız bir yapıda, standart container'ların sızıntı riskleri çok büyük olacağından sanal makine düzeyinde yalıtımlara (gVisor, Firecracker gibi) ihtiyaç duyulur.
