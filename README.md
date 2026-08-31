@@ -3,8 +3,7 @@
 **Proje Durumu:** Tamamlandı ( Day 10 / Week 2 tamamlandı)
 
 > **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
-> Bu proje, yazılım mühendisliği disiplinlerini uygulayarak LLM'lerin çalışma prensiplerini (Token, Embedding, Tool Calling, Otonom Ajanlar ve RAG) sıfırdan ve framework kullanmadan inşa etmeyi amaçlayan bir staj simülasyonudur.
-
+> Proje, temel mekanizmaları önce native Python ile görünür biçimde kurup, ihtiyaç ortaya çıktıktan sonra LangGraph gibi orchestration abstraction'larıyla eşlemeyi amaçlar.
 ---
 
 ## Gereksinimler
@@ -25,6 +24,7 @@ Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşü
 *   **SmolLM2-360M:** Hugging Face ekosisteminde (Day 2); Tokenizer yapısını anlama, Embedding vektörlerini inceleme ve metin üretim parametreleri (temperature, top_p) deneylerinde kullanılmıştır.
 *   **qwen3:1.7b:** Ollama altyapısında (Day 4, 5 ve 8); JSON formatında yapılandırılmış çıktı (Structured Output) üretme, dış Python fonksiyonlarını tetikleme (Tool Calling), Otonom Ajan (Agent) senaryolarında ve RAG sisteminde "Grounded" (bağlama sadık) metin üretim motoru olarak kullanılmıştır.
 *   **embeddinggemma:** Ollama altyapısında (Day 6, 7 ve 8); metinleri 768 boyutlu uzayda vektörlere dönüştürmek, Qdrant üzerinde "Kosinüs Benzerliği" (Cosine Similarity) aracılığıyla Anlamsal Arama (Semantic Search) motoru kurmak için kullanılmıştır.
+*   **Qdrant/bm25 (FastEmbed):** Qdrant üzerinde yerel (local-first) işlem gücüyle sözcüksel (lexical/sparse) arama sinyallerini oluşturmak için Day 11 kapsamında eklenmiştir.
 
 ---
 
@@ -69,6 +69,8 @@ Day 9 (LangGraph Orchestration): Native workflow ile LangGraph framework'ünün 
 
 Day 10 (Reliability & Security Boundaries): Sistemin hata yönetiminin (Failure Injection, özel Exception sınıfları) güçlendirildiği ve modelin ürettiği kodu çalıştırmak için Docker düzeyinde (network none, read-only, tmpfs, non-root) güvenlik yalıtım sınırlarının (Sandbox) test edildiği 2. hafta kapanış modüldür. (Ana Script: day10_failure_experiments.py)
 
+Day 11 (Retrieval Quality Engineering): Sisteme yeni bir arama yöntemi eklemeden önce Hit@k ve MRR (Mean Reciprocal Rank) metrikleriyle kalitenin ölçüldüğü modüldür. Dense (anlamsal), Lexical (sözcüksel) ve RRF (Reciprocal Rank Fusion) kullanan Hybrid arama stratejileri değerlendirme veri setleri üzerinden karşılaştırılmıştır. (Ana Scriptler: day11/ingest.py, day11/benchmark.py)
+
 # Çalıştırma (Docker Compose ile)
 Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
 ```bash
@@ -108,7 +110,7 @@ docker compose run --rm app python -m day08.evaluation
 docker compose run --rm app python -m day09.graph_cli "Ankara'ya 2 kg kargo ne kadar?"
 
 # 13. Day 10 Hata Enjeksiyonu (Failure Injection) deneylerini çalıştırın
-docker compose run --rm app python day10.failure_experiments.py
+docker compose run --rm app python day10.failure_experiments
 
 # 14. Day 10 Hata yönetimini (Exceptions) doğrulayan tüm birim testlerini (Unit Tests) çalıştırın
 docker compose run --rm app python -m pytest -v -m "not integration"
@@ -129,6 +131,21 @@ docker run --rm \
   --cap-drop=ALL \
   --security-opt no-new-privileges=true \
   sandbox-demo
+
+# 17. Day 11 Hybrid collection ingestion (Veri yükleme)
+docker compose run --rm app python -m day11.ingest
+
+# 18. Day 11 Sadece Dense (Anlamsal) Benchmark testini çalıştırın
+docker compose run --rm app python -m day11.benchmark --strategy dense
+
+# 19. Day 11 Sadece Lexical/Sparse (Sözcüksel) Benchmark testini çalıştırın
+docker compose run --rm app python -m day11.benchmark --strategy lexical
+
+# 20. Day 11 Hybrid (Dense + Lexical) Benchmark testini çalıştırın
+docker compose run --rm app python -m day11.benchmark --strategy hybrid
+
+# 21. Day 11 Tüm arama stratejilerini yan yana test edip analiz edin
+docker compose run --rm app python -m day11.benchmark --all
 ```
 ```
 ai-intern-week/
@@ -142,6 +159,7 @@ ai-intern-week/
 ├── day08/                  # 8. Gün Native RAG, chunking, context builder ve evaluation kodları
 ├── day09/                  # 9. Gün LangGraph entegrasyonu, graph objesi ve node/edge yönetim kodları
 ├── day10/                  # 10. Gün Hata yönetimi (Exception), Failure Injection ve Security Sandbox incelemeleri
+├── day11/                  # 11. Gün Dense, Lexical, Hybrid arama stratejileri, RRF füzyonu ve MRR/Hit@k kodları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları ve framework mimari eşleştirmeleri

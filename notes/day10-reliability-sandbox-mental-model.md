@@ -25,7 +25,7 @@ Modelin ürettiği kodun sistemimde dosya okumayacağı, ağdan veri sızdırmay
 Standart container'lar ana makinenin çekirdeğini (kernel) paylaştıkları için tamamen yalıtılmış sayılmazlar ve tek başlarına kesin bir güvenlik garantisi sunmazlar.
 
 ## Network none neyi azaltır?
-Container'ın dış dünya ile ağ bağlantısını tamamen kesen bir ayardır; böylece içerideki kodun dışarıya veya internete veri sızdırma riskini ortadan kaldırır.
+`--network none`, container'ın normal network üzerinden dış sistemlere erişebilme yüzeyini ciddi biçimde azaltır; tek başına bütün exfiltration veya sandbox risklerini ortadan kaldırdığı anlamına gelmez.
 
 ## Read-only filesystem
 Container'ın ana dosya sistemini sadece okunabilir yapan bir kısıtlamadır; içeride çalışan güvensiz kodun kalıcı dosyalar oluşturmasını veya sistemi bozmasını engeller.

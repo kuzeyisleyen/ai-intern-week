@@ -127,4 +127,4 @@ Failure: Döngünün kırılamaması, kayıp veya eksik state güncellemeleri, d
 
 1. İnsan onayına ihtiyaç duyan kritik yüksek riskli görevlerde (Human-in-the-loop), LangGraph üzerinde süreci duraklatıp dışarıdan onay bekleme (interrupt) mantığını nasıl entegre edebiliriz?
 2. Hibrit Arama (Hybrid Search) ve Reranking yöntemlerini kullanarak Qdrant'tan dönen belgelerin isabet oranını (Hit@1) ve RAG kalitesini pratik olarak nasıl daha yukarı taşıyabiliriz?
-3. ...
+3. Bir retrieval veya agent değişikliğinin gerçekten daha iyi olduğunu final cevaba bakmadan hangi metric/evidence ile kanıtlayabilirim?

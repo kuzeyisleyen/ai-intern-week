@@ -1,0 +1,142 @@
+[
+  {
+    "id": "q01",
+    "question": "Named volume ile bind mount arasındaki temel fark nedir?",
+    "query_type": "semantic",
+    "expected_source": "docker.md",
+    "answerable": true
+  },
+  {
+    "id": "q02",
+    "question": "Docker Compose içindeki named volume tanımı nasıl yapılır?",
+    "query_type": "mixed",
+    "expected_source": "compose.md",
+    "answerable": true
+  },
+  {
+    "id": "q03",
+    "question": "Agent loop'ta max_iterations neden var?",
+    "query_type": "mixed",
+    "expected_source": "agent-loop.md",
+    "answerable": true
+  },
+  {
+    "id": "q04",
+    "question": "Vector database'ler hangi tür verileri saklamak için tasarlanmıştır?",
+    "query_type": "semantic",
+    "expected_source": "vector-database.md",
+    "answerable": true
+  },
+  {
+    "id": "q05",
+    "question": "Embedding modeli metinleri neye dönüştürür?",
+    "query_type": "semantic",
+    "expected_source": "embeddings.md",
+    "answerable": true
+  },
+  {
+    "id": "q06",
+    "question": "Türkiye'nin başkenti neresidir?",
+    "query_type": "unanswerable",
+    "expected_source": null,
+    "answerable": false
+  },
+  {
+    "id": "q07",
+    "question": "RAG sisteminde context inşa edilirken modelin kaynakları göstermesi neden istenir?",
+    "query_type": "semantic",
+    "expected_source": "llm-basics.md",
+    "answerable": true
+  },
+  {
+    "id": "q08",
+    "question": "Relational database select işlemlerini nasıl hızlandırır?",
+    "query_type": "unanswerable",
+    "expected_source": null,
+    "answerable": false
+  },
+  {
+    "id": "q09",
+    "question": "Container silinse bile veriyi nasıl kalıcı tutarım?",
+    "query_type": "semantic",
+    "expected_source": "docker.md",
+    "answerable": true
+  },
+  {
+    "id": "q10",
+    "question": "Büyük dil modellerinin halüsinasyon görmesini engellemenin yolları nelerdir?",
+    "query_type": "semantic",
+    "expected_source": "llm-basics.md",
+    "answerable": true
+  },
+  {
+    "id": "q11",
+    "question": "MAX_REWRITES",
+    "query_type": "exact_identifier",
+    "expected_source": "agent-loop.md",
+    "answerable": true
+  },
+  {
+    "id": "q12",
+    "question": "Cosine similarity",
+    "query_type": "exact_identifier",
+    "expected_source": "vector-database.md",
+    "answerable": true
+  },
+  {
+    "id": "q13",
+    "question": "tool_calls",
+    "query_type": "exact_identifier",
+    "expected_source": "function-calling.md",
+    "answerable": true
+  },
+  {
+    "id": "q14",
+    "question": "volumes:",
+    "query_type": "exact_identifier",
+    "expected_source": "compose.md",
+    "answerable": true
+  },
+  {
+    "id": "q15",
+    "question": "down -v",
+    "query_type": "command_or_code",
+    "expected_source": "compose.md",
+    "answerable": true
+  },
+  {
+    "id": "q16",
+    "question": "docker run -d -p 8080:80",
+    "query_type": "command_or_code",
+    "expected_source": "docker.md",
+    "answerable": true
+  },
+  {
+    "id": "q17",
+    "question": "client.query_points()",
+    "query_type": "command_or_code",
+    "expected_source": "vector-database.md",
+    "answerable": true
+  },
+  {
+    "id": "q18",
+    "question": "MAX_STEPS sonsuz workflow'u nasıl durduruyor?",
+    "query_type": "mixed",
+    "expected_source": "agent-loop.md",
+    "answerable": true
+  },
+  {
+    "id": "q19",
+    "question": "Function calling yapısında system prompt nasıl yapılandırılır?",
+    "query_type": "mixed",
+    "expected_source": "function-calling.md",
+    "answerable": true
+  },
+  {
+    "id": "q20",
+    "question": "Kubernetes pod'ları arası iletişim nasıl sağlanır?",
+    "query_type": "unanswerable",
+    "expected_source": null,
+    "answerable": false
+  }
+]
