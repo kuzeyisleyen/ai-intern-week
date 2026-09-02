@@ -22,6 +22,8 @@ def retrieve_sparse(
     """
     if not isinstance(query, str) or not query.strip():
         raise ValueError("Query boş olamaz.")
+    if not isinstance(top_k, int) or top_k <= 0:
+        raise ValueError("top_k pozitif bir tamsayı olmalıdır.")
 
     # FastEmbed ile sparse vektörü oluştur
     sparse_generator = sparse_model.query_embed(query)
@@ -45,6 +47,12 @@ def retrieve_sparse(
 
     for rank, hit in enumerate(response.points, start=1):
         payload = hit.payload or {}
+        source = payload.get("source")
+        if not isinstance(source, str):
+            raise ValueError(f"Payload'da 'source' alanı eksik veya geçersiz: {payload}")
+        chunk_id = payload.get("chunk_id")
+        if not isinstance(chunk_id, str):
+            raise ValueError(f"Payload'da 'chunk_id' alanı eksik veya geçersiz: {payload}")
         
         normalized_results.append(
             {

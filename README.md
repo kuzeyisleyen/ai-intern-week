@@ -1,6 +1,6 @@
 # AI Intern Week
 
-**Proje Durumu:** Tamamlandı ( Day 10 / Week 2 tamamlandı)
+**Proje Durumu:** Tamamlandı ( Day 12 / Week 3 tamamlandı)
 
 > **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
 > Proje, temel mekanizmaları önce native Python ile görünür biçimde kurup, ihtiyaç ortaya çıktıktan sonra LangGraph gibi orchestration abstraction'larıyla eşlemeyi amaçlar.
@@ -70,6 +70,8 @@ Day 9 (LangGraph Orchestration): Native workflow ile LangGraph framework'ünün 
 Day 10 (Reliability & Security Boundaries): Sistemin hata yönetiminin (Failure Injection, özel Exception sınıfları) güçlendirildiği ve modelin ürettiği kodu çalıştırmak için Docker düzeyinde (network none, read-only, tmpfs, non-root) güvenlik yalıtım sınırlarının (Sandbox) test edildiği 2. hafta kapanış modüldür. (Ana Script: day10_failure_experiments.py)
 
 Day 11 (Retrieval Quality Engineering): Sisteme yeni bir arama yöntemi eklemeden önce Hit@k ve MRR (Mean Reciprocal Rank) metrikleriyle kalitenin ölçüldüğü modüldür. Dense (anlamsal), Lexical (sözcüksel) ve RRF (Reciprocal Rank Fusion) kullanan Hybrid arama stratejileri değerlendirme veri setleri üzerinden karşılaştırılmıştır. (Ana Scriptler: day11/ingest.py, day11/benchmark.py)
+
+Day 12 (Model Context Protocol): Araç ve veri kaynağı keşfinin, tip doğrulamasının ve tetikleme sözleşmesinin standardize edildiği, statik bağımlılıkları ortadan kaldıran MCP entegrasyonu yapılmıştır. stdio transfer protokolüyle araç çağrıları ayrı bir istemci-sunucu katmanına ayrılmış, sözleşme hataları (contract errors) test edilerek LangGraph akışına bağımsız adaptörlerle bağlanmıştır. (Ana Scriptler: day12/mcp_server.py, day12/mcp_client.py, day12/mcp_adapter.py)
 
 # Çalıştırma (Docker Compose ile)
 Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
@@ -146,6 +148,12 @@ docker compose run --rm app python -m day11.benchmark --strategy hybrid
 
 # 21. Day 11 Tüm arama stratejilerini yan yana test edip analiz edin
 docker compose run --rm app python -m day11.benchmark --all
+
+# 22. Day 12 MCP Stdio sunucusunu çalıştırın (Sunucu arka planda bekleyecektir, başka bir sekme gerekir)
+docker compose run --rm app python -m day12.mcp_server
+
+# 23. Day 12 İstemci (Client) keşif ve araç/veri kaynağı çekim yeteneklerini test edin
+docker compose run --rm app python -m day12.mcp_client
 ```
 ```
 ai-intern-week/
@@ -160,6 +168,7 @@ ai-intern-week/
 ├── day09/                  # 9. Gün LangGraph entegrasyonu, graph objesi ve node/edge yönetim kodları
 ├── day10/                  # 10. Gün Hata yönetimi (Exception), Failure Injection ve Security Sandbox incelemeleri
 ├── day11/                  # 11. Gün Dense, Lexical, Hybrid arama stratejileri, RRF füzyonu ve MRR/Hit@k kodları
+├── day12/                  # 12. Gün Model Context Protocol sunucu, istemci, adaptör mekanizmaları ve observability trace'leri
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları ve framework mimari eşleştirmeleri

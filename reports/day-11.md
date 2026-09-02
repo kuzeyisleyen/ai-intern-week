@@ -107,7 +107,7 @@ konseptleriyle eşleştirmiş ve asıl beklenen `compose.md` dosyası yerine `do
 
 ### Failure 2
 `exact_identifier` tipindeki `Cosine similarity` (q12) sorgusunda Dense model, beklenen `vector-database.md` dosyasını 2. sıraya iterek `embeddings.md` belgesini 
-zirveye yerleştirmiştir[cite: 9]. Matematiksel olarak cosine similarity, embedding kavramıyla o kadar güçlü bir anlamsal bağa sahiptir ki, model bu çekim kuvvetine
+zirveye yerleştirmiştir. Matematiksel olarak cosine similarity, embedding kavramıyla o kadar güçlü bir anlamsal bağa sahiptir ki, model bu çekim kuvvetine
  kapılarak kelimenin asıl geçtiği dökümanı kaçırmıştır
 
 ### Failure 3
@@ -131,7 +131,7 @@ Hit@3:
 0.7059
 
 MRR:
-0.6373
+0.6471
 
 ## 8. Hybrid
 
@@ -196,6 +196,8 @@ output/day11-retrieval-benchmark.json
 output/day11-retrieval-benchmark_lexical.json
 output/day11-retrieval-benchmark_hybrid.json
 output/day11-retrieval-benchmark_dense.json
+output/day11-retrieval-benchmark-all.json
+
 
 Önemli config:
 

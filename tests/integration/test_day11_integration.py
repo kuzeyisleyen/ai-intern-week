@@ -1,3 +1,5 @@
+from pydoc import doc
+
 import pytest
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
@@ -36,9 +38,8 @@ def test_env():
     points = []
     for doc in docs:
         dense_vec = embed_client.embed(doc["text"])
-        sparse_gen = list(sparse_model.query_embed(doc["text"]))[0]
-        points.append(
-            models.PointStruct(
+        sparse_gen = list(sparse_model.embed(doc["text"]))[0]
+        points.append( models.PointStruct(
                 id=doc["id"],
                 payload={"source": doc["source"], "chunk_id": f"chunk-{doc['id']}"},
                 vector={

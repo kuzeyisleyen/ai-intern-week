@@ -1,55 +1,3 @@
-            [ 1. INGESTION PIPELINE ]
-
-source documents
-       │
-       ▼
-    chunking [D]                  Ollama [E]
-       │                       ┌───────────────┐
-       ▼                       │embeddinggemma │ [L]
-   embeddings ◄────────────────┤               │
-       │                       └───────────────┘
-       ▼
-    Qdrant [E][P]
-
-────────────────────────────────────────────────────────
-
-               [ 2. QUERY WORKFLOW ]
-
-                   user query
-                       │
-                       ▼
-             workflow routing [D]
-              (classify_query)
-        ┌──────────────┼──────────────┐
-        │              │              │
-    smalltalk      knowledge         tool
-        │              │              │
-        │              ▼              ▼
-        │        ┌─► retrieval   allowlisted tool [D][S]
-        │        │ (Qdrant [E][P])    │
-        │        │     │              │
-        │        │     ▼              │
-        │   rewrite retrieval_quality [D]
-        │     [L] ◄────┤              │
-        │              │ good         │
-        │              ▼              │
-        │       context builder [D]   │
-        │              │              │
-        ▼              ▼              │
-     direct         grounded          │
-    generate        generate          │
-   (qwen3 [L])     (qwen3 [L])        │
-        │              │              │
-        │              ▼              │
-        │     citation validation [D] │
-        │              │              │
-        └──────────────┼──────────────┘
-                       ▼
-             trace / terminal state [D]
-
-
-## ---------------------------------------------------------
-
 # LLM-driven Kararlar
 
 Answer generation 
@@ -187,4 +135,56 @@ errors ve error_type: Sistemde bir hata fırlatıldığında (WorkflowLimitError
 1.--network none: Dış dünya ile bağlantıyı keserek veri sızdırmayı (exfiltration) engellemek.
 2.--read-only: Ana dosya sistemini kilitli tutarak zararlı dosyaların kalıcı olarak yazılmasını önlemek.
 3.--tmpfs /tmp: Sadece çalışma anında var olan, geçici ve boyut sınırlı bir bellek içi dosya sistemi vermek.
-4.Non-root user (1000:1000): Uygulamanın sistem yöneticisi yetkileriyle çalışmasını engelleyerek olası yetki tırmanışlarını kırmak.
+4.Non-root user (1000:1000): Uygulamanın sistem yöneticisi yetkileriyle çalışmasını engelleyerek olası yetki tırmanışlarını kırmak. 
+
+# --------------------------------------------------------
+
+
+[ 1. INGESTION PIPELINE ]
+
+source documents
+       │
+       ▼
+    chunking [D]                  Ollama [E]
+       │                       ┌───────────────┐
+       ▼                       │embeddinggemma │ [L]
+   embeddings ◄────────────────┤               │
+       │                       └───────────────┘
+       ▼
+    Qdrant [E][P]
+
+────────────────────────────────────────────────────────
+
+               [ 2. QUERY WORKFLOW ]
+
+                   user query
+                       │
+                       ▼
+             workflow routing [D]
+              (classify_query)
+        ┌──────────────┼──────────────┐
+        │              │              │
+    smalltalk      knowledge         tool
+        │              │              │
+        │              ▼              ▼
+        │        ┌─► retrieval   allowlisted tool [D][S]
+        │        │ (Qdrant [E][P])    │
+        │        │     │              │
+        │        │     ▼              │
+        │   rewrite retrieval_quality [D]
+        │     [L] ◄────┤              │
+        │              │ good         │
+        │              ▼              │
+        │       context builder [D]   │
+        │              │              │
+        ▼              ▼              │
+     direct         grounded          │
+    generate        generate          │
+   (qwen3 [L])     (qwen3 [L])        │
+        │              │              │
+        │              ▼              │
+        │     citation validation [D] │
+        │              │              │
+        └──────────────┼──────────────┘
+                       ▼
+             trace / terminal state [D]

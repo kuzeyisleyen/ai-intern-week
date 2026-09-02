@@ -5,7 +5,7 @@ class EmbeddingClient:
     def __init__(self, base_url=None, model=None, timeout=30):
         # TODO: os.getenv kullanarak "OLLAMA_BASE_URL" çevresel değişkenini oku. 
         # Eğer yoksa varsayılan olarak "http://localhost:11434" kullan.
-        self.base_url = base_url or os.getenv("OLLAMA_BASE_URL","http://localhost:11434")
+        self.base_url = base_url or os.getenv("OLLAMA_BASE_URL","http://ollama:11434")
         
         # TODO: os.getenv kullanarak "OLLAMA_EMBED_MODEL" çevresel değişkenini oku.
         # Eğer yoksa varsayılan olarak "embeddinggemma" kullan.

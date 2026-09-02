@@ -21,6 +21,7 @@ def retrieve_hybrid(
     embedding_client: EmbeddingClient,
     sparse_model: SparseTextEmbedding,
     top_k: int = 5,
+    prefetch_limit =20,
     collection_name: str = "rag_chunks_hybrid",
 ) -> list[RetrievalResult]:
     """
@@ -32,6 +33,8 @@ def retrieve_hybrid(
 
     if not isinstance(top_k, int) or isinstance(top_k, bool) or top_k <= 0:
         raise ValueError("top_k pozitif bir tam sayı olmalıdır")
+    if not isinstance(prefetch_limit, int) or isinstance(prefetch_limit, bool) or prefetch_limit <= 0:
+        raise ValueError("prefetch_limit pozitif bir tam sayı olmalıdır")
 
     #Dense vektörü oluştur
     query_vector_dense = embedding_client.embed(query.strip())
@@ -55,12 +58,12 @@ def retrieve_hybrid(
             models.Prefetch(
                 query=query_vector_dense,
                 using="dense",
-                limit=top_k,
+                limit=prefetch_limit
             ),
             models.Prefetch(
                 query=query_vector_sparse,
                 using="sparse",
-                limit=top_k,
+                limit=prefetch_limit
             ),
         ],
         query=models.FusionQuery(fusion=models.Fusion.RRF),

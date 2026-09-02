@@ -51,7 +51,7 @@ def run_benchmark():
             "mrr": round(mean_reciprocal_rank(scores_dict["mrr"]), 4)
         }
 
-    #Değeerlendirme
+    # Değerlendirme
     for current_strategy in strategies_to_run:
         print(f"--- {current_strategy.upper()} Stratejisi Test Ediliyor ---")
         overall_scores = {"hit_1": [], "hit_3": [], "mrr": []}
@@ -62,29 +62,7 @@ def run_benchmark():
             q_text = item["question"]
             q_type = item.get("query_type", "unknown")
             expected_source = item.get("expected_source")
-            is_answerable = item.get("answerable", True)
-
-            # Sadece cevaplanabilir soruları tip skorlarına ekle
-            if is_answerable and q_type not in type_scores:
-                type_scores[q_type] = {"hit_1": [], "hit_3": [], "mrr": []}
-
-            # Unanswerable
-            if not is_answerable:
-                output_queries.append({
-                    "query_id": q_id,
-                    "query_type": q_type,
-                    "question": q_text,
-                    "expected_source": None,
-                    "strategy": current_strategy,
-                    "retrieved_sources": [],
-                    "scores": [],
-                    "expected_rank": None,
-                    "hit_at_1": None,
-                    "hit_at_3": None,
-                    "reciprocal_rank": None,
-                    "note": "Unanswerable query; excluded from ranking metrics"
-                })
-                continue
+            is_answerable = item.get("answerable", True)           
 
             # Arama
             if current_strategy == "dense":
@@ -96,23 +74,32 @@ def run_benchmark():
             
             # Metrik Hesaplamaları
             retrieved_sources = [r["source"] for r in results]
-            rr = reciprocal_rank(retrieved_sources, expected_source)
-            h1 = hit_at_k(retrieved_sources, expected_source, k=1)
-            h3 = hit_at_k(retrieved_sources, expected_source, k=3)
             
-            expected_rank = None
-            unique_sources = list(dict.fromkeys(retrieved_sources))
-            if expected_source in unique_sources:
-                expected_rank = unique_sources.index(expected_source) + 1
+            if is_answerable and expected_source:
+                rr = reciprocal_rank(retrieved_sources, expected_source)
+                h1 = hit_at_k(retrieved_sources, expected_source, k=1)
+                h3 = hit_at_k(retrieved_sources, expected_source, k=3)
+                
+                expected_rank = None
+                unique_sources = list(dict.fromkeys(retrieved_sources))
+                if expected_source in unique_sources:
+                    expected_rank = unique_sources.index(expected_source) + 1
+            else:
+                # Unanswerable sorular için metrikleri boş geçiyoruz
+                rr, h1, h3, expected_rank = None, None, None, None
 
-            # Havuzları Doldur
-            overall_scores["mrr"].append(rr)
-            overall_scores["hit_1"].append(h1)
-            overall_scores["hit_3"].append(h3)
+            if is_answerable:
+                if q_type not in type_scores:
+                    type_scores[q_type] = {"hit_1": [], "hit_3": [], "mrr": []}
 
-            type_scores[q_type]["mrr"].append(rr)
-            type_scores[q_type]["hit_1"].append(h1)
-            type_scores[q_type]["hit_3"].append(h3)
+                # Havuzları Doldur
+                overall_scores["mrr"].append(rr)
+                overall_scores["hit_1"].append(h1)
+                overall_scores["hit_3"].append(h3)
+
+                type_scores[q_type]["mrr"].append(rr)
+                type_scores[q_type]["hit_1"].append(h1)
+                type_scores[q_type]["hit_3"].append(h3)
 
             # Çıktı listesine ekle
             output_queries.append({
@@ -126,14 +113,15 @@ def run_benchmark():
                 "expected_rank": expected_rank,
                 "hit_at_1": h1,
                 "hit_at_3": h3,
-                "reciprocal_rank": round(rr, 4)
+                "reciprocal_rank": round(rr, 4) if rr is not None else None,
+                "note": "Unanswerable query; excluded from ranking metrics" if not is_answerable else None
             })
 
         # Strateji bazlı kümeleri kaydet
         report_strategies[current_strategy] = calculate_aggregates(overall_scores)
         report_query_types[current_strategy] = {q_type: calculate_aggregates(scores) for q_type, scores in type_scores.items()}
 
-    #JSON Raporunu Oluştur
+    # JSON Raporunu Oluştur
     report = {
         "generated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "dataset_size": len(eval_dataset),
@@ -144,7 +132,6 @@ def run_benchmark():
             "overlap": 100
         },
         "strategies": report_strategies,
-        # Eğer all seçilirse strateji strateji ayır, tek seçilirse sadece o stratejiyi koy
         "query_type_metrics": report_query_types if args.strategy == "all" else report_query_types[args.strategy],
         "queries": output_queries
     }
@@ -158,7 +145,7 @@ def run_benchmark():
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    #Konsol Çıktısı
+    # Konsol Çıktısı
     print(f"\nBenchmark tamamlandı! Sonuçlar {output_file} dosyasına kaydedildi.")
     if args.strategy != "all":
         print(f"[{args.strategy.upper()}] Hit@1: {report_strategies[args.strategy]['hit_at_1']} | "

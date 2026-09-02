@@ -40,7 +40,9 @@ def main():
             )
         },
         sparse_vectors_config={
-            "sparse": models.SparseVectorParams()
+            "sparse": models.SparseVectorParams(
+               modifier = models.Modifier.IDF
+            )
         }
     )
 

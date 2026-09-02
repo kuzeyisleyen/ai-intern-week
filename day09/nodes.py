@@ -15,13 +15,36 @@ DependencyUnavailableError,
 DependencyTimeOutError,
 WorkflowLimitError,
 ResponseContractError)
+from day12.mcp_adapter import MCPToolAdapter
+from day12.trace import log_tool_trace
 
+SEARCH_NOTES_TOOL = {
+    "type": "function",
+    "function": {
+        "name": "search_notes",
+        "description": "Kullanıcının notlarında ve veritabanında semantik arama yapar.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {
+                    "type": "string",
+                    "description": "Aranacak kelime veya cümle (örneğin: 'hybrid search')"
+                },
+                "top_k": {
+                    "type": "integer",
+                    "description": "Döndürülecek sonuç sayısı"
+                }
+            },
+            "required": ["query"]
+        }
+    }
+}
 
 MAX_REWRITES = 1
 MAX_STEPS = 12
 
 ALLOWED_ROUTES = {"smalltalk", "knowledge", "tool"}
-ALLOWED_TOOL_NAMES = {"calculate_shipping_cost"}
+ALLOWED_TOOL_NAMES = {"calculate_shipping_cost", "search_notes"}
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 OLLAMA_GENERATE_URL = f"{OLLAMA_BASE_URL}/api/generate"
@@ -56,7 +79,7 @@ def classify_node(state: dict) -> dict:
 
     if any(greeting in query for greeting in ("merhaba", "selam", "hello")):
         route = "smalltalk"
-    elif "kargo" in query:
+    elif "kargo" in query or "notlar" in query:
         route = "tool"
     elif "banana" in query:
         route = "banana_route"
@@ -97,16 +120,17 @@ def direct_generate_node(state: dict) -> dict:
 # Sadece izin verdiğim kargo aracını kullanarak modelin hesaplama yapmasını sağlıyorum.
 def tool_node(state: dict) -> dict:
     client = OllamaClient()
+    
     response = client.chat(
         messages=[{"role": "user", "content": state["original_query"]}],
-        tools=[SHIPPING_TOOL],
+        tools=[SHIPPING_TOOL,SEARCH_NOTES_TOOL], 
     )
 
     update = next_step(state, "tool_node")
 
     if "error" in response:
         update["status"] = "error"
-        update["error_type"] = "DependencyUnavailableError"#
+        update["error_type"] = "DependencyUnavailableError"
         update["failed_node"] = "tool"
         update["errors"] = state.get("errors", []) + [response["error"]]
         return update
@@ -131,19 +155,42 @@ def tool_node(state: dict) -> dict:
         update["errors"] = state.get("errors", []) + [f"İzinsiz tool: {tool_name}"]
         return update
 
-    tool_result = execute_tool(tool_name, arguments)
-    
-    if "error" in tool_result:
+    # Yeni yapı yönlendirme adaptöre devredildi.
+    try:
+        adapter = MCPToolAdapter()
+        adapter_response = adapter.invoke_sync(tool_name, arguments)
+            
+        # İster başarısız olsun ister başarılı, sonucu ayrı bir json dosyasına logla
+        log_tool_trace(adapter_response, tool_name)
+            
+        if adapter_response["status"] == "failed":
+            update["status"] = "error"
+            update["error_type"] = "ToolRuntimeError"  
+            update["failed_node"] = "tool"
+            update["errors"] = state.get("errors", []) + [adapter_response.get("trace", {}).get("error_type", "Bilinmeyen Adaptör Hatası")]
+            return update
+            
+        tool_result = adapter_response["result"]
+        trace_data = adapter_response.get("trace", {})
+        
+    except Exception as e:
         update["status"] = "error"
         update["error_type"] = "ToolRuntimeError"  
         update["failed_node"] = "tool"
-        update["errors"] = state.get("errors", []) + [tool_result["error"]]
+        update["errors"] = state.get("errors", []) + [f"Adaptör veya çalışma zamanı hatası: {str(e)}"]
         return update
 
     update["tool_name"] = tool_name
     update["tool_result"] = tool_result
-    update["answer"] = f"{tool_result['city']} için {tool_result['weight_kg']} kg kargo ücreti {tool_result['cost']} {tool_result['currency']}."
+    
+    if tool_name == "calculate_shipping_cost":
+        update["answer"] = f"{tool_result['city']} için {tool_result['weight_kg']} kg kargo ücreti {tool_result['cost']} {tool_result['currency']}."
+    else:
+        update["answer"] = f"Arama sonucu: {tool_result}"
+        
     update["status"] = "completed"
+    update["trace"] = trace_data
+    
     return update
 
 

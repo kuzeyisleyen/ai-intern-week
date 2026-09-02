@@ -1,6 +1,5 @@
 import math
 
-
 def _validate_expected_source(expected_source: str) -> None:
     if not isinstance(expected_source, str) or not expected_source.strip():
         raise ValueError(
