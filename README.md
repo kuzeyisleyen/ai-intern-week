@@ -154,6 +154,9 @@ docker compose run --rm app python -m day12.mcp_server
 
 # 23. Day 12 İstemci (Client) keşif ve araç/veri kaynağı çekim yeteneklerini test edin
 docker compose run --rm app python -m day12.mcp_client
+
+# 24. Day 12 LangGraph orkestrasyonunu ve MCP entegrasyonunu (Not aracı testi) çalıştırın
+docker compose run --rm app python -m day09.graph_cli "Notlarımda hybrid search hakkında ne yazıyor?"
 ```
 ```
 ai-intern-week/
