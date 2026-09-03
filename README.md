@@ -1,6 +1,6 @@
 # AI Intern Week
 
-**Proje Durumu:** Tamamlandı ( Day 12 / Week 3 tamamlandı)
+**Proje Durumu:** Day 13 Tamamlandı (Week 3 devam ediyor)
 
 > **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
 > Proje, temel mekanizmaları önce native Python ile görünür biçimde kurup, ihtiyaç ortaya çıktıktan sonra LangGraph gibi orchestration abstraction'larıyla eşlemeyi amaçlar.
@@ -73,6 +73,8 @@ Day 11 (Retrieval Quality Engineering): Sisteme yeni bir arama yöntemi eklemede
 
 Day 12 (Model Context Protocol): Araç ve veri kaynağı keşfinin, tip doğrulamasının ve tetikleme sözleşmesinin standardize edildiği, statik bağımlılıkları ortadan kaldıran MCP entegrasyonu yapılmıştır. stdio transfer protokolüyle araç çağrıları ayrı bir istemci-sunucu katmanına ayrılmış, sözleşme hataları (contract errors) test edilerek LangGraph akışına bağımsız adaptörlerle bağlanmıştır. (Ana Scriptler: day12/mcp_server.py, day12/mcp_client.py, day12/mcp_adapter.py)
 
+Day 13 (Durable Workflow & HITL): İş akışının kritik noktalarda duraklatılabilmesi (interrupt) ve kalıcı durum (persistent state) yönetimi için SQLite checkpointer entegre edilmiştir. Yüksek riskli işlemlerde insan onayı (Human-in-the-Loop) beklenmesi ve işlemlerin güvenle yeniden başlatılabilmesi için (idempotency) önlemler alınmıştır. (Ana Scriptler: day13/durable_graph.py, day13/hitl_cli.py, day13/trace.py)
+
 # Çalıştırma (Docker Compose ile)
 Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
 ```bash
@@ -118,21 +120,10 @@ docker compose run --rm app python day10.failure_experiments
 docker compose run --rm app python -m pytest -v -m "not integration"
 
 # 15. Day 10 Kısıtlı Sandbox imajını derleyin (Build)
-docker build \
-  -t sandbox-demo \
-  sandbox_demo
+docker build -t sandbox-demo sandbox_demo
 
 # 16. Day 10 Öğrenilen tüm güvenlik katmanlarını (Isolation Layers) içeren Canonical Sandbox Testini çalıştırın
-docker run --rm \
-  --network none \
-  --read-only \
-  --tmpfs /tmp:rw,noexec,nosuid,size=64m \
-  --memory=128m \
-  --cpus=0.5 \
-  --pids-limit=64 \
-  --cap-drop=ALL \
-  --security-opt no-new-privileges=true \
-  sandbox-demo
+docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m --memory=128m --cpus=0.5 --pids-limit=64 --cap-drop=ALL --security-opt no-new-privileges=true sandbox-demo
 
 # 17. Day 11 Hybrid collection ingestion (Veri yükleme)
 docker compose run --rm app python -m day11.ingest
@@ -157,6 +148,16 @@ docker compose run --rm app python -m day12.mcp_client
 
 # 24. Day 12 LangGraph orkestrasyonunu ve MCP entegrasyonunu (Not aracı testi) çalıştırın
 docker compose run --rm app python -m day09.graph_cli "Notlarımda hybrid search hakkında ne yazıyor?"
+
+# 25. Day 13 İlk durable run (İş akışı onaya kadar ilerleyip duraklatılır)
+docker compose run --rm app python -m day13.hitl_cli start --thread-id demo-001 --action publish_report 
+
+# 26. Day 13 Aynı thread'i approve (onay) kararı ile devam ettir (resume)
+docker compose run --rm app python -m day13.hitl_cli resume --thread-id demo-001 --decision approve 
+
+# 27. Day 13 Mevcut thread'in durumunu ve sıradaki düğümü kontrol et (inspect)
+docker compose run --rm app python -m day13.hitl_cli inspect --thread-id demo-001 
+
 ```
 ```
 ai-intern-week/
@@ -172,6 +173,7 @@ ai-intern-week/
 ├── day10/                  # 10. Gün Hata yönetimi (Exception), Failure Injection ve Security Sandbox incelemeleri
 ├── day11/                  # 11. Gün Dense, Lexical, Hybrid arama stratejileri, RRF füzyonu ve MRR/Hit@k kodları
 ├── day12/                  # 12. Gün Model Context Protocol sunucu, istemci, adaptör mekanizmaları ve observability trace'leri
+├── day13/                  # 13. Gün Durable Workflow, SQLite checkpointer, HITL onayı ve Idempotency mekanizmaları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları ve framework mimari eşleştirmeleri

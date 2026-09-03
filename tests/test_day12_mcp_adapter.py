@@ -34,14 +34,13 @@ def test_native_routing_and_trace(mock_execute_tool, adapter):
 @patch("day12.mcp_adapter.Client")
 def test_mcp_normalization_mocked(mock_client_class, adapter):
     """Karmaşık MCP objesinin (meta ve content) standart sözlüğe dönüştürülmesi."""
-    # MCP Client mock kurgusu
     mock_client_instance = AsyncMock()
     mock_client_class.return_value.__aenter__.return_value = mock_client_instance
     
-    # Fake response hazırlığı
     mock_content = MagicMock()
     mock_content.text = '{"source": "test.md", "chunk_id": "1"}'
     mock_response = MagicMock()
+    mock_response.is_error = False
     mock_response.content = [mock_content]
     mock_client_instance.call_tool.return_value = mock_response
 
@@ -55,9 +54,28 @@ def test_mcp_normalization_mocked(mock_client_class, adapter):
     assert trace["transport"] == "stdio"
     assert trace["server_name"] == "ai-intern-week"
 
+@patch("day12.mcp_adapter.Client")
+def test_mcp_is_error_returns_failed_status(mock_client_class, adapter):
+    """MCP'den dönen response.is_error == True ise uygulamanın bunu failed kabul edip contracta çevirmesi."""
+    mock_client_instance = AsyncMock()
+    mock_client_class.return_value.__aenter__.return_value = mock_client_instance
+    
+    mock_content = MagicMock()
+    mock_content.text = "Error details"
+    mock_response = MagicMock()
+    mock_response.is_error = True
+    mock_response.content = [mock_content]
+    
+    mock_client_instance.call_tool.return_value = mock_response
+    
+    result = adapter.invoke_sync("search_notes", {"query": "test"})
+    
+    assert result["status"] == "failed"
+    assert result["trace"]["provider"] == "mcp"
+    assert result["trace"]["error_type"] == "MCPToolError"
+
 def test_trace_observability_contract(adapter):
     """Zorunlu 8 observability alanının varlık kontrolü."""
-    # Başarısız bir durum üzerinden trace iskeletini kontrol ediyorum
     result = adapter.invoke_sync("unregistered_tool", {})
     trace = result.get("trace", {})
     
@@ -65,7 +83,6 @@ def test_trace_observability_contract(adapter):
         "provider", "server_name", "capability_type", 
         "transport", "duration_ms", "error_type"
     }
-    # status ve tool_name dışarıda tutulduğu için ayrı kontrole ettim
     assert required_keys.issubset(trace.keys())
     assert "status" in result
     assert "tool_name" in result

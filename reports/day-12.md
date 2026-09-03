@@ -168,7 +168,7 @@ Failure surface:
 MCP kullanımıyla beraber süreçler arası iletişimin kopması sunucu yanıtsızlığı veya stdout kirlenmesi gibi yeni hata noktaları eklenmiştir.
 
 Overhead:
-...
+MCP kullanımıyla per-call stdio spawn + model initialization latency yaratıyor
 
 Security responsibility:
 Her ikisinde de güvenlik, onay listesi ve yetki yönetimi uygulamanın/çalışma zamanının kendi sorumluluğundadır

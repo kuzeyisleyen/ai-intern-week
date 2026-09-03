@@ -25,6 +25,19 @@ def test_discovery_contract(server_params):
     
     asyncio.run(run())
 
+def test_read_resource_content(server_params):
+    """Resource read işleminin integration test üzerinden içeriğinin kontrolü."""
+    async def run():
+        async with Client(stdio_client(server_params)) as client:
+            response = await client.read_resource("week2://system-review")
+            content = response.contents[0].text
+            
+            assert content is not None
+            assert len(content.strip()) > 0
+            assert "#" in content 
+            
+    asyncio.run(run())
+
 def test_invalid_args_controlled_failure(server_params):
     async def run():
         async with Client(stdio_client(server_params)) as client:
@@ -45,17 +58,14 @@ def test_full_retrieval_smoke():
     """Adapter -> Server -> Qdrant uçtan uca bütünlük testi."""
     adapter = MCPToolAdapter()
     
-    # Gerçek Qdrant ve model ile çağrı
     result = adapter.invoke_sync("search_notes", {"query": "hybrid search", "top_k": 1})
     
     assert result["status"] == "completed"
     assert result["trace"]["provider"] == "mcp"
     assert result["trace"]["error_type"] is None
     
-    # Result içindeki JSON stringin format bütünlüğü kontrolü
     result_data = json.loads(result["result"])
     
-    # Dönen veri tek bir chunk ise veya liste isef kontrol
     if isinstance(result_data, list):
         assert len(result_data) > 0
         assert "source" in result_data[0]

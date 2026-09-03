@@ -39,7 +39,8 @@ def search_notes(query: str, top_k: int = 3) -> list[dict]:
     if  isinstance(top_k, bool) or not isinstance(top_k, int) or not 1 <= top_k <= 5:
         raise ValueError("top_k 1 ile 5 arasında bir tam sayı olmalıdır")
 
-    logger.info(f"Arama tool'u tetiklendi. Query: {query}, top_k: {top_k}")
+    # Raw query gizlendi, güvenli default metrikler kullanıldı
+    logger.info(f"tool=search_notes top_k={top_k} query_length={len(query)}")
 
     hybrid_model = retrieve_hybrid(query = query,
                                    qdrant_client=qdrant_client,

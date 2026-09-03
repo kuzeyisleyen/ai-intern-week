@@ -32,7 +32,8 @@ def test_env():
     client.create_collection(
         collection_name=col_name,
         vectors_config={"dense": models.VectorParams(size=vector_size, distance=models.Distance.COSINE)},
-        sparse_vectors_config={"sparse": models.SparseVectorParams()}
+        #Modifier.IDF eklendi
+        sparse_vectors_config={"sparse": models.SparseVectorParams(modifier=models.Modifier.IDF)}
     )
 
     points = []

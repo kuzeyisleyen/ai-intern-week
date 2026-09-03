@@ -9,7 +9,7 @@ kurabilmesi için var.
 Host uygulamasının içinde çalışan ve standartlaştırılmış MCP protokolü üzerinden sunuculara istek gönderip veri alan iletişim katmanıdır.
 
 ## Server
-Belirli araçları verileri veya promptları barındıran ve istemciden gelen MCP isteklerine JSON-RPC formatında yanıt veren izole arka plan servisidir.
+MCP stdio server ayrı bir process boundary oluşturabilir; bu security isolation veya sandbox garantisi değildir.
 
 ## Tool
 Yapay zeka modelinin dış dünyada bir eylem gerçekleştirmesine (hesaplama, API çağrısı, veritabanı yazması vb.) olanak tanıyan çalıştırılabilir 
@@ -44,7 +44,7 @@ stdio taşıma mekanizmasında JSON-RPC mesajları doğrudan terminalin standart
 görevi görür.
 
 ## Schema / validation
-Gelen veri veya argümanların, beklenen veri tiplerine ve kurallarına uygun olup olmadığını kod çalışırken kesin olarak doğrulama işlemidir.
+Şema doğrulaması yalnızca verinin tipini ve yapısını kontrol eden yapısal bir sözleşmedir; iş kuralları, yetkilendirme ve risk onay süreçleri şemanın değil, uygulamanın ayrı katmanlarının sorumluluğundadır.
 
 ## Type hint neden tek başına runtime validation değildir?
 Pythondaki type hint'ler sadece geliştiriciye ve araçlara statik ipucu verir kod çalışırken gelen verinin tipini zorlamaz veya yanlış veri tipini 
@@ -71,4 +71,4 @@ Ajan ve araçlar artık ayrı süreçler olduğu için süreçler arası iletiş
 noktası hataları eklendi.
 
 ## MCP hangi problemi çözmedi?
-Yapay zeka modelinin halüsinasyon görmesini, yanlış aracı seçmesini veya geçersiz argümanlar üretme problemini ve güvenlik problemini çözmez sadece bu hataların sistemi çökertmesini engeller.
+MCP failure'ların standart bir boundary üzerinden ifade edilmesini kolaylaştırır; containment ve recovery application/runtime tasarımına bağlıdır.

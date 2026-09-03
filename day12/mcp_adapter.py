@@ -57,15 +57,19 @@ class MCPToolAdapter:
             # MCP istemcisi ile araç çağırma
             async with Client(stdio_client(self.server_params)) as client:
                 response = await client.call_tool(tool_name, arguments)
+                duration_ms = int((time.time() - start_time) * 1000)
+                
+                # is_error kontrolü: Transport çalışsa bile operation başarısız olabilir
+                if response.is_error:
+                    return self._build_error_response(tool_name, "mcp", "MCPToolError", duration_ms)
+
                 # MCP'den dönen cevap
                 result_text = response.content[0].text if response.content else ""
-                duration_ms = int((time.time() - start_time) * 1000)
                 return self._build_success_response(tool_name, result_text, "mcp", duration_ms)
                     
         except Exception as e:
             duration_ms = int((time.time() - start_time) * 1000)
             return self._build_error_response(tool_name, "mcp", type(e).__name__, duration_ms)
-
     def invoke_sync(self, tool_name: str, arguments: dict) -> dict:
         """
         Senkron LangGraph düğümlerinden (`nodes.py`) asenkron akışı çağırmak için köprü.
