@@ -1,4 +1,5 @@
 import os
+from qdrant_client.http import model
 import requests
 
 class OllamaClient:
@@ -20,36 +21,47 @@ class OllamaClient:
             return {"status": "error", "details": str(e)}
         
 
-    def chat(self, messages: list, tools: list = None, response_format: str = None) -> dict:
+    def chat(
+        self,
+        messages: list,
+        tools: list = None,
+        model: str = None,
+        response_format=None,
+        options: dict = None,
+    ) -> dict:
         """
-        Model ile etkileşimi kuran asıl fonksiyon.
-        """
+     Model ile etkileşimi kuran asıl fonksiyon.
+     """
         endpoint = f"{self.base_url}/api/chat"
+    
+    # 1. Dışarıdan model gelirse onu, gelmezse sınıfın varsayılan modelini kullan
         payload = {
-            "model": self.model,
+            "model": model or getattr(self, "model", "qwen3:1.7b"),
             "messages": messages,
             "stream": False
         }
-        
+    
         if tools:
             payload["tools"] = tools
-            
-        # 2. Eğer JSON formatı isteniyorsa, payload'a ekliyoruz 
-        if response_format == "json":
-            payload["format"] = "json"
+        
+    # 2. JSON formatı (eski string formatı veya yeni JSON Schema sözlüğü) payload'a ekleniyor
+        if response_format is not None:
+            payload["format"] = response_format
+
+    # 3. Temperature gibi model ayarları için options alanı payload'a ekleniyor
+        if options is not None:
+            payload["options"] = options
 
         try:
-            response = requests.post(endpoint, json=payload,timeout=30.0) 
-    
+            response = requests.post(endpoint, json=payload, timeout=30.0) 
             response.raise_for_status() 
-            
             return response.json()
-        
+    
         except requests.exceptions.Timeout as e:
             return {"error": f"Zaman Aşımı: {str(e)}"}
-            
+        
         except requests.exceptions.RequestException as e:
             return {"error": f"Bağlantı hatası: {str(e)}"}
-            
+        
         except ValueError as e:
             return {"error": f"Geçersiz yanıt formatı: {str(e)}"}

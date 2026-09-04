@@ -20,3 +20,13 @@ def validate_decision(decision: str) -> str:
     if decision not in ["approve", "reject"]:
         raise ValueError("Decision must be 'approve' or 'reject'")
     return decision
+
+def validate_resume_payload(payload) -> str:
+    if not isinstance(payload, dict):
+        raise ValueError("Resume payload must be a dictionary")
+    
+    decision = payload.get("decision")
+    if not isinstance(decision, str):
+        raise ValueError("Decision value must be a string")
+        
+    return validate_decision(decision)

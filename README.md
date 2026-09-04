@@ -1,6 +1,6 @@
 # AI Intern Week
 
-**Proje Durumu:** Day 13 Tamamlandı (Week 3 devam ediyor)
+**Proje Durumu:** Day 14 Tamamlandı (Week 3 devam ediyor)
 
 > **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
 > Proje, temel mekanizmaları önce native Python ile görünür biçimde kurup, ihtiyaç ortaya çıktıktan sonra LangGraph gibi orchestration abstraction'larıyla eşlemeyi amaçlar.
@@ -69,11 +69,13 @@ Day 9 (LangGraph Orchestration): Native workflow ile LangGraph framework'ünün 
 
 Day 10 (Reliability & Security Boundaries): Sistemin hata yönetiminin (Failure Injection, özel Exception sınıfları) güçlendirildiği ve modelin ürettiği kodu çalıştırmak için Docker düzeyinde (network none, read-only, tmpfs, non-root) güvenlik yalıtım sınırlarının (Sandbox) test edildiği 2. hafta kapanış modüldür. (Ana Script: day10_failure_experiments.py)
 
-Day 11 (Retrieval Quality Engineering): Sisteme yeni bir arama yöntemi eklemeden önce Hit@k ve MRR (Mean Reciprocal Rank) metrikleriyle kalitenin ölçüldüğü modüldür. Dense (anlamsal), Lexical (sözcüksel) ve RRF (Reciprocal Rank Fusion) kullanan Hybrid arama stratejileri değerlendirme veri setleri üzerinden karşılaştırılmıştır. (Ana Scriptler: day11/ingest.py, day11/benchmark.py)
+Day 11 (Retrieval Quality Engineering): Sisteme yeni bir arama yöntemi eklemeden önce Hit@k ve MRR (Mean Reciprocal Rank) metrikleriyle kalitenin ölçüldüğü modüldür. Dense (anlamsal), Lexical (sözcüksel) ve RRF (Reciprocal Rank Fusion) kullanan Hybrid arama stratejileri değerlendirme veri setleri üzerinden karşılaştırılmıştır. (Ana Scriptler: day11/ingest_hybrid.py, day11/benchmark.py)
 
 Day 12 (Model Context Protocol): Araç ve veri kaynağı keşfinin, tip doğrulamasının ve tetikleme sözleşmesinin standardize edildiği, statik bağımlılıkları ortadan kaldıran MCP entegrasyonu yapılmıştır. stdio transfer protokolüyle araç çağrıları ayrı bir istemci-sunucu katmanına ayrılmış, sözleşme hataları (contract errors) test edilerek LangGraph akışına bağımsız adaptörlerle bağlanmıştır. (Ana Scriptler: day12/mcp_server.py, day12/mcp_client.py, day12/mcp_adapter.py)
 
 Day 13 (Durable Workflow & HITL): İş akışının kritik noktalarda duraklatılabilmesi (interrupt) ve kalıcı durum (persistent state) yönetimi için SQLite checkpointer entegre edilmiştir. Yüksek riskli işlemlerde insan onayı (Human-in-the-Loop) beklenmesi ve işlemlerin güvenle yeniden başlatılabilmesi için (idempotency) önlemler alınmıştır. (Ana Scriptler: day13/durable_graph.py, day13/hitl_cli.py, day13/trace.py)
+
+Day 14 (Agent Evaluation & Observability): Sistemin doğruluğunu (Route, Tool, Trajectory, Terminal State) ölçmek için Golden Dataset (Altın Veri Seti) oluşturulmuş ve uçtan uca değerlendirme (Evaluation) mimarisi kurulmuştur. Mevcut "Keyword Router" ile yeni nesil "LLM Semantic Router" arasında A/B testi yapılarak hız ve doğruluk analizi gerçekleştirilmiş, gözlemlenebilirlik (Observability) için OpenTelemetry standartlarına uygun "Span" mental modeline geçilmiştir. (Ana Scriptler: day14/evaluate.py, day14/evaluator.py, day14/llm_router.py, day14/observability.py)
 
 # Çalıştırma (Docker Compose ile)
 Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
@@ -114,7 +116,7 @@ docker compose run --rm app python -m day08.evaluation
 docker compose run --rm app python -m day09.graph_cli "Ankara'ya 2 kg kargo ne kadar?"
 
 # 13. Day 10 Hata Enjeksiyonu (Failure Injection) deneylerini çalıştırın
-docker compose run --rm app python day10.failure_experiments
+docker compose run --rm app python -m day10.failure_experiments
 
 # 14. Day 10 Hata yönetimini (Exceptions) doğrulayan tüm birim testlerini (Unit Tests) çalıştırın
 docker compose run --rm app python -m pytest -v -m "not integration"
@@ -126,7 +128,7 @@ docker build -t sandbox-demo sandbox_demo
 docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m --memory=128m --cpus=0.5 --pids-limit=64 --cap-drop=ALL --security-opt no-new-privileges=true sandbox-demo
 
 # 17. Day 11 Hybrid collection ingestion (Veri yükleme)
-docker compose run --rm app python -m day11.ingest
+docker compose run --rm app python -m day11.ingest_hybrid
 
 # 18. Day 11 Sadece Dense (Anlamsal) Benchmark testini çalıştırın
 docker compose run --rm app python -m day11.benchmark --strategy dense
@@ -158,6 +160,18 @@ docker compose run --rm app python -m day13.hitl_cli resume --thread-id demo-001
 # 27. Day 13 Mevcut thread'in durumunu ve sıradaki düğümü kontrol et (inspect)
 docker compose run --rm app python -m day13.hitl_cli inspect --thread-id demo-001 
 
+# 28. Day 14 Uçtan uca sistem değerlendirmesini (Workflow + Routing) çalıştır
+docker compose run --rm app python -m day14.evaluate --all
+
+# 29. Day 14 Sadece Semantic LLM Router testlerini çalıştır
+docker compose run --rm app python -m day14.evaluate --suite routing --router llm
+
+# 30. Day 14 Observability (Span) mekanizmasını test et
+docker compose run --rm app python -m day14.observability
+
+# 32. Day 14 Comparison
+docker compose run --rm app python -m day14.router_experiment --compare
+
 ```
 ```
 ai-intern-week/
@@ -174,6 +188,7 @@ ai-intern-week/
 ├── day11/                  # 11. Gün Dense, Lexical, Hybrid arama stratejileri, RRF füzyonu ve MRR/Hit@k kodları
 ├── day12/                  # 12. Gün Model Context Protocol sunucu, istemci, adaptör mekanizmaları ve observability trace'leri
 ├── day13/                  # 13. Gün Durable Workflow, SQLite checkpointer, HITL onayı ve Idempotency mekanizmaları
+├── day14/                  # 14. Gün System Evaluation, Golden Dataset, Semantic Router ve Span Observability kodları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları ve framework mimari eşleştirmeleri

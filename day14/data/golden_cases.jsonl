@@ -1,0 +1,32 @@
+{"id": "smalltalk-001", "query": "Selam", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-002", "query": "Günaydın", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-003", "query": "Nasılsın?", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-004", "query": "Teşekkürler", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-005", "query": "Keyifler nasıl?", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-006", "query": "Naber?", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-007", "query": "Bugün nasıl gidiyor?", "suite": "routing", "expected_route": "smalltalk"}
+{"id": "smalltalk-008", "query": "Merhaba, kolay gelsin", "suite": "workflow", "expected_route": "smalltalk", "expected_terminal_status": "completed", "allowed_trajectory": ["classify_query", "direct_generate"]}
+{"id": "knowledge-001", "query": "Agentic workflow ile deterministik akışın farkı nedir?", "suite": "routing", "expected_route": "knowledge"}
+{"id": "knowledge-002", "query": "Named volume neden kullanılır?", "suite": "workflow", "expected_route": "knowledge", "expected_source": "docker.md", "allowed_trajectory": ["classify_query", "retrieve", "generate_with_context"]}
+{"id": "knowledge-003", "query": "Docker compose ile servisler arası ağ iletişimi nasıl sağlanır?", "suite": "routing", "expected_route": "knowledge"}
+{"id": "knowledge-004", "query": "Embedding modellerinde cosine similarity neye göre seçilmelidir?", "suite": "routing", "expected_route": "knowledge"}
+{"id": "knowledge-005", "query": "Büyük dil modellerinde context window neyi ifade eder?", "suite": "routing", "expected_route": "knowledge"}
+{"id": "knowledge-006", "query": "Qdrant'ta collection oluştururken hangi bilgiler tanımlanır?", "suite": "routing", "expected_route": "knowledge"}
+{"id": "knowledge-007", "query": "Function calling kullanırken model gerçek fonksiyonu doğrudan çalıştırır mı?", "suite": "routing", "expected_route": "knowledge"}
+{"id": "knowledge-008", "query": "RAG uygulamalarında filtreleme yapmak retrieval kalitesini nasıl etkiler?", "suite": "workflow", "expected_route": "knowledge", "expected_source": "vector-database.md", "allowed_trajectory": ["classify_query", "retrieve", "generate_with_context"]}
+{"id": "tool-001", "query": "Ankara'ya 2 kilo paket göndereceğim, maliyeti ne?", "suite": "workflow", "expected_route": "tool", "expected_tool": "calculate_shipping_cost", "expected_tool_provider": "native", "expected_terminal_status": "completed", "allowed_trajectory": ["classify_query", "tool_node"]}
+{"id": "tool-002", "query": "2 kiloluk gönderi Ankara için ne tutar?", "suite": "routing", "expected_route": "tool", "expected_tool": "calculate_shipping_cost"}
+{"id": "tool-003", "query": "Kargo ücretimi hesaplar mısın?", "suite": "routing", "expected_route": "tool", "expected_tool": "calculate_shipping_cost"}
+{"id": "tool-004", "query": "Selam, Ankara'ya 2 kg kargo ne kadar?", "suite": "routing", "expected_route": "tool", "expected_tool": "calculate_shipping_cost"}
+{"id": "tool-005", "query": "Notlarımda hybrid search hakkında ne yazıyor?", "suite": "workflow", "expected_route": "tool", "expected_tool": "search_notes", "expected_tool_provider": "mcp", "approval_required": false, "expected_terminal_status": "completed", "allowed_trajectory": ["classify_query", "tool_node"]}
+{"id": "tool-006", "query": "Geçen haftaki raporumda RRF'i bul.", "suite": "routing", "expected_route": "tool", "expected_tool": "search_notes"}
+{"id": "tool-007", "query": "Week 2 review içinde sandbox hakkında ne yazmışım?", "suite": "routing", "expected_route": "tool", "expected_tool": "search_notes"}
+{"id": "tool-008", "query": "Merhaba, notlarımda hybrid search'i bul.", "suite": "routing", "expected_route": "tool", "expected_tool": "search_notes"}
+{"id": "tool-009", "query": "Selam, notlarımda RAG hakkında ne yazıyor?", "suite": "routing", "expected_route": "tool", "expected_tool": "search_notes"}
+{"id": "challenge-001", "query": "Bugün hava nasıl?", "suite": "routing_challenge", "capability_available": false, "expected_route": null}
+{"id": "challenge-002", "query": "Dolar kuru şu an ne kadar?", "suite": "routing_challenge", "capability_available": false, "expected_route": null}
+{"id": "challenge-003", "query": "Bana bir fıkra anlat.", "suite": "routing_challenge", "capability_available": false, "expected_route": null}
+{"id": "challenge-004", "query": "Bunu bulabilir misin?", "suite": "routing_challenge", "capability_available": null, "expected_route": null, "notes": "ambiguous intent; insufficient context"}
+{"id":"approval-001","query":"Hazırlanan raporu yayınla","suite":"durable","expected_action":"publish_report","approval_required":true,"expected_terminal_status":"interrupted","strict_trajectory":["prepare","approval"]}
+{"id":"approval-002","query":"Hazırlanan raporu yayınla","suite":"durable","expected_action":"publish_report","approval_required":true,"resume_payload":{"decision":"approve"},"expected_terminal_status":"completed","strict_trajectory":["prepare","approval","execute_action"]}
+{"id":"approval-003","query":"Hazırlanan raporu yayınla","suite":"durable","expected_action":"publish_report","approval_required":true,"resume_payload":{"decision":"reject"},"expected_terminal_status":"rejected","strict_trajectory":["prepare","approval","rejected"]}

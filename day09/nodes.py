@@ -74,17 +74,23 @@ def next_step(state: dict, node_name: str) -> dict:
 
 
 # Gelen soruyu basit kelime kurallarıyla 'smalltalk', 'tool' veya 'knowledge' rotalarına ayırıyorum.
-def classify_node(state: dict) -> dict:
-    query = state["original_query"].lower()
+def classify_keyword(query: str) -> str:
+    lowered = query.lower()
 
-    if any(greeting in query for greeting in ("merhaba", "selam", "hello")):
-        route = "smalltalk"
-    elif "kargo" in query or "notlar" in query:
-        route = "tool"
-    elif "banana" in query:
-        route = "banana_route"
-    else:
-        route = "knowledge"
+    if any(
+        greeting in lowered
+        for greeting in ("merhaba", "selam", "hello")
+    ):
+        return "smalltalk"
+
+    if "kargo" in lowered or "notlar" in lowered:
+        return "tool"
+
+    return "knowledge"
+
+
+def classify_node(state: dict) -> dict:
+    route = classify_keyword(state["original_query"])
 
     update = next_step(state, "classify_query")
     update["route"] = route

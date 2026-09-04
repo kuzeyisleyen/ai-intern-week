@@ -1,7 +1,7 @@
 import pytest
 import os
 import json
-from day13.approval_policy import requires_approval, validate_decision
+from day13.approval_policy import requires_approval, validate_decision, validate_resume_payload
 from day13.actions import execute_once
 
 
@@ -21,6 +21,15 @@ def test_validate_decision():
 
     with pytest.raises(ValueError):
         validate_decision(True)  
+        
+def test_validate_resume_payload():
+    assert validate_resume_payload({"decision": "approve"}) == "approve"
+    
+    with pytest.raises(ValueError):
+        validate_resume_payload("approve") # dict değilse hata
+        
+    with pytest.raises(ValueError):
+        validate_resume_payload({"decision": "maybe"})
 
 def test_execute_once_idempotency(tmp_path, monkeypatch):
     test_log_file = tmp_path / "test-actions.jsonl"
@@ -35,4 +44,3 @@ def test_execute_once_idempotency(tmp_path, monkeypatch):
     with open(test_log_file, "r") as f:
         lines = f.readlines()
         assert len(lines) == 1
-    

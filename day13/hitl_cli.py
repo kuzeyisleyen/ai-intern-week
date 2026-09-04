@@ -1,6 +1,7 @@
 import argparse
 import os
 import time
+from uuid import uuid4
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.types import Command
 from day13.durable_graph import get_durable_graph_builder
@@ -12,6 +13,7 @@ def main():
     parser.add_argument("--thread-id", required=True)
     parser.add_argument("--decision", choices=["approve", "reject"])
     parser.add_argument("--action", default="publish_report")
+    parser.add_argument("--action-id", default=None)
     args = parser.parse_args()
 
     os.makedirs("output/day13", exist_ok=True)
@@ -24,9 +26,14 @@ def main():
         if args.command == "start":
             print(f"[{args.thread_id}] Workflow çalıştırılıyor... (Action: {args.action})")
             
+            run_id = f"run-{uuid4()}"
             start_time = time.time()
             
-            graph.invoke({"request": "start_demo", "action_type": args.action}, config)
+            invoke_payload = {"request": "start_demo", "action_type": args.action}
+            if args.action_id:
+                invoke_payload["action_id"] = args.action_id
+                
+            graph.invoke(invoke_payload, config)
             duration = int((time.time() - start_time) * 1000)
             
             snapshot = graph.get_state(config)
@@ -34,12 +41,15 @@ def main():
             is_interrupted = len(snapshot.next) > 0
             
             log_trace(
+                run_id=run_id,
                 thread_id=args.thread_id,
                 action_id=state_values.get("action_id"),
                 action_type=state_values.get("action_type", args.action),
+                approval_required=state_values.get("approval_required"),
                 resumed=False,
                 duration_ms=duration,
-                status="interrupted" if is_interrupted else "completed"
+                status="interrupted" if is_interrupted else "completed",
+                terminal_status="interrupted" if is_interrupted else state_values.get("status")
             )
             print("Akış tamamlandı veya duraklatıldı.")
             
@@ -56,6 +66,7 @@ def main():
             if not args.decision:
                 raise ValueError("Resume komutu için --decision argümanı gereklidir.")
             
+            run_id = f"run-{uuid4()}"
             start_time = time.time()
             graph.invoke(Command(resume={"decision": args.decision}), config)
             duration = int((time.time() - start_time) * 1000)
@@ -65,13 +76,16 @@ def main():
             is_interrupted = len(snapshot.next) > 0
             
             log_trace(
+                run_id=run_id,
                 thread_id=args.thread_id,
                 action_id=state_values.get("action_id"),
                 action_type=state_values.get("action_type"),
+                approval_required=state_values.get("approval_required"),
                 resumed=True,
                 approval_decision=args.decision,
                 duration_ms=duration,
-                status="interrupted" if is_interrupted else "completed"
+                status="interrupted" if is_interrupted else "completed",
+                terminal_status="interrupted" if is_interrupted else state_values.get("status")
             )
 
 if __name__ == "__main__":

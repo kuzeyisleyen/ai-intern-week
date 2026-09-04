@@ -29,8 +29,7 @@ kanalıdır.
 İstemcinin bağlandığı sunucunun hangi araçları kaynakları veya promptları desteklediğini otomatik olarak öğrenme ve listeleme yeteneğidir.
 
 ## Native dispatcher vs MCP
-Native dispatcher araçları doğrudan ajanın kodu içinde aynı bellekte çalıştırarak çökme riski yaratırken, MCP bu araçları ayrı bir sunucu sürecine izole 
-ederek sistemi korur ve dilden bağımsızlık sağlar.
+Native dispatcher araçları doğrudan ajanın kodu içinde aynı bellekte çalıştırarak hata anında tüm sistemin çökmesi riskini yaratırken; MCP bu araçları ayrı bir sunucu sürecine (process) taşıyarak mimari bir izolasyon (hata toleransı) ve dilden bağımsızlık sağlar. Ancak MCP bir güvenlik (sandbox) katmanı değildir; çalıştırılan aracın sistem kaynaklarına erişimi, MCP sunucusunun işletim sistemindeki yetkileriyle aynıdır.
 
 ## Resource vs Tool
 Resource modelin sadece okuyup bağlamına kattığı pasif verilerken, Tool modelin aktif olarak çalıştırıp parametre gönderdiği fonksiyonlardır.
