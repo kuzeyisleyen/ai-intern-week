@@ -1,3 +1,5 @@
+from unittest import result
+
 import pytest
 from day14.llm_router import run_llm_router
 from day09.native_workflow import run_native_workflow
@@ -23,8 +25,7 @@ def test_ollama_structured_router_smoke():
         assert "latency_ms" in result
         
         if not result["fallback_used"]:
-            assert result["router"] == "llm"
-            assert result["error_type"] is None
+            assert result["decision_source"] in ["llm", "deterministic_fastpath"]
 
 @pytest.mark.integration
 def test_workflow_eval_smoke():

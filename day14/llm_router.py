@@ -10,11 +10,7 @@ ROUTE_SCHEMA = {
     "properties": {
         "route": {
             "type": "string",
-            "enum": [
-                "smalltalk",
-                "knowledge",
-                "tool",
-            ],
+            "enum": ["smalltalk", "knowledge", "tool"],
         },
     },
     "required": ["route"],
@@ -41,13 +37,34 @@ Available tool capabilities (Mevcut yetenekler):
 Yanıtını kesinlikle verilen JSON şemasına uygun olarak üret.
 """
 
+class RouterDependencyError(Exception):
+    pass
+
+#  Yüksek güvenli deterministik hızlı yol
+def match_high_confidence_rule(query: str) -> str | None:
+    query_lower = query.strip().lower()
+    # Saf ve kısa greeting (selamlama) ifadeleri doğrudan smalltalka gider
+    if query_lower in ["selam", "merhaba", "günaydın"]:
+        return "smalltalk"
+    return None
+
 def run_llm_router(query: str) -> Dict[str, Any]:
-    """
-    Sorguyu LLM kullanarak anlamsal olarak sınıflandırır.
-    Hata durumunda keyword_router'a fallback yapar.
-    """
     start_time = time.perf_counter()
     
+    # Deterministik Hızlı Yol Kontrolü
+    fast_route = match_high_confidence_rule(query)
+    if fast_route:
+        latency_ms = (time.perf_counter() - start_time) * 1000
+        return {
+            "route": fast_route,
+            "decision_source": "deterministic_fastpath", # Kararın kaynağı eklendi
+            "llm_attempted": False,
+            "fallback_used": False,
+            "error_type": None,
+            "latency_ms": latency_ms
+        }
+
+    #LLM Yönlendirmesi
     actual_route = None
     error_type = None
     fallback_used = False
@@ -64,10 +81,12 @@ def run_llm_router(query: str) -> Dict[str, Any]:
             options={"temperature": 0},
             response_format=ROUTE_SCHEMA
         )
+        
+        if "error" in response:
+            raise RouterDependencyError(response["error"])
     
         raw_content = response.get("message", {}).get("content")
         
-        # None veya boş string kontrolü
         if not raw_content:
             raise ValueError("LLM'den boş veya geçersiz yanıt geldi.")
             
@@ -76,21 +95,27 @@ def run_llm_router(query: str) -> Dict[str, Any]:
         
         if actual_route not in {"smalltalk", "knowledge", "tool"}:
             raise ValueError(f"Invalid route from LLM: {actual_route}")
+            
+        decision_source = "llm" # LLM başarılı oldu
         
     except Exception as e:
+        # Hata durumunda Fallback 
         error_type = type(e).__name__
         fallback_used = True
         
         fallback_result = run_keyword_router(query)
         actual_route = fallback_result.get("route")
+        decision_source = "keyword_fallback" # Fallback devreye girdi
 
     end_time = time.perf_counter()
     latency_ms = (end_time - start_time) * 1000
 
+    # "Result Contract" formatına uydurulmuş dönüş
     return {
-        "route": actual_route,
-        "router": "llm",
-        "latency_ms": latency_ms,
+        "route": actual_route, 
+        "decision_source": decision_source,
+        "llm_attempted": True,
         "fallback_used": fallback_used,
-        "error_type": error_type,
+        "error_type": error_type, 
+        "latency_ms": latency_ms,
     }

@@ -1,213 +1,128 @@
 # AI Intern Week
-
-**Proje Durumu:** Day 14 Tamamlandı (Week 3 devam ediyor)
-
-> **Python, Temiz Kod, Otomatik Testler ve Açık Kaynaklı Yapay Zeka Modelleri (LLM)**
-> Proje, temel mekanizmaları önce native Python ile görünür biçimde kurup, ihtiyaç ortaya çıktıktan sonra LangGraph gibi orchestration abstraction'larıyla eşlemeyi amaçlar.
+---
+## What This Repository Demonstrates
+Bu proje, yapay zeka destekli bir sistemin temel mekanizmalarından üretim kalitesindeki (production-ready) mimarisine kadar uzanan üç haftalık inşa sürecini gösterir. Temel mühendislik prensibi olarak "native-first → framework later" (önce saf Python, sonra orkestrasyon) yaklaşımı benimsenmiştir.
 ---
 
-## Gereksinimler
+## Architecture
+Sistem, donanım tüketimini düşük tutmak ve yerel (local) cihazlarda çalışabilmek için tamamen açık kaynaklı modeller ve modüler konteynerler üzerine kurulmuştur.
+* **Generation & Routing:** Yapılandırılmış çıktı (structured output), araç kullanımı (tool calling) ve iki aşamalı yönlendirme (two-stage routing) için Ollama altyapısında `qwen3:1.7b` modeli kullanılmıştır.
+* **Embedding & Vector Space:** Metinleri 768 boyutlu uzayda vektörlere dönüştürmek için `embeddinggemma` modeli entegre edilmiştir.
+* **Storage & Retrieval:** Vektör (Dense) ve sözcüksel (Lexical/BM25) arama sinyallerini RRF (Reciprocal Rank Fusion) ile birleştiren hibrit arama altyapısı Qdrant üzerinde çalıştırılmaktadır.
 
-Projeyi sorunsuz çalıştırmak için bilgisayarınızda aşağıdakilerin kurulu olduğundan emin olun:
+## Core Learning Progression
 
-*   **Python** 3.10 veya üzeri
-*   **Git** versiyon kontrol sistemi
-*   **Docker** ve **Docker Compose**
-*   Aktif bir internet bağlantısı
+### Week 1 — Native Foundations
+Python temelleri ve açık kaynaklı modellerin incelenmesiyle başlanmıştır. Çalışma ortamı Docker üzerine taşınmış ve modelin Python fonksiyonlarını tetiklediği (Tool Calling) mekanizmalar kurulmuştur. Haftanın sonunda, orkestrasyon araçları olmadan saf Python ile sonsuz döngü frenlerine ve kendini düzeltme (self-correction) yeteneğine sahip otonom bir ajan motoru inşa edilmiştir.
 
----
+### Week 2 — Retrieval, RAG, Workflow, Reliability
+Saf matematik ile kosinüs benzerliği algoritmaları yazılarak temeller atılmış, ardından sisteme Qdrant vektör veritabanı entegre edilmiştir. Uçtan uca native RAG mimarisi inşa edilerek arama kalitesi (Hit@k) ölçülmüştür. Hafta sonuna doğru LangGraph orkestrasyonuna geçilmiş, hata enjeksiyonu (failure injection) yöntemleriyle sistemin dayanıklılığı sınanmıştır.
 
-## Kullanılan Modeller
+### Week 3 — Evaluation, MCP, Durability, Observability
+Qdrant üzerinde Dense, Lexical ve Hybrid (RRF) arama stratejilerinin kıyaslandığı kalite mühendisliği çalışmaları yapılmıştır. Model Context Protocol (MCP) `stdio` sunucu/istemci mimarisi kurularak bağımsız araç adaptörleri sisteme entegre edilmiştir. İş akışlarına kalıcılık (durability) sağlamak için LangGraph SQLite checkpointer eklenmiş, yüksek riskli işlemlere insan onayı (HITL) şartı getirilmiştir. Süreç, Semantic Router A/B testleri, OpenTelemetry standartlarında Observability ("Span") entegrasyonu ve uçtan uca Golden Dataset değerlendirmesiyle noktalanmıştır.
 
-Proje boyunca yerel (local) çıkarım (inference), hızlı iterasyon ve düşük donanım tüketimi amacıyla aşağıdaki açık kaynaklı modeller tercih edilmiştir:
-
-*   **SmolLM2-360M:** Hugging Face ekosisteminde (Day 2); Tokenizer yapısını anlama, Embedding vektörlerini inceleme ve metin üretim parametreleri (temperature, top_p) deneylerinde kullanılmıştır.
-*   **qwen3:1.7b:** Ollama altyapısında (Day 4, 5 ve 8); JSON formatında yapılandırılmış çıktı (Structured Output) üretme, dış Python fonksiyonlarını tetikleme (Tool Calling), Otonom Ajan (Agent) senaryolarında ve RAG sisteminde "Grounded" (bağlama sadık) metin üretim motoru olarak kullanılmıştır.
-*   **embeddinggemma:** Ollama altyapısında (Day 6, 7 ve 8); metinleri 768 boyutlu uzayda vektörlere dönüştürmek, Qdrant üzerinde "Kosinüs Benzerliği" (Cosine Similarity) aracılığıyla Anlamsal Arama (Semantic Search) motoru kurmak için kullanılmıştır.
-*   **Qdrant/bm25 (FastEmbed):** Qdrant üzerinde yerel (local-first) işlem gücüyle sözcüksel (lexical/sparse) arama sinyallerini oluşturmak için Day 11 kapsamında eklenmiştir.
-
----
-
-## Kurulum (Lokal Python Ortamı)
-
-Projeyi lokalinizde çalıştırmak isterseniz aşağıdaki adımları izleyebilirsiniz. *(Not: 3. Gün itibarıyla projenin ana çalıştırma ortamı Docker Compose olarak belirlenmiştir.)*
+## Quick Start
+Sistemi yerel ortamda başlatmak için Python 3.10.21, Git, Docker ve Docker Compose gereklidir.
 
 ```bash
-# 1. Sanal ortam (virtual environment) oluşturun
-python -m venv .venv
-
-# 2. Sanal ortamı aktif edin (Windows)
-.venv\Scripts\activate.bat
-
-# (macOS/Linux)
-source .venv/bin/activate
-
-# 3. Temel bağımlılıkları yükleyin
-python -m pip install -r requirements.txt
-
-# Opsiyonel: 2. Gün laboratuvar çalışmalarını lokalde çalıştırmak için ağır kütüphaneleri de kurun
-python -m pip install -r requirements-lab.txt
-```
-# Modüller
-Day 1 (Temeller): Python temellerinin atıldığı modüldür. Koda; hata yönetimi, veri tipleri, döngüler ve uç durum (edge-case) güvenlik kontrolleri eklenmiştir. (Ana Script: day01/text_utils.py)
-
-Day 2 (Hugging Face Laboratuvarı): Açık kaynaklı modellerin incelendiği laboratuvar günüdür. Token/Embedding kavramları ve metin üretim parametreleri üzerine deneyler yapılmıştır. (Ana Scriptler: day02/token_embedding_lab.py, day02/generation_experiment.py)
-
-Day 3 (Docker Entegrasyonu): Projenin ve testlerin Docker Compose üzerine taşındığı, çıktıların output/ klasöründe kalıcı hale getirildiği geçiş günüdür. (Ana Script: day03/text_cli.py)
-
-Day 4 (Yerel LLM ve Tool Calling): Ollama kullanılarak modelden yapılandırılmış veri (Structured Output) elde edildiği ve modelin Python fonksiyonlarını (Tool Calling) tetiklediği modüldür. (Ana Scriptler: day04/tool_call_demo.py, day04/ollama_client.py)
-
-Day 5 (Otonom Ajan Mimarisi): LangChain olmadan sıfırdan otonom bir ajan motorunun yazıldığı modüldür. Sisteme; sonsuz döngü frenleri, kendini düzelten (Self-Correction) yapı ve gözlemlenebilirlik (Trace) altyapısı eklenmiştir. (Ana Scriptler: day05/agent_loop.py, day05/agent_cli.py)
-
-Day 6 (Anlamsal Arama): Framework kullanmadan saf matematik ile Anlamsal Arama (Semantic Search) motorunun inşa edildiği modüldür. Kelime bazlı arama ile anlamsal arama kıyaslanmıştır. (Ana Scriptler: day06/similarity.py, day06/semantic_search_cli.py)
-
-Day 7 (Vektör Veritabanı): Qdrant kullanılarak yerel bir vektör veritabanının ayağa kaldırıldığı, anlamsal arama ve meta veri filtreleme (metadata filtering) yeteneklerinin entegre edildiği modüldür. (Ana Scriptler: day07/ingest.py, day07/search.py)
-
-Day 8 (Native RAG ve Evaluation): Dış bir framework kullanmadan sıfırdan "Retrieval-Augmented Generation" (RAG) mimarisinin kurulduğu modüldür. Dökümanları parçalama, Qdrant'ta arama, bağlam oluşturma (citation) ve Hit@k metrikleriyle arama motoru kalitesi ölçülmüştür. (Ana Scriptler: day08/rag_pipeline.py, day08/rag_cli.py, day08/evaluation.py)
-
-Day 9 (LangGraph Orchestration): Native workflow ile LangGraph framework'ünün karşılaştırıldığı modüldür. Düğümler (nodes), kenarlar (edges) ve framework mimarisinin entegrasyonu tamamlanmıştır. (Ana Scriptler: day09/nodes.py, day09/graph_workflow.py, day09/graph_cli.py)
-
-Day 10 (Reliability & Security Boundaries): Sistemin hata yönetiminin (Failure Injection, özel Exception sınıfları) güçlendirildiği ve modelin ürettiği kodu çalıştırmak için Docker düzeyinde (network none, read-only, tmpfs, non-root) güvenlik yalıtım sınırlarının (Sandbox) test edildiği 2. hafta kapanış modüldür. (Ana Script: day10_failure_experiments.py)
-
-Day 11 (Retrieval Quality Engineering): Sisteme yeni bir arama yöntemi eklemeden önce Hit@k ve MRR (Mean Reciprocal Rank) metrikleriyle kalitenin ölçüldüğü modüldür. Dense (anlamsal), Lexical (sözcüksel) ve RRF (Reciprocal Rank Fusion) kullanan Hybrid arama stratejileri değerlendirme veri setleri üzerinden karşılaştırılmıştır. (Ana Scriptler: day11/ingest_hybrid.py, day11/benchmark.py)
-
-Day 12 (Model Context Protocol): Araç ve veri kaynağı keşfinin, tip doğrulamasının ve tetikleme sözleşmesinin standardize edildiği, statik bağımlılıkları ortadan kaldıran MCP entegrasyonu yapılmıştır. stdio transfer protokolüyle araç çağrıları ayrı bir istemci-sunucu katmanına ayrılmış, sözleşme hataları (contract errors) test edilerek LangGraph akışına bağımsız adaptörlerle bağlanmıştır. (Ana Scriptler: day12/mcp_server.py, day12/mcp_client.py, day12/mcp_adapter.py)
-
-Day 13 (Durable Workflow & HITL): İş akışının kritik noktalarda duraklatılabilmesi (interrupt) ve kalıcı durum (persistent state) yönetimi için SQLite checkpointer entegre edilmiştir. Yüksek riskli işlemlerde insan onayı (Human-in-the-Loop) beklenmesi ve işlemlerin güvenle yeniden başlatılabilmesi için (idempotency) önlemler alınmıştır. (Ana Scriptler: day13/durable_graph.py, day13/hitl_cli.py, day13/trace.py)
-
-Day 14 (Agent Evaluation & Observability): Sistemin doğruluğunu (Route, Tool, Trajectory, Terminal State) ölçmek için Golden Dataset (Altın Veri Seti) oluşturulmuş ve uçtan uca değerlendirme (Evaluation) mimarisi kurulmuştur. Mevcut "Keyword Router" ile yeni nesil "LLM Semantic Router" arasında A/B testi yapılarak hız ve doğruluk analizi gerçekleştirilmiş, gözlemlenebilirlik (Observability) için OpenTelemetry standartlarına uygun "Span" mental modeline geçilmiştir. (Ana Scriptler: day14/evaluate.py, day14/evaluator.py, day14/llm_router.py, day14/observability.py)
-
-# Çalıştırma (Docker Compose ile)
-Aşağıdaki komutların tamamı terminale doğrudan yapıştırılıp test edilebilir şekilde ayarlanmıştır.
-```bash
+# 1. Altyapı servislerini (Ollama ve Qdrant) başlatın
 docker compose up -d ollama qdrant
 
-# 2. App imajını inşa edin
-docker compose build app
-
-# 3. Uygulamayı çalıştırın (Örnek: Day 4 Tool Calling)
-docker compose run --rm app python -m day04.tool_call_demo "Ankara'ya 3 desi kargo göndereceğim. Maliyeti hesapla."
-
-# 4. Ajanı interaktif modda çalıştırın (Örnek: Day 5)
-docker compose run --rm app python -m day05.agent_cli
-
-# 5. Day 6 Semantic Search için 'embeddinggemma' modelini indirin
+# 2. Embedding modelini indirin
 docker compose exec ollama ollama pull embeddinggemma
 
-# 6. Day 6 Anlamsal Arama uygulamasını çalıştırın
-docker compose run --rm app python -m day06.semantic_search_cli
+# 3. Ana uygulama imajını inşa edin
+docker compose build app
+```
+## Main Demos
+```bash
+# Native Ajanı interaktif modda başlatmak (Week 1)
+docker compose run --rm app python -m day05.agent_cli
 
-# 7. Day 7 Qdrant Ingestion (Veri yükleme)
-docker compose run --rm app python -m day07.ingest
-
-# 8. Day 7 Qdrant Arama (Semantic Search)
-docker compose run --rm app python -m day07.search "Container silinince verilerim kaybolmasın."
-
-# 9. Day 8 RAG sistemi için dökümanları Qdrant'a kaydedin (Ingestion)
-docker compose run --rm app python -m day08.ingest
-
-# 10. Day 8 Uçtan uca RAG sistemine soru sorun
+# RAG sistemine soru sormak (Week 2)
 docker compose run --rm app python -m day08.rag_cli "Named volume ne zaman kullanılır?"
 
-# 11. Day 8 RAG sisteminin arama motoru kalitesini (Hit@k) ölçün
-docker compose run --rm app python -m day08.evaluation
-
-# 12. Day 9 LangGraph Orkestrasyonunu çalıştırın
-docker compose run --rm app python -m day09.graph_cli "Ankara'ya 2 kg kargo ne kadar?"
-
-# 13. Day 10 Hata Enjeksiyonu (Failure Injection) deneylerini çalıştırın
-docker compose run --rm app python -m day10.failure_experiments
-
-# 14. Day 10 Hata yönetimini (Exceptions) doğrulayan tüm birim testlerini (Unit Tests) çalıştırın
-docker compose run --rm app python -m pytest -v -m "not integration"
-
-# 15. Day 10 Kısıtlı Sandbox imajını derleyin (Build)
-docker build -t sandbox-demo sandbox_demo
-
-# 16. Day 10 Öğrenilen tüm güvenlik katmanlarını (Isolation Layers) içeren Canonical Sandbox Testini çalıştırın
-docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=64m --memory=128m --cpus=0.5 --pids-limit=64 --cap-drop=ALL --security-opt no-new-privileges=true sandbox-demo
-
-# 17. Day 11 Hybrid collection ingestion (Veri yükleme)
-docker compose run --rm app python -m day11.ingest_hybrid
-
-# 18. Day 11 Sadece Dense (Anlamsal) Benchmark testini çalıştırın
-docker compose run --rm app python -m day11.benchmark --strategy dense
-
-# 19. Day 11 Sadece Lexical/Sparse (Sözcüksel) Benchmark testini çalıştırın
-docker compose run --rm app python -m day11.benchmark --strategy lexical
-
-# 20. Day 11 Hybrid (Dense + Lexical) Benchmark testini çalıştırın
-docker compose run --rm app python -m day11.benchmark --strategy hybrid
-
-# 21. Day 11 Tüm arama stratejilerini yan yana test edip analiz edin
-docker compose run --rm app python -m day11.benchmark --all
-
-# 22. Day 12 MCP Stdio sunucusunu çalıştırın (Sunucu arka planda bekleyecektir, başka bir sekme gerekir)
-docker compose run --rm app python -m day12.mcp_server
-
-# 23. Day 12 İstemci (Client) keşif ve araç/veri kaynağı çekim yeteneklerini test edin
-docker compose run --rm app python -m day12.mcp_client
-
-# 24. Day 12 LangGraph orkestrasyonunu ve MCP entegrasyonunu (Not aracı testi) çalıştırın
+# MCP entegrasyonuyla LangGraph çalıştırmak (Week 3)
 docker compose run --rm app python -m day09.graph_cli "Notlarımda hybrid search hakkında ne yazıyor?"
 
-# 25. Day 13 İlk durable run (İş akışı onaya kadar ilerleyip duraklatılır)
-docker compose run --rm app python -m day13.hitl_cli start --thread-id demo-001 --action publish_report 
+# İnsan onaylı (HITL) bir iş akışını başlatmak (Week 3)
+docker compose run --rm app python -m day13.hitl_cli start --thread-id demo-001 --action publish_report
+```
+## Testing
+Testler, dış ağa/modele giden bileşenleri izole ederek (mocking) milisaniyeler içinde deterministik sonuçlar üretecek şekilde kurgulanmıştır.
+```bash
+# Hata yönetimini doğrulayan hızlı birim (Unit) testleri
+docker compose run --rm app python -m pytest -q -m "not integration"
 
-# 26. Day 13 Aynı thread'i approve (onay) kararı ile devam ettir (resume)
-docker compose run --rm app python -m day13.hitl_cli resume --thread-id demo-001 --decision approve 
+# Dış bağımlılıkları test eden entegrasyon (Integration) testleri
+docker compose run --rm app python -m pytest -q -m integration
 
-# 27. Day 13 Mevcut thread'in durumunu ve sıradaki düğümü kontrol et (inspect)
-docker compose run --rm app python -m day13.hitl_cli inspect --thread-id demo-001 
+# Kontrollü kriz ve hata toleransı tatbikatı
+docker compose run --rm app python -m day15.failure_experiements
 
-# 28. Day 14 Uçtan uca sistem değerlendirmesini (Workflow + Routing) çalıştır
+```
+## Evaluation
+Projedeki semantic-router politikası, varsayımlar yerine evidence-driven (kanıt odaklı) bir tasarıma dayanır.
+```bash
+# Arama stratejileri (Hybrid/Lexical/Dense) benchmark analizi
+docker compose run --rm app python -m day11.benchmark --all
+
+# Uçtan uca sistem değerlendirmesi ve Rota/Ajan analizi
 docker compose run --rm app python -m day14.evaluate --all
 
-# 29. Day 14 Sadece Semantic LLM Router testlerini çalıştır
-docker compose run --rm app python -m day14.evaluate --suite routing --router llm
-
-# 30. Day 14 Observability (Span) mekanizmasını test et
-docker compose run --rm app python -m day14.observability
-
-# 32. Day 14 Comparison
-docker compose run --rm app python -m day14.router_experiment --compare
-
+# Üretim Kalitesi (Production) Kanıt Raporu (JSON) oluşturma
+docker compose run --rm app python -m day15.capstone --all
 ```
-```
+## CI
+Sistem "Ayrıştırılmış CI" (Bifurcated CI) stratejisine sahiptir. Deterministik olan birim ve entegrasyon testleri uzak CI sunucularında (hard gate) çalıştırılırken; probabilistik yapıdaki LLM, RAG ve End-to-End değerlendirme testleri yerel ortamda (Local CI) çalıştırılarak sonuçlar statik bir kanıt dosyasına (output/day15-capstone-summary.json) mühürlenir.
+
+## Safety Boundaries
+Mimari kurgulanırken ve değerlendirilirken sistemin sınırları şu gerçeklikler üzerine oturtulmuştur:
+*MCP ≠ sandbox (Sadece protokol izolasyonudur)
+*LLM router ≠ authorization (Yapay zeka sadece niyet belirler, izni Tool Allowlist verir)
+*citation validation ≠ semantic grounding
+*SQLite checkpoint ≠ backup (Sadece durum hafızasıdır)
+*Docker ≠ perfect sandbox
+*semantic-router policy = evidence-driven (A/B testleriyle kanıtlanmıştır)
+
+## Known Limitations
+*Tüm mimari, scriptler ve veritabanı yerel cihazlarda CPU üzerinde çalışacak şekilde optimize edilmiştir.
+*Hızlı iterasyon amacıyla seçilen küçük parametreli LLM (qwen3:1.7b), çok katmanlı yönlendirme senaryolarında niyet karmaşası (intent confusion) yaşayabilmekte ve araç sorgularını bilgi (knowledge) rotasına yönlendirebilmektedir. Bu durum, mimarideki fallback mekanizmalarını ve kontrollü hata (graceful degradation) yönetimini test etmek için kullanılmıştır.
+```bash
 ai-intern-week/
-├── day01/                  # 1. Gün metin analizi kodları
-├── day02/                  # 2. Gün LLM ve tokenizer laboratuvar kodları
-├── day03/                  # 3. Gün Docker CLI ve Python uyarlamaları
-├── day04/                  # 4. Gün yerel LLM, yapılandırılmış çıktı ve Tool Calling kodları
-├── day05/                  # 5. Gün native ajan döngüsü, state yönetimi ve CLI kodları
-├── day06/                  # 6. Gün Embedding vektörleri, kosinüs benzerliği ve arama motoru kodları
-├── day07/                  # 7. Gün Qdrant vektör DB, Ingestion ve Vector DB deney kodları
-├── day08/                  # 8. Gün Native RAG, chunking, context builder ve evaluation kodları
-├── day09/                  # 9. Gün LangGraph entegrasyonu, graph objesi ve node/edge yönetim kodları
-├── day10/                  # 10. Gün Hata yönetimi (Exception), Failure Injection ve Security Sandbox incelemeleri
-├── day11/                  # 11. Gün Dense, Lexical, Hybrid arama stratejileri, RRF füzyonu ve MRR/Hit@k kodları
-├── day12/                  # 12. Gün Model Context Protocol sunucu, istemci, adaptör mekanizmaları ve observability trace'leri
-├── day13/                  # 13. Gün Durable Workflow, SQLite checkpointer, HITL onayı ve Idempotency mekanizmaları
-├── day14/                  # 14. Gün System Evaluation, Golden Dataset, Semantic Router ve Span Observability kodları
+├── .github/workflows/      # CI/CD pipeline yapılandırması (ci.yml)
+├── .pytest_cache/          # Pytest önbellek dosyaları (göz ardı edilir)
+├── .venv/                  # Lokal Python sanal ortamı (göz ardı edilir)
+├── .vscode/                # VS Code çalışma alanı ayarları
+├── day01/                  # Metin analizi ve native veri tipleri
+├── day02/                  # Tokenizer ve Embedding laboratuvarı
+├── day03/                  # Docker CLI uyarlamaları
+├── day04/                  # Yerel LLM, yapılandırılmış çıktı ve Tool Calling
+├── day05/                  # Native ajan döngüsü ve self-correction mekanizmaları
+├── day06/                  # Kosinüs benzerliği ve arama motoru temelleri
+├── day07/                  # Qdrant vektör DB ve Ingestion
+├── day08/                  # Native RAG, chunking ve evaluation
+├── day09/                  # LangGraph orkestrasyonu (nodes/edges)
+├── day10/                  # Exception yönetimi ve Failure Injection sınırları
+├── day11/                  # Hybrid (RRF), Dense, Lexical strateji benchmarkları
+├── day12/                  # MCP stdio client/server adaptör mekanizmaları
+├── day13/                  # SQLite Checkpointer, HITL onayı ve Idempotency
+├── day14/                  # System Evaluation, Semantic Router ve Observability
+├── day15/                  # Production CI, Capstone ve Drill operasyonları
+├── docs/                   # Mimari ve bileşen dokümantasyonları
 ├── experiments/            # Otomatik kaydedilen deney sonuçları (JSON)
 ├── literature/             # Makale okuma notları ve teorik incelemeler
 ├── notes/                  # Teorik kavram cevapları ve framework mimari eşleştirmeleri
-├── output/                 # Docker'dan host'a yazılan kalıcı trace, arama ve log çıktıları
+├── output/                 # Kalıcı trace, değerlendirme (eval) ve log çıktıları
 ├── reports/                # Günlük gelişim raporları (Blocker'lar ve öğrenimler)
-├── sandbox_demo/           # 10. Gün Restricted Sandbox (Docker Security) laboratuvar dosyaları
-├── tests/                  # Pytest ile yazılmış otomatik test senaryoları
+├── sandbox_demo/           # Restricted Sandbox (Docker Security) laboratuvar dosyaları
+├── tests/                  # Pytest birim ve entegrasyon senaryoları
 ├── .dockerignore           # Docker build context'e girmeyecek dosyalar
 ├── .gitignore              # Git tarafından takip edilmeyen dosyalar
 ├── compose.yaml            # Servis, volume ve environment tanımları
 ├── Dockerfile              # Proje imajının kurulum adımları
-├── pytest.ini              # Pytest konfigürasyonu
+├── pytest.ini              # Pytest yapılandırması
 ├── README.md               # Proje dokümantasyonu
-├── requirements-lab.txt    # Lokal deney kodları için ağır bağımlılıklar (torch, transformers)
-└── requirements.txt        # Temel bağımlılıklar (pytest, requests, qdrant-client vb.)
+├── requirements-lab.txt    # Lokal deney kodları için ağır bağımlılıklar
+└── requirements.txt        # Temel paket bağımlılıkları
 ```
-
-# Bilinen Limitasyonlar
-Donanım: Scriptler lokal cihazda CPU üzerinde çalışacak şekilde kurgulanmıştır.
-
-# Model Ölçeği:
- Kullanılan modeller hızlı test için küçük boyutludur. Karmaşık mantık yürütme sorularında halüsinasyon riskleri yüksektir veya tool seçmekte zorlanabilirler. Bu limitasyon, ajan motorunun kendi kendini düzelten (self-correction) yapısını ve RAG sistemindeki kaynak zorunluluğunu (citation policy) test etmek için bir avantaja dönüştürülmüştür.

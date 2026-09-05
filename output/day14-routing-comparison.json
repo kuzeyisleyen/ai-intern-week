@@ -1,0 +1,1389 @@
+{
+  "generated_at": "2026-09-05T14:26:10.042454",
+  "results": {
+    "keyword": {
+      "scored_cases": 25,
+      "challenge_cases": 4,
+      "scored_metrics": {
+        "accuracy": {
+          "correct": 12,
+          "denominator": 25,
+          "accuracy": 0.48
+        },
+        "pure_llm_accuracy": null,
+        "per_class": {
+          "smalltalk": {
+            "correct": 2,
+            "denominator": 8,
+            "accuracy": 0.25
+          },
+          "knowledge": {
+            "correct": 8,
+            "denominator": 8,
+            "accuracy": 1.0
+          },
+          "tool": {
+            "correct": 2,
+            "denominator": 9,
+            "accuracy": 0.2222222222222222
+          }
+        },
+        "confusion_matrix": {
+          "smalltalk": {
+            "smalltalk": 2,
+            "knowledge": 6,
+            "tool": 0
+          },
+          "knowledge": {
+            "smalltalk": 0,
+            "knowledge": 8,
+            "tool": 0
+          },
+          "tool": {
+            "smalltalk": 3,
+            "knowledge": 4,
+            "tool": 2
+          }
+        }
+      },
+      "challenge_diagnostics": [
+        {
+          "id": "challenge-001",
+          "query": "Bugün hava nasıl?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0006119989848230034,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-002",
+          "query": "Dolar kuru şu an ne kadar?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007119997462723404,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-003",
+          "query": "Bana bir fıkra anlat.",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007320013537537307,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-004",
+          "query": "Bunu bulabilir misin?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0005109977792017162,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        }
+      ],
+      "case_results": [
+        {
+          "id": "smalltalk-001",
+          "query": "Selam",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.003696997737279162,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-002",
+          "query": "Günaydın",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0025139997887890786,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "smalltalk-003",
+          "query": "Nasılsın?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0009520008461549878,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "smalltalk-004",
+          "query": "Teşekkürler",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0006409973138943315,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "smalltalk-005",
+          "query": "Keyifler nasıl?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.000690997694619,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "smalltalk-006",
+          "query": "Naber?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0005510009941644967,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "smalltalk-007",
+          "query": "Bugün nasıl gidiyor?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0010320000001229346,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "smalltalk-008",
+          "query": "Merhaba, kolay gelsin",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0006410009518731385,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-001",
+          "query": "Agentic workflow ile deterministik akışın farkı nedir?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0012119999155402184,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-002",
+          "query": "Named volume neden kullanılır?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0008819988579489291,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-003",
+          "query": "Docker compose ile servisler arası ağ iletişimi nasıl sağlanır?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0011929987522307783,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-004",
+          "query": "Embedding modellerinde cosine similarity neye göre seçilmelidir?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0009520008461549878,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-005",
+          "query": "Büyük dil modellerinde context window neyi ifade eder?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007620001269970089,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-006",
+          "query": "Qdrant'ta collection oluştururken hangi bilgiler tanımlanır?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0011320007615722716,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-007",
+          "query": "Function calling kullanırken model gerçek fonksiyonu doğrudan çalıştırır mı?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0012220007192809135,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-008",
+          "query": "RAG uygulamalarında filtreleme yapmak retrieval kalitesini nasıl etkiler?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0011019983503501862,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-001",
+          "query": "Ankara'ya 2 kilo paket göndereceğim, maliyeti ne?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0011319971235934645,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "tool-002",
+          "query": "2 kiloluk gönderi Ankara için ne tutar?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.001082000380847603,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "tool-003",
+          "query": "Kargo ücretimi hesaplar mısın?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007409980753436685,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-004",
+          "query": "Selam, Ankara'ya 2 kg kargo ne kadar?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0005510009941644967,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "tool-005",
+          "query": "Notlarımda hybrid search hakkında ne yazıyor?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0009119976311922073,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-006",
+          "query": "Geçen haftaki raporumda RRF'i bul.",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.000772000930737704,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "tool-007",
+          "query": "Week 2 review içinde sandbox hakkında ne yazmışım?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0008409988367930055,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "tool-008",
+          "query": "Merhaba, notlarımda hybrid search'i bul.",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0006510017556138337,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "tool-009",
+          "query": "Selam, notlarımda RAG hakkında ne yazıyor?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007509988790843636,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "challenge-001",
+          "query": "Bugün hava nasıl?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0006119989848230034,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-002",
+          "query": "Dolar kuru şu an ne kadar?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007119997462723404,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-003",
+          "query": "Bana bir fıkra anlat.",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0007320013537537307,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-004",
+          "query": "Bunu bulabilir misin?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "keyword",
+            "decision_source": "keyword",
+            "latency_ms": 0.0005109977792017162,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        }
+      ],
+      "accuracy": {
+        "correct": 12,
+        "denominator": 25,
+        "accuracy": 0.48
+      },
+      "pure_llm_accuracy": null,
+      "per_class": {
+        "smalltalk": {
+          "correct": 2,
+          "denominator": 8,
+          "accuracy": 0.25
+        },
+        "knowledge": {
+          "correct": 8,
+          "denominator": 8,
+          "accuracy": 1.0
+        },
+        "tool": {
+          "correct": 2,
+          "denominator": 9,
+          "accuracy": 0.2222222222222222
+        }
+      },
+      "confusion_matrix": {
+        "smalltalk": {
+          "smalltalk": 2,
+          "knowledge": 6,
+          "tool": 0
+        },
+        "knowledge": {
+          "smalltalk": 0,
+          "knowledge": 8,
+          "tool": 0
+        },
+        "tool": {
+          "smalltalk": 3,
+          "knowledge": 4,
+          "tool": 2
+        }
+      },
+      "failures": 0,
+      "invalid_outputs": 0,
+      "avg_latency": 0.0010060684871859848,
+      "median_latency": 0.0008409988367930055
+    },
+    "llm": {
+      "scored_cases": 25,
+      "challenge_cases": 4,
+      "scored_metrics": {
+        "accuracy": {
+          "correct": 23,
+          "denominator": 25,
+          "accuracy": 0.92
+        },
+        "pure_llm_accuracy": {
+          "accuracy": 0.9130434782608695,
+          "correct": 21,
+          "denominator": 23
+        },
+        "per_class": {
+          "smalltalk": {
+            "correct": 8,
+            "denominator": 8,
+            "accuracy": 1.0
+          },
+          "knowledge": {
+            "correct": 6,
+            "denominator": 8,
+            "accuracy": 0.75
+          },
+          "tool": {
+            "correct": 9,
+            "denominator": 9,
+            "accuracy": 1.0
+          }
+        },
+        "confusion_matrix": {
+          "smalltalk": {
+            "smalltalk": 8,
+            "knowledge": 0,
+            "tool": 0
+          },
+          "knowledge": {
+            "smalltalk": 0,
+            "knowledge": 6,
+            "tool": 2
+          },
+          "tool": {
+            "smalltalk": 0,
+            "knowledge": 0,
+            "tool": 9
+          }
+        }
+      },
+      "challenge_diagnostics": [
+        {
+          "id": "challenge-001",
+          "query": "Bugün hava nasıl?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 35496.09577400042,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-002",
+          "query": "Dolar kuru şu an ne kadar?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 33656.997131001845,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-003",
+          "query": "Bana bir fıkra anlat.",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 18410.14524899947,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-004",
+          "query": "Bunu bulabilir misin?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 31846.180328000628,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        }
+      ],
+      "case_results": [
+        {
+          "id": "smalltalk-001",
+          "query": "Selam",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "deterministic_fastpath",
+            "latency_ms": 0.0010119983926415443,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-002",
+          "query": "Günaydın",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "deterministic_fastpath",
+            "latency_ms": 0.001082000380847603,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-003",
+          "query": "Nasılsın?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 4915.625169000123,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-004",
+          "query": "Teşekkürler",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 6197.050929000397,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-005",
+          "query": "Keyifler nasıl?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 6388.793263999105,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-006",
+          "query": "Naber?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 8991.088044000207,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-007",
+          "query": "Bugün nasıl gidiyor?",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 6414.229400001204,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "smalltalk-008",
+          "query": "Merhaba, kolay gelsin",
+          "expected": {
+            "route": "smalltalk"
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 6198.2540959979815,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-001",
+          "query": "Agentic workflow ile deterministik akışın farkı nedir?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 10014.711686999362,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-002",
+          "query": "Named volume neden kullanılır?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 9037.098033997609,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-003",
+          "query": "Docker compose ile servisler arası ağ iletişimi nasıl sağlanır?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 15772.618008999416,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-004",
+          "query": "Embedding modellerinde cosine similarity neye göre seçilmelidir?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 26674.34146999949,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-005",
+          "query": "Büyük dil modellerinde context window neyi ifade eder?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 15546.72048700013,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "knowledge-006",
+          "query": "Qdrant'ta collection oluştururken hangi bilgiler tanımlanır?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 11844.796427001711,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "knowledge-007",
+          "query": "Function calling kullanırken model gerçek fonksiyonu doğrudan çalıştırır mı?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 12180.936281001777,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": false
+          }
+        },
+        {
+          "id": "knowledge-008",
+          "query": "RAG uygulamalarında filtreleme yapmak retrieval kalitesini nasıl etkiler?",
+          "expected": {
+            "route": "knowledge"
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 17111.41580399999,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-001",
+          "query": "Ankara'ya 2 kilo paket göndereceğim, maliyeti ne?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 10011.630295000941,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-002",
+          "query": "2 kiloluk gönderi Ankara için ne tutar?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 9525.80931200282,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-003",
+          "query": "Kargo ücretimi hesaplar mısın?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 9601.819301002251,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-004",
+          "query": "Selam, Ankara'ya 2 kg kargo ne kadar?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 8500.27909200071,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-005",
+          "query": "Notlarımda hybrid search hakkında ne yazıyor?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 8224.948566999956,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-006",
+          "query": "Geçen haftaki raporumda RRF'i bul.",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 18430.039230999682,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-007",
+          "query": "Week 2 review içinde sandbox hakkında ne yazmışım?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 9950.10691400239,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-008",
+          "query": "Merhaba, notlarımda hybrid search'i bul.",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 16423.582445000648,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "tool-009",
+          "query": "Selam, notlarımda RAG hakkında ne yazıyor?",
+          "expected": {
+            "route": "tool"
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 11486.641736999445,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": true
+          }
+        },
+        {
+          "id": "challenge-001",
+          "query": "Bugün hava nasıl?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 35496.09577400042,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-002",
+          "query": "Dolar kuru şu an ne kadar?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "tool",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 33656.997131001845,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-003",
+          "query": "Bana bir fıkra anlat.",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "smalltalk",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 18410.14524899947,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        },
+        {
+          "id": "challenge-004",
+          "query": "Bunu bulabilir misin?",
+          "expected": {
+            "route": null
+          },
+          "actual": {
+            "route": "knowledge",
+            "router": "llm",
+            "decision_source": "llm",
+            "latency_ms": 31846.180328000628,
+            "fallback_used": false,
+            "error_type": null
+          },
+          "scores": {
+            "route_correct": null
+          }
+        }
+      ],
+      "accuracy": {
+        "correct": 23,
+        "denominator": 25,
+        "accuracy": 0.92
+      },
+      "pure_llm_accuracy": {
+        "accuracy": 0.9130434782608695,
+        "correct": 21,
+        "denominator": 23
+      },
+      "per_class": {
+        "smalltalk": {
+          "correct": 8,
+          "denominator": 8,
+          "accuracy": 1.0
+        },
+        "knowledge": {
+          "correct": 6,
+          "denominator": 8,
+          "accuracy": 0.75
+        },
+        "tool": {
+          "correct": 9,
+          "denominator": 9,
+          "accuracy": 1.0
+        }
+      },
+      "confusion_matrix": {
+        "smalltalk": {
+          "smalltalk": 8,
+          "knowledge": 0,
+          "tool": 0
+        },
+        "knowledge": {
+          "smalltalk": 0,
+          "knowledge": 6,
+          "tool": 2
+        },
+        "tool": {
+          "smalltalk": 0,
+          "knowledge": 0,
+          "tool": 9
+        }
+      },
+      "failures": 0,
+      "invalid_outputs": 0,
+      "avg_latency": 13063.860571414085,
+      "median_latency": 10011.630295000941
+    }
+  }
+}

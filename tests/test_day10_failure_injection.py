@@ -67,7 +67,8 @@ def test_retriever_unavailable_failure():
 
         print("\n[PASS] Retriever failure kontrollü yönetildi.")
 
-        return final_state
+        assert final_state["status"] == "error"
+        assert final_state["error_type"] == "DependencyUnavailableError"
 
     finally:
         # Test başarılı olsa da assertion/exception nedeniyle yarıda

@@ -1,0 +1,89 @@
+[
+  {
+    "id": "scenario-001",
+    "suite": "workflow",
+    "query": "Selam",
+    "expected": {
+      "route": "smalltalk",
+      "decision_source": "deterministic_fastpath",
+      "tool": null,
+      "terminal_status": "completed"
+    }
+  },
+  {
+    "id": "scenario-002",
+    "suite": "workflow",
+    "query": "Named volume neden kullanılır?",
+    "expected": {
+      "route": "knowledge",
+      "tool": null,
+      "terminal_status": "completed"
+    }
+  },
+  {
+    "id": "scenario-003",
+    "suite": "workflow",
+    "query": "Ankara'ya iki kiloluk bir paket göndersem ne tutar?",
+    "expected": {
+      "route": "tool",
+      "decision_source": "llm",
+      "tool": "calculate_shipping_cost",
+      "provider": "native",
+      "terminal_status": "completed"
+    }
+  },
+  {
+    "id": "scenario-004",
+    "suite": "workflow",
+    "query": "Geçen haftaki çalışma notlarımda RRF hakkında ne yazıyor?",
+    "expected": {
+      "route": "tool",
+      "decision_source": "llm",
+      "tool": "search_notes",
+      "provider": "mcp",
+      "terminal_status": "completed"
+    }
+  },
+  {
+    "id": "scenario-005",
+    "suite": "workflow",
+    "query": "Selam, Ankara'ya iki kilo gönderi ne kadar?",
+    "expected": {
+      "route": "tool",
+      "decision_source": "llm",
+      "tool": "calculate_shipping_cost",
+      "terminal_status": "completed"
+    }
+  },
+  {
+    "id": "scenario-006",
+    "suite": "durable",
+    "expected_action": "publish_report",
+    "resume_payload":{"decision": "approve"},
+    "expected": {
+      "approval_required": true,
+      "terminal_status": "completed"
+    }
+  },
+  {
+    "id": "scenario-007",
+    "suite": "durable",
+    "expected_action": "publish_report",
+    "resume_payload":{"decision": "reject"},
+    "expected": {
+      "approval_required": true,
+      "terminal_status": "rejected"
+    }
+  },
+  {
+    "id": "scenario-008",
+    "suite": "workflow",
+    "query": "Bugün hava nasıl?",
+    "expected": {
+      "terminal_status": "completed"
+    },
+    "not_expected": {
+      "route": "tool"
+    }
+  }
+]

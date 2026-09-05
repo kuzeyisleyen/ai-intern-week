@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama@sha256:9d30908e41144b1f1da89b9d8e33c07e4aeb43ff41a8660241b1686e2cc330ad  
     volumes:
       # İndirilen modelleri kalıcı olarak saklar.
       - ollama_data:/root/.ollama
@@ -39,6 +39,12 @@ services:
 
       # Compose içindeki Qdrant servis adresi.
       QDRANT_URL: http://qdrant:6333
+      
+      #Yeni mimari için ayrılmış model rolleri
+      GENERATION_MODEL: qwen3:1.7b
+      ROUTER_MODEL: qwen3:1.7b
+      EMBEDDING_MODEL: embeddinggemma
+      SPARSE_MODEL: Qdrant/bm25
 
     volumes:
       # Deney çıktılarını host üzerinde saklar.

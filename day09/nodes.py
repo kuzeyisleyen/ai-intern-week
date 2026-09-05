@@ -90,10 +90,15 @@ def classify_keyword(query: str) -> str:
 
 
 def classify_node(state: dict) -> dict:
-    route = classify_keyword(state["original_query"])
+    from day14.llm_router import run_llm_router
+    
+    router_result = run_llm_router(state["original_query"])
 
     update = next_step(state, "classify_query")
-    update["route"] = route
+    update["route"] = router_result.get("route")
+    update["decision_source"] = router_result.get("decision_source")
+    update["router_latency_ms"] = router_result.get("latency_ms")
+    
     return update
 
 

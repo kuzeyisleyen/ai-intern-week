@@ -1,0 +1,35 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  deterministic-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build app image
+        run: docker compose build app
+
+      - name: Lint with Ruff
+        run: |
+          docker compose run --rm --no-deps app \
+            python -m ruff check day15/capstone.py
+
+      - name: Fast Unit & Deterministic Tests
+        # LLM ve Integration testlerini CI'dan hariç tutuyoruz.
+        run: |
+          docker compose run --rm --no-deps app \
+            python -m pytest -q -m "not integration and not llm"
+
+      - name: Validate Golden Dataset
+        # Veri setinin yapısal olarak geçerli olup olmadığını kontrol eden hard gate.
+        run: |
+          docker compose run --rm --no-deps app \
+            python -c "from day14.dataset import load_golden_cases; load_golden_cases('day14/data/golden_cases.jsonl', {'calculate_shipping_cost', 'search_notes'})"

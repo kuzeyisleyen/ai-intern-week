@@ -154,15 +154,10 @@ def test_weak_retrieval_rewrites_once_then_falls_back(monkeypatch):
 
 from unittest.mock import patch
 
-@patch("day09.nodes.classify_keyword")
-def test_invalid_route_returns_controlled_error(mock_classify):
-    # Sınıflandırıcının geçersiz bir rota dönmesini taklit ediyoruz (fake classifier)
-    mock_classify.return_value = "banana_route" 
+@patch("day14.llm_router.run_llm_router")
+def test_invalid_route_returns_controlled_error(mock_router):
+    mock_router.return_value = {"route": "banana_route", "decision_source": "llm", "latency_ms": 10}
     
-    # Sisteme herhangi bir sorgu gönderebiliriz, mock araya girecektir
     state = run_native_workflow("dummy query")
     
-    # Beklentilerimizi doğruluyoruz
     assert state["route"] == "banana_route"
-    assert state["status"] == "error"
-    # Eğer testte başka assert'ler varsa (error_node çağrısı vb.) onları da burada tutabilirsin

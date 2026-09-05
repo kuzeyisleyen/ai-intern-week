@@ -1,0 +1,132 @@
+{
+  "generated_at": "2026-09-05T14:38:20.269193Z",
+  "commit": "unknown",
+  "runtime": {
+    "python": "Python 3.10.21",
+    "router_model": "qwen3:1.7b",
+    "generation_model": "qwen3:1.7b",
+    "embedding_model": "embeddinggemma",
+    "langgraph_version": "1.2.11",
+    "qdrant_client_version": "1.19.0",
+    "mcp_version": "2.1.1"
+  },
+  "router_policy": {
+    "selected": "two_stage",
+    "evidence_source": "day14-routing-comparison.json"
+  },
+  "test_metrics": {
+    "unit_tests_passed": 75,
+    "integration_tests_passed": 27,
+    "capstone_passed": 8,
+    "capstone_total": 8
+  },
+  "known_limitations": [
+    "Small parameter LLM (qwen3:1.7b) occasionally hallucinates intent, routing tool tasks to knowledge paths (e.g., scenario-003)."
+  ],
+  "details": [
+    {
+      "id": "scenario-001",
+      "passed": true,
+      "query": "Selam",
+      "route": "smalltalk",
+      "router_decision_source": "deterministic_fastpath",
+      "tool": null,
+      "provider": null,
+      "approval_required": false,
+      "terminal_status": "completed",
+      "duration_ms": 6654,
+      "errors": []
+    },
+    {
+      "id": "scenario-002",
+      "passed": true,
+      "query": "Named volume neden kullanılır?",
+      "route": "knowledge",
+      "router_decision_source": "llm",
+      "tool": null,
+      "provider": null,
+      "approval_required": false,
+      "terminal_status": "completed",
+      "duration_ms": 27144,
+      "errors": []
+    },
+    {
+      "id": "scenario-003",
+      "passed": true,
+      "query": "Ankara'ya iki kiloluk bir paket göndersem ne tutar?",
+      "route": "tool",
+      "router_decision_source": "llm",
+      "tool": "calculate_shipping_cost",
+      "provider": "native",
+      "approval_required": false,
+      "terminal_status": "completed",
+      "duration_ms": 11147,
+      "errors": []
+    },
+    {
+      "id": "scenario-004",
+      "passed": true,
+      "query": "Geçen haftaki çalışma notlarımda RRF hakkında ne yazıyor?",
+      "route": "tool",
+      "router_decision_source": "llm",
+      "tool": "search_notes",
+      "provider": "mcp",
+      "approval_required": false,
+      "terminal_status": "completed",
+      "duration_ms": 23350,
+      "errors": []
+    },
+    {
+      "id": "scenario-005",
+      "passed": true,
+      "query": "Selam, Ankara'ya iki kilo gönderi ne kadar?",
+      "route": "tool",
+      "router_decision_source": "llm",
+      "tool": "calculate_shipping_cost",
+      "provider": "native",
+      "approval_required": false,
+      "terminal_status": "completed",
+      "duration_ms": 35343,
+      "errors": []
+    },
+    {
+      "id": "scenario-006",
+      "passed": true,
+      "query": "[redacted]",
+      "route": null,
+      "router_decision_source": null,
+      "tool": null,
+      "provider": null,
+      "approval_required": true,
+      "terminal_status": "completed",
+      "duration_ms": 24,
+      "errors": []
+    },
+    {
+      "id": "scenario-007",
+      "passed": true,
+      "query": "[redacted]",
+      "route": null,
+      "router_decision_source": null,
+      "tool": null,
+      "provider": null,
+      "approval_required": true,
+      "terminal_status": "rejected",
+      "duration_ms": 11,
+      "errors": []
+    },
+    {
+      "id": "scenario-008",
+      "passed": true,
+      "query": "Bugün hava nasıl?",
+      "route": "knowledge",
+      "router_decision_source": "llm",
+      "tool": null,
+      "provider": null,
+      "approval_required": false,
+      "terminal_status": "completed",
+      "duration_ms": 49511,
+      "errors": []
+    }
+  ]
+}

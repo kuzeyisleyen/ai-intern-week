@@ -12,6 +12,9 @@
 ## Evaluation
 - citation validity semantic grounding değildir
 
+# Python 3.10 → supported baseline migration
+
 
 baseline_unit_passed = 51
 baseline_integration_passed = 15
+
